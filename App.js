@@ -14,6 +14,7 @@ import Physics from './Components/Physics.js';
 import Images from './Assets/Images.js';
 import Floor from './Components/Floor';
 import MainCharacter from './Components/MainCharacter';
+import Quiz from './Components/Quiz';
 
 export const randomBetween = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -84,23 +85,7 @@ class App extends Component {
         </View>
 
         <View style = { styles.questionFrame}>
-          <View style = { styles.questionBox}>
-            <Text style = { styles.textQuestion}>questionBox</Text>  
-          </View>
-          <View style = { styles.AnswerBox}>
-            <View style = { styles.answerBoxRow}>
-              <Text style = { styles.textContent}>AAA</Text>
-            </View>
-            <View style = { styles.answerBoxRow}>
-              <Text style = { styles.textContent}>BBB</Text>
-            </View>
-            <View style = { styles.answerBoxRow}>
-              <Text style = { styles.textContent}>CCC</Text>
-            </View>
-            <View style = { styles.answerBoxRow}>
-              <Text style = { styles.textContent}>DDD</Text>
-            </View>
-          </View>
+            <Quiz />
         </View>
       </View>
     );

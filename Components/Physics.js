@@ -13,7 +13,7 @@ const Physics = (entities, { touches, time }) => {
         Matter.Body.applyForce( mainCharacter, mainCharacter.position, {x: 0.00, y: -0.020});
     });
     if (bird.position.x <= (mainCharacter.position.x + Constants.BIRD_SIZE/2 + Constants.MAIN_CHARACTER_SIZE/2)) {
-        Matter.Body.translate(bird, {x: 0, y: +10})
+        Matter.Body.setPosition( bird, { x:Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE, y: (Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - 2*Constants.BIRD_SIZE)})
     }
     else {
         Matter.Body.translate(bird, {x: -1, y: 0})
@@ -22,7 +22,7 @@ const Physics = (entities, { touches, time }) => {
     Object.keys(entities).forEach(key => {
         if (key.indexOf("floor") === 0) {
             if (entities[key].body.position.x <= -1*Constants.MAX_WIDTH){
-                Matter.Body.setPosition( entities[key].body, { x: Constants.MAX_WIDTH, y: Constants.MAX_HEIGHT})
+                Matter.Body.setPosition( entities[key].body, { x:Constants.MAX_WIDTH, y: Constants.MAX_HEIGHT})
             }
             Matter.Body.translate( entities[key].body, {x: -2, y: 0});  
         }
