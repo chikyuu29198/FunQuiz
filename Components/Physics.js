@@ -1,17 +1,23 @@
 import Matter from "matter-js";
 import Constants from "./Constants";
+import { connect} from 'react-redux';
 
 let tick = 1;
 let pose = 1;
 
 const Physics = (entities, { touches, time }) => {
+    const { _isCorrect } = this.props;
     let engine = entities.physics.engine;
     let mainCharacter = entities.mainCharacter.body;
-    let bird = entities.bird.body;
+    let bird = entities.bird.body; 
 
     touches.filter(t => t.type === "press").forEach(t => {
         Matter.Body.applyForce( mainCharacter, mainCharacter.position, {x: 0.00, y: -0.020});
     });
+
+    if (_isCorrect == false) {
+        Matter.Body.translate(mainCharacter, {x: 0, y: - 20})
+    }
     if (bird.position.x <= (mainCharacter.position.x + Constants.BIRD_SIZE/2 + Constants.MAIN_CHARACTER_SIZE/2)) {
         Matter.Body.setPosition( bird, { x:Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE, y: (Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - 2*Constants.BIRD_SIZE)})
     }
@@ -21,8 +27,8 @@ const Physics = (entities, { touches, time }) => {
 
     Object.keys(entities).forEach(key => {
         if (key.indexOf("floor") === 0) {
-            if (entities[key].body.position.x <= -1*Constants.MAX_WIDTH){
-                Matter.Body.setPosition( entities[key].body, { x:Constants.MAX_WIDTH, y: Constants.MAX_HEIGHT})
+            if (entities[key].body.position.x <= -0.5*Constants.MAX_WIDTH){
+                Matter.Body.setPosition( entities[key].body, { x:1.5*Constants.MAX_WIDTH, y: Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT/2})
             }
             Matter.Body.translate( entities[key].body, {x: -2, y: 0});  
         }
@@ -40,4 +46,7 @@ const Physics = (entities, { touches, time }) => {
     return entities;
 };
 
-export default Physics;
+function mapStateToProps (state){
+    return {_isCorrect : state.isCorrect};
+}
+export default connect(mapStateToProps)(Physics);

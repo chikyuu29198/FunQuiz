@@ -7,13 +7,12 @@ export default class Floor extends Component {
     render() {
         const width = this.props.size[1];
         const height = this.props.size[0];
-        const x = this.props.body.position.x + width/2;
+        const x = this.props.body.position.x - width/2;
         const y = this.props.body.position.y - height/2;
         return (
             <View
                 style={{
-                    // flex: 1,
-                    // position: "absolute",
+                    position: "absolute",
                     left: x,
                     top: y,
                     width: width,
@@ -22,8 +21,6 @@ export default class Floor extends Component {
                 <Image 
                 source = {Images.Floor}
                 style = {{ 
-                    // position: 'relative',
-                    // width: width,
                     height: height,
                     resizeMode : 'repeat',
                    }}

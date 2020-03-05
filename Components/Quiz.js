@@ -4,8 +4,13 @@ import {
     View,
     Text,
     Image,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    Alert,
+    TouchableOpacity
 } from 'react-native';
+import { connect } from 'react-redux';
+import { handleCorrect, handleInCorrect } from '../redux/actionCreators';
+
 
 const myQuestions = [
 {
@@ -16,7 +21,7 @@ const myQuestions = [
     c: "Brendan Eich",
     d: "xyz"
     },
-    correctAnswer: "a"
+    correctAnswer: "c"
 },
 {
     question: "Which one of these is a JavaScript package manager?",
@@ -45,12 +50,16 @@ class Quiz extends Component {
         this.state = {
             listQuiz: myQuestions,
             currentQuestion: 0,
+            status: null,
         }
     }
 
-    onPress = (choice) => {
-        if (choice != this.state.listQuiz[this.state.currentQuestion].correctAnswer) {
-            alert('You long-pressed the button!');
+    _onPress = (choice) => {
+        if (choice == this.state.listQuiz[this.state.currentQuestion].correctAnswer) {
+          this.props.handleCorrect();
+        }
+        else {
+          this.props.handleInCorrect();
         }
     }
     render(){
@@ -63,24 +72,32 @@ class Quiz extends Component {
               </View>
               <View style = { styles.AnswerBox}>
               <View style = { styles.answerBoxRow}>
-                <TouchableWithoutFeedback  onPress = {this.onPress (quiz.answers.a)}> 
+                <TouchableOpacity onPress = {() => this._onPress('a')}> 
                     <Text style = { styles.textContent}>{quiz.answers.a}</Text>
-                </TouchableWithoutFeedback>
+                </TouchableOpacity>
                 </View>
                 <View style = { styles.answerBoxRow}>
-                  <Text style = { styles.textContent}>{quiz.answers.b}</Text>
+                  <TouchableOpacity onPress = {() => this._onPress('b')}> 
+                      <Text style = { styles.textContent}>{quiz.answers.b}</Text>
+                  </TouchableOpacity>
                 </View>
                 <View style = { styles.answerBoxRow}>
-                  <Text style = { styles.textContent}>{quiz.answers.c}</Text>
+                  <TouchableOpacity onPress = {() => this._onPress('c')}> 
+                      <Text style = { styles.textContent}>{quiz.answers.c}</Text>
+                  </TouchableOpacity>
                 </View>
                 <View style = { styles.answerBoxRow}>
-                  <Text style = { styles.textContent}>{quiz.answers.d}</Text>
+                  <TouchableOpacity onPress = {() => this._onPress('d')}> 
+                      <Text style = { styles.textContent}>{quiz.answers.d}</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
         );
     }
 };
+
+export default connect(null, { handleCorrect, handleInCorrect }) (Quiz);
 
 const styles = StyleSheet.create({
     questionFrame: {
@@ -128,4 +145,4 @@ const styles = StyleSheet.create({
     
   });
   
-  export default Quiz;
+  

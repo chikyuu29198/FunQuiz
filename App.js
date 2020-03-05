@@ -3,7 +3,8 @@ import {
   StyleSheet,
   View,
   Text,
-  Image
+  Image,
+  Alert
 } from 'react-native';
 import Constants from './Components/Constants';
 import { GameEngine} from 'react-native-game-engine';
@@ -15,6 +16,8 @@ import Images from './Assets/Images.js';
 import Floor from './Components/Floor';
 import MainCharacter from './Components/MainCharacter';
 import Quiz from './Components/Quiz';
+import store  from './redux/store';
+import { Provider } from 'react-redux';
 
 export const randomBetween = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -39,20 +42,34 @@ class App extends Component {
     super(props);
     this.GameEngine = null;
     this.entities = this.setupWorld();
+    // this.isCorrect = null;
+
   }
+
+  // checkIsCorrect = (_isCorrect) => {
+  //   this.setState( {isCorrect : _isCorrect})
+  //   if (this.state.isCorrect == true){
+  //     Alert.alert("true")
+  //   }
+  //   else if (this.state.isCorrect == false){
+  //     Alert.alert("false")
+  //   }
+  // }
+
   setupWorld = () => {
     let engine = Matter.Engine.create({ enableSleeping: false });
     let world = engine.world;
     let bird = Matter.Bodies.rectangle( Constants.MAX_WIDTH, Constants.FLOOR_HEIGHT , Constants.BIRD_SIZE, Constants.BIRD_SIZE, { isStatic: true })
-    let mainCharacter = Matter.Bodies.rectangle( Constants.FLOOR_HEIGHT, Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT, Constants.MAIN_CHARACTER_SIZE, Constants.MAIN_CHARACTER_SIZE, { isStatic: true });
-    let floor1 = Matter.Bodies.rectangle( 0, Constants.MAX_HEIGHT, Constants.MAX_WIDTH, Constants.FLOOR_HEIGHT, { isStatic: true });
-    let floor2 = Matter.Bodies.rectangle( Constants.MAX_WIDTH, Constants.MAX_HEIGHT, Constants.MAX_WIDTH, Constants.FLOOR_HEIGHT, { isStatic: true });
+    let mainCharacter = Matter.Bodies.rectangle( Constants.FLOOR_HEIGHT, 
+                                              Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.MAIN_CHARACTER_SIZE/2, Constants.MAIN_CHARACTER_SIZE, Constants.MAIN_CHARACTER_SIZE, { isStatic: true });
+    let floor1 = Matter.Bodies.rectangle( Constants.MAX_WIDTH/2, Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT/2, Constants.MAX_WIDTH, Constants.FLOOR_HEIGHT, { isStatic: true });
+    let floor2 = Matter.Bodies.rectangle( Constants.MAX_WIDTH*1.5, Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT/2, Constants.MAX_WIDTH, Constants.FLOOR_HEIGHT, { isStatic: true });
     let ceiling = Matter.Bodies.rectangle( Constants.MAX_WIDTH / 2, 25, Constants.MAX_WIDTH, 50, { isStatic: true });
 
     Matter.World.add(world, [bird, mainCharacter, floor1, floor2, ceiling]);
 
     return {
-        physics: { engine: engine, world: world },
+        physics: { engine: engine, world: world},
         mainCharacter: { body: mainCharacter, pose: 1,size: [Constants.MAIN_CHARACTER_SIZE, Constants.MAIN_CHARACTER_SIZE], renderer: MainCharacter},
         bird: { body: bird, size: [Constants.BIRD_SIZE, Constants.BIRD_SIZE], renderer: Bird},
         floor1: { body: floor1, size: [Constants.FLOOR_HEIGHT, Constants.MAX_WIDTH], renderer: Floor },
@@ -62,6 +79,7 @@ class App extends Component {
 }
   render(){
     return(
+      <Provider store = { store }>
       <View style = {styles.container}>
         <View style = {styles.gameEngine}>
           <Image
@@ -79,7 +97,9 @@ class App extends Component {
             ref={(ref)=> {this.GameEngine = ref;}}
             style = {styles.gameContainer}
             systems = {[Physics]}
-            entities = {this.entities}>
+            entities = {this.entities}
+            status = {this.status}
+            >
           </GameEngine>   
           
         </View>
@@ -88,6 +108,7 @@ class App extends Component {
             <Quiz />
         </View>
       </View>
+      </Provider>
     );
   }
 };
