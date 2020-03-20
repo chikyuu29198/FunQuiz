@@ -7,6 +7,11 @@ export function handleCorrect() {
 }
 
 export function handleInCorrect() {
-    return { type: 'HANDLE_INCORRECR'}
+    return { type: 'HANDLE_INCORRECT'};
+    
+}
+
+export function reset() {
+    return { type: 'RESET'};
     
 }

@@ -1,30 +1,36 @@
 import Matter from "matter-js";
 import Constants from "./Constants";
-import { connect} from 'react-redux';
+import store from '../redux/store';
+import { Alert } from "react-native";
 
 let tick = 1;
 let pose = 1;
+let jum = false;
 
 const Physics = (entities, { touches, time }) => {
-    const { _isCorrect } = this.props;
+
     let engine = entities.physics.engine;
     let mainCharacter = entities.mainCharacter.body;
     let bird = entities.bird.body; 
+    
+    // touches.filter(t => t.type === "press").forEach(t => {
+    //     Matter.Body.applyForce( mainCharacter, mainCharacter.position, {x: 0.00, y: -0.020});
+    // });
+    if (mainCharacter.position.y > Constants.MAX_HEIGHT/2 && bird.position.y < Constants.MAX_HEIGHT/2 && jum == false){
+        // if(bird.position.x <= (mainCharacter.position.x + Constants.BIRD_SIZE/2 + Constants.MAIN_CHARACTER_SIZE/2 && mainCharacter.position.y 
+        if (bird.position.x <= (mainCharacter.position.x + Constants.BIRD_SIZE/2 + Constants.MAIN_CHARACTER_SIZE/2) ) {
 
-    touches.filter(t => t.type === "press").forEach(t => {
-        Matter.Body.applyForce( mainCharacter, mainCharacter.position, {x: 0.00, y: -0.020});
-    });
-
-    if (_isCorrect == false) {
-        Matter.Body.translate(mainCharacter, {x: 0, y: - 20})
+            Matter.Body.setPosition( bird, { x:Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2, y: (Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.BIRD_SIZE/2)})
+            Matter.Body.setPosition( mainCharacter, { x:Constants.FLOOR_HEIGHT + Constants.MAIN_CHARACTER_SIZE/2, y: (Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.MAIN_CHARACTER_SIZE/2)})
+        }
+        else {
+            Matter.Body.translate(bird, {x: -3, y: 0})
+                 
+        }
     }
-    if (bird.position.x <= (mainCharacter.position.x + Constants.BIRD_SIZE/2 + Constants.MAIN_CHARACTER_SIZE/2)) {
-        Matter.Body.setPosition( bird, { x:Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE, y: (Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - 2*Constants.BIRD_SIZE)})
+    else{
+        jum = true;
     }
-    else {
-        Matter.Body.translate(bird, {x: -1, y: 0})
-    }
-
     Object.keys(entities).forEach(key => {
         if (key.indexOf("floor") === 0) {
             if (entities[key].body.position.x <= -0.5*Constants.MAX_WIDTH){
@@ -33,7 +39,6 @@ const Physics = (entities, { touches, time }) => {
             Matter.Body.translate( entities[key].body, {x: -2, y: 0});  
         }
     })
-    // Matter.Body.applyForce( bird, bird.position, {x: 0.1, y: 0});
     tick += 1;
     if (tick%8 == 0){
         pose ++;
@@ -46,7 +51,4 @@ const Physics = (entities, { touches, time }) => {
     return entities;
 };
 
-function mapStateToProps (state){
-    return {_isCorrect : state.isCorrect};
-}
-export default connect(mapStateToProps)(Physics);
+export default Physics;

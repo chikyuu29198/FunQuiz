@@ -12,6 +12,7 @@ import Matter from 'matter-js';
 import Bird from './Components/Bird';
 import Wall from './Components/Wall';
 import Physics from './Components/Physics.js';
+import AnswerHandle from './Components/AnswerHandle.js';
 import Images from './Assets/Images.js';
 import Floor from './Components/Floor';
 import MainCharacter from './Components/MainCharacter';
@@ -46,27 +47,38 @@ class App extends Component {
 
   }
 
-  // checkIsCorrect = (_isCorrect) => {
-  //   this.setState( {isCorrect : _isCorrect})
-  //   if (this.state.isCorrect == true){
-  //     Alert.alert("true")
-  //   }
-  //   else if (this.state.isCorrect == false){
-  //     Alert.alert("false")
-  //   }
-  // }
-
   setupWorld = () => {
     let engine = Matter.Engine.create({ enableSleeping: false });
     let world = engine.world;
-    let bird = Matter.Bodies.rectangle( Constants.MAX_WIDTH, Constants.FLOOR_HEIGHT , Constants.BIRD_SIZE, Constants.BIRD_SIZE, { isStatic: true })
-    let mainCharacter = Matter.Bodies.rectangle( Constants.FLOOR_HEIGHT, 
-                                              Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.MAIN_CHARACTER_SIZE/2, Constants.MAIN_CHARACTER_SIZE, Constants.MAIN_CHARACTER_SIZE, { isStatic: true });
-    let floor1 = Matter.Bodies.rectangle( Constants.MAX_WIDTH/2, Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT/2, Constants.MAX_WIDTH, Constants.FLOOR_HEIGHT, { isStatic: true });
-    let floor2 = Matter.Bodies.rectangle( Constants.MAX_WIDTH*1.5, Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT/2, Constants.MAX_WIDTH, Constants.FLOOR_HEIGHT, { isStatic: true });
-    let ceiling = Matter.Bodies.rectangle( Constants.MAX_WIDTH / 2, 25, Constants.MAX_WIDTH, 50, { isStatic: true });
+    world.gravity.y = 0.5;
+    let bird = Matter.Bodies.rectangle( Constants.MAX_WIDTH, 
+                                        Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2,
+                                        Constants.BIRD_SIZE, 
+                                        Constants.BIRD_SIZE, 
+                                        { isStatic: true },
+                                        { friction : 1},
+                                        { frictionAir: 1})
+    let mainCharacter = Matter.Bodies.rectangle( Constants.FLOOR_HEIGHT + Constants.MAIN_CHARACTER_SIZE/2, 
+                                                 Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.MAIN_CHARACTER_SIZE/2, 
+                                                 Constants.MAIN_CHARACTER_SIZE, Constants.MAIN_CHARACTER_SIZE, 
+                                                 { isStatic: false },
+                                                 { friction : 1},
+                                                 { frictionAir: 1}
+                                                );
+    let floor1 = Matter.Bodies.rectangle( Constants.MAX_WIDTH/2,
+                                          Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT/2, 
+                                          Constants.MAX_WIDTH, 
+                                          Constants.FLOOR_HEIGHT, 
+                                          { isStatic: true });
+    let floor2 = Matter.Bodies.rectangle( Constants.MAX_WIDTH*1.5, 
+                                          Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT/2, 
+                                          Constants.MAX_WIDTH, 
+                                          Constants.FLOOR_HEIGHT, 
+                                          { isStatic: true });
+    // let ceiling = Matter.Bodies.rectangle( Constants.MAX_WIDTH / 2, 
+    //                                         25, Constants.MAX_WIDTH, Constants.FLOOR_HEIGHT, { isStatic: true });
 
-    Matter.World.add(world, [bird, mainCharacter, floor1, floor2, ceiling]);
+    Matter.World.add(world, [bird, mainCharacter, floor1, floor2]);
 
     return {
         physics: { engine: engine, world: world},
@@ -74,7 +86,7 @@ class App extends Component {
         bird: { body: bird, size: [Constants.BIRD_SIZE, Constants.BIRD_SIZE], renderer: Bird},
         floor1: { body: floor1, size: [Constants.FLOOR_HEIGHT, Constants.MAX_WIDTH], renderer: Floor },
         floor2: { body: floor2, size: [Constants.FLOOR_HEIGHT, Constants.MAX_WIDTH], renderer: Floor },
-        ceiling: { body: ceiling, size: [Constants.MAX_WIDTH, 50], color: "green", renderer: Wall },
+        // ceiling: { body: ceiling, size: [Constants.MAX_WIDTH, Constants.FLOOR_HEIGHT], color: "green", renderer: Wall },
     }
 }
   render(){
@@ -95,8 +107,8 @@ class App extends Component {
             />
           <GameEngine
             ref={(ref)=> {this.GameEngine = ref;}}
-            style = {styles.gameContainer}
-            systems = {[Physics]}
+            style = {styles.gameContainer} 
+            systems = {[Physics,AnswerHandle]}
             entities = {this.entities}
             status = {this.status}
             >

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { handleCorrect, handleInCorrect } from '../redux/actionCreators';
+import store from '../redux/store';
 
 
 const myQuestions = [
@@ -54,6 +55,7 @@ class Quiz extends Component {
         }
     }
 
+
     _onPress = (choice) => {
         if (choice == this.state.listQuiz[this.state.currentQuestion].correctAnswer) {
           this.props.handleCorrect();
@@ -97,7 +99,17 @@ class Quiz extends Component {
     }
 };
 
-export default connect(null, { handleCorrect, handleInCorrect }) (Quiz);
+
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     handleCorrect: () => dispatch(handleCorrect()),
+//     handleInCorrect: () => dispatch(handleInCorrect())
+//   }
+// }
+
+
+
+export default connect(null, {handleCorrect, handleInCorrect}) (Quiz);
 
 const styles = StyleSheet.create({
     questionFrame: {

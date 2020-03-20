@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-
 import plusScoreReducer from './plusScoreReducer';
 import isCorrectReducer from './isCorrectReducer';
 
