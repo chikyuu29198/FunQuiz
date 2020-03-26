@@ -27,7 +27,6 @@ const AnswerHandle = (entities, { touches, time }) => {
     if (_isCorrect == true) {
         store.dispatch({type: 'RESET'});
         while (mainCharacter.position.y >= Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2){
-            
             Matter.Body.translate( mainCharacter, {x: 0, y: -1}); 
             // sleep(10);  
       }

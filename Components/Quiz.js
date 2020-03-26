@@ -3,15 +3,11 @@ import {
     StyleSheet,
     View,
     Text,
-    Image,
-    TouchableWithoutFeedback,
-    Alert,
     TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux';
-import { handleCorrect, handleInCorrect } from '../redux/actionCreators';
+import { handleCorrect, handleInCorrect, plusScore } from '../redux/actionCreators';
 import store from '../redux/store';
-
 
 const myQuestions = [
 {
@@ -59,6 +55,7 @@ class Quiz extends Component {
     _onPress = (choice) => {
         if (choice == this.state.listQuiz[this.state.currentQuestion].correctAnswer) {
           this.props.handleCorrect();
+          this.props.plusScore();
         }
         else {
           this.props.handleInCorrect();
@@ -109,7 +106,7 @@ class Quiz extends Component {
 
 
 
-export default connect(null, {handleCorrect, handleInCorrect}) (Quiz);
+export default connect(null, {handleCorrect, handleInCorrect, plusScore}) (Quiz);
 
 const styles = StyleSheet.create({
     questionFrame: {

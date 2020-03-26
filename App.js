@@ -17,6 +17,7 @@ import Images from './Assets/Images.js';
 import Floor from './Components/Floor';
 import MainCharacter from './Components/MainCharacter';
 import Quiz from './Components/Quiz';
+import Score from './Components/Score';
 import store  from './redux/store';
 import { Provider } from 'react-redux';
 
@@ -75,10 +76,10 @@ class App extends Component {
                                           Constants.MAX_WIDTH, 
                                           Constants.FLOOR_HEIGHT, 
                                           { isStatic: true });
-    // let ceiling = Matter.Bodies.rectangle( Constants.MAX_WIDTH / 2, 
-    //                                         25, Constants.MAX_WIDTH, Constants.FLOOR_HEIGHT, { isStatic: true });
+    let score = Matter.Bodies.rectangle( Constants.MAX_WIDTH / 2, 
+                                            25, 80, 30, { isStatic: true });
 
-    Matter.World.add(world, [bird, mainCharacter, floor1, floor2]);
+    Matter.World.add(world, [bird, mainCharacter, floor1, floor2, score]);
 
     return {
         physics: { engine: engine, world: world},
@@ -86,7 +87,7 @@ class App extends Component {
         bird: { body: bird, size: [Constants.BIRD_SIZE, Constants.BIRD_SIZE], renderer: Bird},
         floor1: { body: floor1, size: [Constants.FLOOR_HEIGHT, Constants.MAX_WIDTH], renderer: Floor },
         floor2: { body: floor2, size: [Constants.FLOOR_HEIGHT, Constants.MAX_WIDTH], renderer: Floor },
-        // ceiling: { body: ceiling, size: [Constants.MAX_WIDTH, Constants.FLOOR_HEIGHT], color: "green", renderer: Wall },
+        score: { body: score, size: [80, 30], renderer: Score },
     }
 }
   render(){

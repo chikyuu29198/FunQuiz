@@ -1,4 +1,4 @@
-export function plusSore() {
+export function plusScore() {
     return { type: 'PLUS_SCORE' };
 }
 
@@ -15,3 +15,8 @@ export function reset() {
     return { type: 'RESET'};
     
 }
+
+// export function plusSore() {
+//     return { type: 'PLUS_SCORE'};
+    
+// }
