@@ -5,32 +5,43 @@ import { Alert } from "react-native";
 
 let tick = 1;
 let pose = 1;
-let jum = false;
+let checkStatic = false;
 
-const Physics = (entities, { touches, time }) => {
+const Physics = (entities, { touches, time, dispatch }) => {
 
     let engine = entities.physics.engine;
     let mainCharacter = entities.mainCharacter.body;
     let bird = entities.bird.body; 
+    let _isCorrect = store.getState().isCorrect;
+    let world = engine.world;
+
+    _isCorrect = store.getState().isCorrect;
     
     // touches.filter(t => t.type === "press").forEach(t => {
     //     Matter.Body.applyForce( mainCharacter, mainCharacter.position, {x: 0.00, y: -0.020});
     // });
-    if (mainCharacter.position.y > Constants.MAX_HEIGHT/2 && bird.position.y < Constants.MAX_HEIGHT/2 && jum == false){
-        // if(bird.position.x <= (mainCharacter.position.x + Constants.BIRD_SIZE/2 + Constants.MAIN_CHARACTER_SIZE/2 && mainCharacter.position.y 
-        if (bird.position.x <= (mainCharacter.position.x + Constants.BIRD_SIZE/2 + Constants.MAIN_CHARACTER_SIZE/2) ) {
 
-            Matter.Body.setPosition( bird, { x:Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2, y: (Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.BIRD_SIZE/2)})
-            Matter.Body.setPosition( mainCharacter, { x:Constants.FLOOR_HEIGHT + Constants.MAIN_CHARACTER_SIZE/2, y: (Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.MAIN_CHARACTER_SIZE/2)})
+    if (mainCharacter.position.y > Constants.MAX_HEIGHT/2 && bird.position.y < Constants.MAX_HEIGHT/2 && _isCorrect == null){
+        if (bird.position.x <= mainCharacter.position.x ) {
+            checkStatic = true;
         }
         else {
             Matter.Body.translate(bird, {x: -3, y: 0})
                  
         }
     }
-    else{
-        jum = true;
+    if (checkStatic == true){
+        Matter.Body.setStatic(bird, false);
     }
+    if (bird.position.y >= Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.BIRD_SIZE/2 - Constants.MAIN_CHARACTER_SIZE){
+        Matter.Body.setStatic(bird, true);
+        Matter.Body.setPosition(bird, {x: Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2,
+                                       y: Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.BIRD_SIZE/2})
+        dispatch({ type: "game-over"});
+    }
+    // else{
+    //     jum = true;
+    // }
     Object.keys(entities).forEach(key => {
         if (key.indexOf("floor") === 0) {
             if (entities[key].body.position.x <= -0.5*Constants.MAX_WIDTH){

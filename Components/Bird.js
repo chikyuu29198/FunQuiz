@@ -4,6 +4,13 @@ import Images from '../Assets/Images.js';
 import Constants from './Constants';
 
 export default class Bird extends Component { 
+    constructor (props) {
+        super(props)
+        this.state = {
+          isRun: true
+        }
+     }
+   
     render() {
         const width = this.props.size[0];
         const height = this.props.size[1];

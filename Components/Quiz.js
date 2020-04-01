@@ -46,14 +46,14 @@ class Quiz extends Component {
         super(pros);
         this.state = {
             listQuiz: myQuestions,
-            currentQuestion: 0,
+            // currentQuestion: 0,
             status: null,
         }
     }
 
-
+    //  let index = this.props.index;
     _onPress = (choice) => {
-        if (choice == this.state.listQuiz[this.state.currentQuestion].correctAnswer) {
+        if (choice == this.state.listQuiz[this.props.index].correctAnswer) {
           this.props.handleCorrect();
           this.props.plusScore();
         }
@@ -62,7 +62,7 @@ class Quiz extends Component {
         }
     }
     render(){
-        const index = this.state.currentQuestion;
+        const index = this.props.index;
         const quiz = this.state.listQuiz[index];
         return(  
             <View style = { styles.questionFrame}>
@@ -96,17 +96,13 @@ class Quiz extends Component {
     }
 };
 
+function mapStateToProps(state) {
+  return {
+     index: state.updateIndex
+     };
+}
 
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     handleCorrect: () => dispatch(handleCorrect()),
-//     handleInCorrect: () => dispatch(handleInCorrect())
-//   }
-// }
-
-
-
-export default connect(null, {handleCorrect, handleInCorrect, plusScore}) (Quiz);
+export default connect(mapStateToProps, {handleCorrect, handleInCorrect, plusScore}) (Quiz);
 
 const styles = StyleSheet.create({
     questionFrame: {

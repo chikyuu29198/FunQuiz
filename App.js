@@ -21,50 +21,32 @@ import Score from './Components/Score';
 import store  from './redux/store';
 import { Provider } from 'react-redux';
 
-export const randomBetween = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-export const generatePipes = () => {
-  let topPipeHeight = randomBetween(100, (Constants.MAX_HEIGHT / 2) - 100);
-  let bottomPipeHeight = Constants.MAX_HEIGHT - topPipeHeight - Constants.GAP_SIZE;
-
-  let sizes = [topPipeHeight, bottomPipeHeight]
-
-  if (Math.random() < 0.5) {
-      sizes = sizes.reverse();
-  }
-
-
-  return sizes;
-}
-
 class App extends Component {
   constructor(props){
     super(props);
     this.GameEngine = null;
     this.entities = this.setupWorld();
-    // this.isCorrect = null;
-
+    this.state = {
+      running: true
+    }
   }
+  
 
   setupWorld = () => {
     let engine = Matter.Engine.create({ enableSleeping: false });
     let world = engine.world;
-    world.gravity.y = 0.5;
+    world.gravity.y = 1;
     let bird = Matter.Bodies.rectangle( Constants.MAX_WIDTH, 
                                         Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2,
                                         Constants.BIRD_SIZE, 
                                         Constants.BIRD_SIZE, 
-                                        { isStatic: true },
-                                        { friction : 1},
-                                        { frictionAir: 1})
+                                        { isStatic: true,}                                        
+                                        );
+                                        
     let mainCharacter = Matter.Bodies.rectangle( Constants.FLOOR_HEIGHT + Constants.MAIN_CHARACTER_SIZE/2, 
                                                  Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.MAIN_CHARACTER_SIZE/2, 
                                                  Constants.MAIN_CHARACTER_SIZE, Constants.MAIN_CHARACTER_SIZE, 
-                                                 { isStatic: false },
-                                                 { friction : 1},
-                                                 { frictionAir: 1}
+                                                 { isStatic: true },                                                 
                                                 );
     let floor1 = Matter.Bodies.rectangle( Constants.MAX_WIDTH/2,
                                           Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT/2, 
@@ -89,7 +71,13 @@ class App extends Component {
         floor2: { body: floor2, size: [Constants.FLOOR_HEIGHT, Constants.MAX_WIDTH], renderer: Floor },
         score: { body: score, size: [80, 30], renderer: Score },
     }
-}
+  }
+  handleEvent = (ev) => {
+		if (ev.type === "game-over")
+			this.setState({
+        running: false
+      });
+	};
   render(){
     return(
       <Provider store = { store }>
@@ -111,6 +99,8 @@ class App extends Component {
             style = {styles.gameContainer} 
             systems = {[Physics,AnswerHandle]}
             entities = {this.entities}
+            running = {this.state.running}
+            onEvent = {this.handleEvent}
             status = {this.status}
             >
           </GameEngine>   

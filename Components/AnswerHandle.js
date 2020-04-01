@@ -3,6 +3,8 @@ import Constants from "./Constants";
 import store from '../redux/store';
 import { Alert } from "react-native";
 
+let checkSwap = false;
+
 function sleep(milliseconds) {
       const date = Date.now();
       let currentDate = null;
@@ -11,7 +13,7 @@ function sleep(milliseconds) {
       } while (currentDate - date < milliseconds);
     }
 
-const AnswerHandle = (entities, { touches, time }) => {
+const AnswerHandle = (entities, { touches, time, dispatch }) => {
 
     let engine = entities.physics.engine;
     let mainCharacter = entities.mainCharacter.body;
@@ -20,35 +22,41 @@ const AnswerHandle = (entities, { touches, time }) => {
     let world = engine.world;
     _isCorrect = store.getState().isCorrect;
 
-//     function sleep(ms) {
-//       return new Promise(resolve => setTimeout(resolve, ms));
-//     }
-    
     if (_isCorrect == true) {
-        store.dispatch({type: 'RESET'});
-        while (mainCharacter.position.y >= Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2){
-            Matter.Body.translate( mainCharacter, {x: 0, y: -1}); 
-            // sleep(10);  
+      if (bird.position.x > (mainCharacter.position.x)){
+        Matter.Body.translate( bird, {x: -10, y: 0});
       }
-        while (bird.position.x > (mainCharacter.position.x  + 3)){
-              Matter.Body.translate( bird, {x: -1, y: 0});
-            //   sleep(10);     
+      else if (mainCharacter.position.y > Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2){
+        Matter.Body.translate( mainCharacter, {x: 0, y: -10});
+      }
+      else {
+        store.dispatch({type: 'RESET'});
+        Matter.Body.setPosition( bird, { x:Constants.MAX_WIDTH + 2*Constants.BIRD_SIZE, 
+                                         y: Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2})
+        checkSwap = true;
+        Matter.Body.setStatic( mainCharacter, false);
+        // engine.world.gravity.y = 1;
         }
-        
-      //   Matter.Composite.remove(world, bird)
-        Matter.World.remove(world, bird)
-        engine.world.gravity.y = 0.5;
-        
     }
+
     else if (_isCorrect == false){
-        store.dispatch({type: 'RESET'}); 
-        while (bird.position.x > (mainCharacter.position.x + Constants.BIRD_SIZE/2 + Constants.MAIN_CHARACTER_SIZE/2)){
-              Matter.Body.translate( bird, {x: -1, y: 0});      
+        if (bird.position.x > (mainCharacter.position.x  + 3)){
+          Matter.Body.translate( bird, {x: -6, y: 0});
         }
-        while (bird.position.y < Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.BIRD_SIZE/2){
-              Matter.Body.translate( bird, {x: 0, y: +1});    
-        }      
+        else if (bird.position.y < Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.BIRD_SIZE/2){
+          Matter.Body.translate( bird, {x: 0, y: +6}); 
+        }
+        else {
+          store.dispatch({type: 'RESET'});
+          dispatch({ type: "game-over"});
+          
+        } 
     }
+    if ( checkSwap == true && mainCharacter.position.y >= Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.MAIN_CHARACTER_SIZE/2){
+      checkSwap = false;
+      Matter.Body.setStatic(mainCharacter, true);
+      store.dispatch( { type: 'UPDATE_INDEX'});
+    }   
     Matter.Engine.update(engine, time.delta);
     return entities;
 };
