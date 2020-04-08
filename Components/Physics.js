@@ -37,6 +37,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
         Matter.Body.setStatic(bird, true);
         Matter.Body.setPosition(bird, {x: Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2,
                                        y: Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.BIRD_SIZE/2})
+        delete(entities.mainCharacter)
         dispatch({ type: "game-over"});
     }
     // else{

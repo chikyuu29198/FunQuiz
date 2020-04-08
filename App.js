@@ -4,10 +4,12 @@ import {
   View,
   Text,
   Image,
-  Alert
+  Alert,
+  TouchableOpacity,
+  StatusBar
 } from 'react-native';
 import Constants from './Components/Constants';
-import { GameEngine} from 'react-native-game-engine';
+import { GameEngine, dispatch} from 'react-native-game-engine';
 import Matter from 'matter-js';
 import Bird from './Components/Bird';
 import Wall from './Components/Wall';
@@ -77,7 +79,23 @@ class App extends Component {
 			this.setState({
         running: false
       });
-	};
+    if (ev.type === "reset-game"){
+      this.refs.engine.swap(setupWorld());
+      this.setState({
+        running: true
+    });
+    }  
+  };
+  
+  reset = () => {
+    this.GameEngine.swap(this.setupWorld());
+    // this.entities = this.setupWorld();
+    this.setState({
+        running: true
+    });
+    // dispatch({ type: "reset-game"})
+  };
+
   render(){
     return(
       <Provider store = { store }>
@@ -103,6 +121,7 @@ class App extends Component {
             onEvent = {this.handleEvent}
             status = {this.status}
             >
+            <StatusBar hidden={true} />
           </GameEngine>   
           
         </View>
@@ -110,6 +129,12 @@ class App extends Component {
         <View style = { styles.questionFrame}>
             <Quiz />
         </View>
+        {!this.state.running && 
+          <TouchableOpacity style={styles.fullScreenButton} onPress={this.reset}>
+            <View style={styles.fullScreen}>
+              <Text style={styles.gameOverText}>Game Over</Text>
+            </View>
+            </TouchableOpacity>}
       </View>
       </Provider>
     );
@@ -166,6 +191,29 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold'
+  },
+  gameOverText: {
+    color: 'white',
+    fontSize: 48
+},
+  fullScreen: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'black',
+    opacity: 0.8,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  fullScreenButton: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flex: 1
   }
   
 });

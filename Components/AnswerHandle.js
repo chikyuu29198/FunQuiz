@@ -47,9 +47,9 @@ const AnswerHandle = (entities, { touches, time, dispatch }) => {
           Matter.Body.translate( bird, {x: 0, y: +6}); 
         }
         else {
+          delete(entities.mainCharacter)
           store.dispatch({type: 'RESET'});
-          dispatch({ type: "game-over"});
-          
+          dispatch({ type: "game-over"}); 
         } 
     }
     if ( checkSwap == true && mainCharacter.position.y >= Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.MAIN_CHARACTER_SIZE/2){
