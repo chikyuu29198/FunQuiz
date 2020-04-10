@@ -2,10 +2,17 @@ import Matter from "matter-js";
 import Constants from "./Constants";
 import store from '../redux/store';
 import { Alert } from "react-native";
-
+import Sound from 'react-native-sound'
 let tick = 1;
 let pose = 1;
 let checkStatic = false;
+
+const failedSound = new Sound(require('../Assets/sounds/failedSound.mp3'),
+(error, sound) => {
+if (error) {
+  alert('error');
+  return;
+}})
 
 const Physics = (entities, { touches, time, dispatch }) => {
 
@@ -16,12 +23,8 @@ const Physics = (entities, { touches, time, dispatch }) => {
     let world = engine.world;
 
     _isCorrect = store.getState().isCorrect;
-    
-    // touches.filter(t => t.type === "press").forEach(t => {
-    //     Matter.Body.applyForce( mainCharacter, mainCharacter.position, {x: 0.00, y: -0.020});
-    // });
-
-    if (mainCharacter.position.y > Constants.MAX_HEIGHT/2 && bird.position.y < Constants.MAX_HEIGHT/2 && _isCorrect == null){
+    // mainCharacter.position.y > Constants.MAX_HEIGHT/2 && bird.position.y < Constants.MAX_HEIGHT/2 &&
+    if ( _isCorrect == null){
         if (bird.position.x <= mainCharacter.position.x ) {
             checkStatic = true;
         }
@@ -30,19 +33,23 @@ const Physics = (entities, { touches, time, dispatch }) => {
                  
         }
     }
-    if (checkStatic == true){
+    if (checkStatic == true &&  _isCorrect == null){
         Matter.Body.setStatic(bird, false);
     }
-    if (bird.position.y >= Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.BIRD_SIZE/2 - Constants.MAIN_CHARACTER_SIZE){
+    else {
+        Matter.Body.setStatic(bird, true);
+    }
+    if ( _isCorrect == null && bird.position.y >= Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.BIRD_SIZE/2 - Constants.MAIN_CHARACTER_SIZE){
         Matter.Body.setStatic(bird, true);
         Matter.Body.setPosition(bird, {x: Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2,
                                        y: Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.BIRD_SIZE/2})
-        delete(entities.mainCharacter)
-        dispatch({ type: "game-over"});
+        // delete(entities.mainCharacter)
+        failedSound.play();
+        dispatch({ type: "game-over"}); 
+        store.dispatch({type: 'RESET'});
+        // checkStatic = false;
+
     }
-    // else{
-    //     jum = true;
-    // }
     Object.keys(entities).forEach(key => {
         if (key.indexOf("floor") === 0) {
             if (entities[key].body.position.x <= -0.5*Constants.MAX_WIDTH){
@@ -52,7 +59,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
         }
     })
     tick += 1;
-    if (tick%8 == 0){
+    if (tick%8 == 0 && mainCharacter){
         pose ++;
         if(pose == 9){
             pose = 1;
