@@ -5,7 +5,7 @@ import { Alert } from "react-native";
 import Sound from 'react-native-sound'
 let tick = 1;
 let pose = 1;
-let checkStatic = false;
+let timeOut = false;
 
 const failedSound = new Sound(require('../Assets/sounds/failedSound.mp3'),
 (error, sound) => {
@@ -23,32 +23,28 @@ const Physics = (entities, { touches, time, dispatch }) => {
     let world = engine.world;
 
     _isCorrect = store.getState().isCorrect;
-    // mainCharacter.position.y > Constants.MAX_HEIGHT/2 && bird.position.y < Constants.MAX_HEIGHT/2 &&
-    if ( _isCorrect == null){
+
+    if ( _isCorrect == null && timeOut == false && bird.position.y == Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2){
         if (bird.position.x <= mainCharacter.position.x ) {
-            checkStatic = true;
+            timeOut = true;
         }
         else {
-            Matter.Body.translate(bird, {x: -3, y: 0})
-                 
+            Matter.Body.translate(bird, {x: -3, y: 0})            
         }
     }
-    if (checkStatic == true &&  _isCorrect == null){
-        Matter.Body.setStatic(bird, false);
-    }
-    else {
-        Matter.Body.setStatic(bird, true);
-    }
-    if ( _isCorrect == null && bird.position.y >= Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.BIRD_SIZE/2 - Constants.MAIN_CHARACTER_SIZE){
-        Matter.Body.setStatic(bird, true);
-        Matter.Body.setPosition(bird, {x: Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2,
-                                       y: Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.BIRD_SIZE/2})
-        // delete(entities.mainCharacter)
-        failedSound.play();
-        dispatch({ type: "game-over"}); 
-        store.dispatch({type: 'RESET'});
-        // checkStatic = false;
+    console.log(timeOut);
+    if (timeOut == true && _isCorrect == null){
 
+        if (bird.position.y < Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.BIRD_SIZE/2){
+            Matter.Body.translate(bird, {x: 0, y: +3})
+        }
+        else{
+            Matter.Body.setPosition(bird, {x: Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2,
+                                           y: Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.BIRD_SIZE/2});
+            timeOut = false;
+            failedSound.play();
+            dispatch({ type: "game-over"}); 
+        }
     }
     Object.keys(entities).forEach(key => {
         if (key.indexOf("floor") === 0) {

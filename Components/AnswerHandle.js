@@ -33,6 +33,7 @@ const AnswerHandle = (entities, { touches, time, dispatch }) => {
     let bird = entities.bird.body; 
     let _isCorrect = store.getState().isCorrect;
     let world = engine.world;
+
     _isCorrect = store.getState().isCorrect;
 
     if (_isCorrect == true) {
@@ -44,12 +45,12 @@ const AnswerHandle = (entities, { touches, time, dispatch }) => {
       }
       else {
         correctSound.play();
+        dispatch({type: "score"});
         store.dispatch({type: 'RESET'});
         Matter.Body.setPosition( bird, { x:Constants.MAX_WIDTH + 2*Constants.BIRD_SIZE, 
                                          y: Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2})
         checkSwap = true;
         Matter.Body.setStatic( mainCharacter, false);
-        // engine.world.gravity.y = 1;
         }
     }
 
@@ -64,8 +65,7 @@ const AnswerHandle = (entities, { touches, time, dispatch }) => {
           failedSound.play();
           delete(entities.mainCharacter)
           dispatch({ type: "game-over"}); 
-          store.dispatch({type: 'RESET'});
-          
+          store.dispatch({type: 'RESET'});        
         } 
     }
     if ( checkSwap == true && mainCharacter.position.y >= Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.MAIN_CHARACTER_SIZE/2){

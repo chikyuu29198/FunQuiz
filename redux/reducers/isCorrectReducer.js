@@ -1,4 +1,4 @@
-const isCorrectReducer = (state = false, action) => {
+const isCorrectReducer = (state = null, action) => {
     if (action.type == 'HANDLE_CORRECT') return true;
     if (action.type == 'HANDLE_INCORRECT') return false;
     if (action.type == 'RESET') return null;

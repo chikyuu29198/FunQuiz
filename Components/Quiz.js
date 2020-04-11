@@ -39,6 +39,66 @@ const myQuestions = [
     d: "ESLint"
     },
     correctAnswer: "d"
+},
+{
+  question: "Who invented JavaScript?",
+  answers: {
+  a: "Douglas Crockford",
+  b: "Sheryl Sandberg",
+  c: "Brendan Eich",
+  d: "xyz"
+  },
+  correctAnswer: "c"
+},
+{
+  question: "Which one of these is a JavaScript package manager?",
+  answers: {
+  a: "Node.js",
+  b: "TypeScript",
+  c: "npm",
+  d: "xyz",
+  },
+  correctAnswer: "c"
+},
+{
+  question: "Which tool can you use to ensure code quality?",
+  answers: {
+  a: "Angular",
+  b: "jQuery",
+  c: "RequireJS",
+  d: "ESLint"
+  },
+  correctAnswer: "d"
+},
+{
+  question: "Who invented JavaScript?",
+  answers: {
+  a: "Douglas Crockford",
+  b: "Sheryl Sandberg",
+  c: "Brendan Eich",
+  d: "xyz"
+  },
+  correctAnswer: "c"
+},
+{
+  question: "Which one of these is a JavaScript package manager?",
+  answers: {
+  a: "Node.js",
+  b: "TypeScript",
+  c: "npm",
+  d: "xyz",
+  },
+  correctAnswer: "c"
+},
+{
+  question: "Which tool can you use to ensure code quality?",
+  answers: {
+  a: "Angular",
+  b: "jQuery",
+  c: "RequireJS",
+  d: "ESLint"
+  },
+  correctAnswer: "d"
 }
 ];
 class Quiz extends Component {
@@ -47,13 +107,13 @@ class Quiz extends Component {
         this.state = {
             listQuiz: myQuestions,
             // currentQuestion: 0,
-            status: false
+            status: this.props.isCorrect
         }
     }
 
     //  let index = this.props.index;
     _onPress = (choice) => {
-        this.setState({status: true})
+        // this.setState({status: true})
         if (choice == this.state.listQuiz[this.props.index].correctAnswer) {
           this.props.handleCorrect();
           this.props.plusScore();
@@ -79,7 +139,7 @@ class Quiz extends Component {
               <View style = { styles.AnswerBox}>
               <View style = { styles.answerBoxRow}>
                 <TouchableOpacity
-                  // disabled = {this.state.status}
+                  //  disabled = {this.state.status}
                   onPress = {() => this._onPress('a')}> 
                     <Text style = { styles.textContent}>{quiz.answers.a}</Text>
                 </TouchableOpacity>
@@ -113,7 +173,9 @@ class Quiz extends Component {
 
 function mapStateToProps(state) {
   return {
-     index: state.updateIndex
+     index: state.updateIndex,
+     disable: state.isCorrect
+
      };
 }
 

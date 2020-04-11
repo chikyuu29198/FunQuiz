@@ -4,7 +4,6 @@ import {
   View,
   Text,
   Image,
-  Alert,
   TouchableOpacity,
   StatusBar
 } from 'react-native';
@@ -12,16 +11,15 @@ import { GameEngine, dispatch} from 'react-native-game-engine';
 import Matter from 'matter-js';
 import Constants from '../Components/Constants';
 import Bird from '../Components/Bird';
-// import Wall from './Components/Wall';
 import Physics from '../Components/Physics.js';
 import AnswerHandle from '../Components/AnswerHandle.js';
 import Images from '../Assets/Images.js';
 import Floor from '../Components/Floor';
 import MainCharacter from '../Components/MainCharacter';
 import Quiz from '../Components/Quiz';
-import Score from '../Components/Score';
 import store  from '../redux/store';
 import { Provider } from 'react-redux';
+import SettingBar from '../Components/SettingBar'
 
 class RunAway extends Component {
   constructor(props){
@@ -29,7 +27,8 @@ class RunAway extends Component {
     this.GameEngine = null;
     this.entities = this.setupWorld();
     this.state = {
-      running: true
+      running: true,
+      score: 0
     }
   }
   
@@ -60,10 +59,10 @@ class RunAway extends Component {
                                           Constants.MAX_WIDTH, 
                                           Constants.FLOOR_HEIGHT, 
                                           { isStatic: true });
-    let score = Matter.Bodies.rectangle( Constants.MAX_WIDTH / 2, 
-                                            25, 80, 30, { isStatic: true });
+    // let score = Matter.Bodies.rectangle( Constants.MAX_WIDTH / 2, 
+    //                                         25, 80, 30, { isStatic: true });
 
-    Matter.World.add(world, [bird, mainCharacter, floor1, floor2, score]);
+    Matter.World.add(world, [bird, mainCharacter, floor1, floor2]);
 
     return {
         physics: { engine: engine, world: world},
@@ -71,7 +70,7 @@ class RunAway extends Component {
         bird: { body: bird, size: [Constants.BIRD_SIZE, Constants.BIRD_SIZE], renderer: Bird},
         floor1: { body: floor1, size: [Constants.FLOOR_HEIGHT, Constants.MAX_WIDTH], renderer: Floor },
         floor2: { body: floor2, size: [Constants.FLOOR_HEIGHT, Constants.MAX_WIDTH], renderer: Floor },
-        score: { body: score, size: [80, 30], renderer: Score },
+        // score: { body: score, size: [80, 30], renderer: Score },
     }
   }
   handleEvent = (ev) => {
@@ -79,7 +78,11 @@ class RunAway extends Component {
 			this.setState({
         running: false
       });
-    if (ev.type === "reset-game"){
+    else if (ev.type === "score")
+      this.setState({
+        score: this.state.score + 1
+      })
+    else if (ev.type === "reset-game"){
       this.refs.engine.swap(setupWorld());
       this.setState({
         running: true
@@ -123,7 +126,8 @@ class RunAway extends Component {
             >
             <StatusBar hidden={true} />
           </GameEngine>   
-          
+          < Text style = { styles.score }> {this.state.score} </Text>
+          < SettingBar />
         </View>
 
         <View style = { styles.questionFrame}>
@@ -215,7 +219,28 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     flex: 1
-  }
+  },
+  score: {
+    position: "absolute",
+    top: 5,
+    left: Constants.MAX_WIDTH/2 - 15,
+    fontSize: 40,
+    color: '#DC7C9D',
+    fontFamily: 'lucida grande',
+    fontWeight: "bold",
+    textShadowColor: '#444444',
+    textShadowRadius: 10,
+    textShadowOffset: { width: 2, height: 2}
+  },
+  settingBar: {
+    position: "absolute",
+    top: 5,
+    width: 40,
+    height: 20,
+    left: Constants.MAX_WIDTH - 50,
+    backgroundColor: 'black',
+    opacity: 0.8
+  },
   
 });
 

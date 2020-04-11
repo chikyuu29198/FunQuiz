@@ -13,4 +13,6 @@ export default Images = {
     grass1: require('./images/GrassLeft.png'),
     grass2: require('./images/GrassMid.png'),
     grass3: require('./images/GrassRight.png'),
+    mute: require('./images/mute.png'),
+    speaker: require('./images/speaker.png'),
 }
