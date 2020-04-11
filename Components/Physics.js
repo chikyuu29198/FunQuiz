@@ -32,7 +32,6 @@ const Physics = (entities, { touches, time, dispatch }) => {
             Matter.Body.translate(bird, {x: -3, y: 0})            
         }
     }
-    console.log(timeOut);
     if (timeOut == true && _isCorrect == null){
 
         if (bird.position.y < Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.BIRD_SIZE/2){

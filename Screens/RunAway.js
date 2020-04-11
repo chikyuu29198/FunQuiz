@@ -36,7 +36,6 @@ class RunAway extends Component {
   setupWorld = () => {
     let engine = Matter.Engine.create({ enableSleeping: false });
     let world = engine.world;
-    world.gravity.y = 1;
     let bird = Matter.Bodies.rectangle( Constants.MAX_WIDTH, 
                                         Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2,
                                         Constants.BIRD_SIZE, 
@@ -59,8 +58,6 @@ class RunAway extends Component {
                                           Constants.MAX_WIDTH, 
                                           Constants.FLOOR_HEIGHT, 
                                           { isStatic: true });
-    // let score = Matter.Bodies.rectangle( Constants.MAX_WIDTH / 2, 
-    //                                         25, 80, 30, { isStatic: true });
 
     Matter.World.add(world, [bird, mainCharacter, floor1, floor2]);
 
@@ -70,7 +67,6 @@ class RunAway extends Component {
         bird: { body: bird, size: [Constants.BIRD_SIZE, Constants.BIRD_SIZE], renderer: Bird},
         floor1: { body: floor1, size: [Constants.FLOOR_HEIGHT, Constants.MAX_WIDTH], renderer: Floor },
         floor2: { body: floor2, size: [Constants.FLOOR_HEIGHT, Constants.MAX_WIDTH], renderer: Floor },
-        // score: { body: score, size: [80, 30], renderer: Score },
     }
   }
   handleEvent = (ev) => {
@@ -92,11 +88,9 @@ class RunAway extends Component {
   
   reset = () => {
     this.GameEngine.swap(this.setupWorld());
-    // this.entities = this.setupWorld();
     this.setState({
         running: true
     });
-    // dispatch({ type: "reset-game"})
   };
 
   render(){
@@ -127,7 +121,7 @@ class RunAway extends Component {
             <StatusBar hidden={true} />
           </GameEngine>   
           < Text style = { styles.score }> {this.state.score} </Text>
-          < SettingBar />
+          < SettingBar/>
         </View>
 
         <View style = { styles.questionFrame}>
@@ -235,7 +229,7 @@ const styles = StyleSheet.create({
   settingBar: {
     position: "absolute",
     top: 5,
-    width: 40,
+    width: 50,
     height: 20,
     left: Constants.MAX_WIDTH - 50,
     backgroundColor: 'black',

@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Images from '../Assets/Images';
 import Constants from '../Components/Constants';
+import {ImageButton} from 'react-native-image-button-text';
 
 class SettingBar extends Component {
     constructor(props){
@@ -16,25 +17,33 @@ class SettingBar extends Component {
         this.setState({
             isMute: !this.state.isMute
         })
-        console.log(this.state.isMute)
     }
     
+    exitPress(){
+      this.props.navigation.navigate('Home')
+    }
   render() {
     return (
-      <View style={styles.statusBar}>
-        <TouchableOpacity style = {styles.settingBar}>
-        <Image 
-            style={{
-              position: 'absolute',
-              width: "100%",
-              height: "100%",
-          }} 
-          resizeMode="stretch"
-          source={ this.state.isMute == true ?                  
-          Images.mute : 
-          Images.speaker}  
-          />        
-       </TouchableOpacity>
+      <View style={styles.settingBar}>
+        <ImageButton  
+          width={20} 
+          height={20} 
+          text= "" 
+          onPress={this.changeSoundIcon.bind(this)}
+          source={ this.state.isMute ?
+                    Images.mute : 
+                    Images.speaker}/>
+        <ImageButton
+          width = {20}
+          height = {20}
+          paddingRight = {0}
+          text = ""
+          onPress={() =>
+            this.exitPress()    
+          }
+          source = { Images.exit}
+        
+        />
       </View>
     );
   }
@@ -46,8 +55,18 @@ const styles = StyleSheet.create({
       width: 50,
       height: 20,
       left: Constants.MAX_WIDTH -60,
-      // backgroundColor: 'black',
-      opacity: 0.5
+      alignContent: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'black',
+      opacity: 0.5,
+      flexDirection: 'row'
+
+      
     },
+    touchable: {
+      opacity: 0.5,
+      width: 20,
+      height: 20,
+    }
   });
 export default SettingBar; 
