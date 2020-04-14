@@ -40,7 +40,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
         else{
             Matter.Body.setPosition(bird, {x: Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2,
                                            y: Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.BIRD_SIZE/2});
-            console.log(soundStatus)
+            // console.log(soundStatus)
             if ( soundStatus == true ){
                 failedSound.play();
             }

@@ -41,12 +41,27 @@ class SettingBar extends Component {
         
     }
     exitPress(){
-      {this.props.navigation.navigate('Home')}
+      // {this.props.navigation.navigate('Home')}
+      Alert.alert(
+        //title
+        'Exit Game!',
+        //body
+        'Are you sure you want to exit ?',
+        [
+          {text: 'Yes', onPress: () => {this.props.navigation.navigate('Home')}},
+          {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
+        ],
+        { cancelable: false }
+        //clicking out side of alert will not cancel
+      );
     }
 
     UNSAFE_componentWillMount(){
       backgroundSound.play();
       // backgroundSound.stop();
+    }
+    componentWillUnmount(){
+      backgroundSound.stop();
     }
   render() {
     return (

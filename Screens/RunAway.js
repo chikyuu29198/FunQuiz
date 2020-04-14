@@ -90,6 +90,7 @@ class RunAway extends Component {
   };
   
   reset = () => {
+    store.dispatch({type: 'ENABLE_ANSWER'})
     store.dispatch({type: 'RESET_INDEX'});
     this.GameEngine.swap(this.setupWorld());
     this.setState({
@@ -126,7 +127,7 @@ class RunAway extends Component {
             <StatusBar hidden={true} />
           </GameEngine>   
           < Text style = { styles.score }> {this.state.score} </Text>
-          < SettingBar />
+          < SettingBar navigation = {this.props.navigation} />
         </View>
 
         <View style = { styles.questionFrame}>

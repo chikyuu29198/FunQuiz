@@ -6,7 +6,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux';
-import { handleCorrect, handleInCorrect, plusScore } from '../redux/actionCreators';
+import { handleCorrect, handleInCorrect, plusScore, enableAnswer, disableAnswer} from '../redux/actionCreators';
 import store from '../redux/store';
 
 const myQuestions = [
@@ -106,13 +106,13 @@ class Quiz extends Component {
         super(pros);
         this.state = {
             listQuiz: myQuestions,
-            status: false
+            // status: false
         }
     }
 
     //  let index = this.props.index;
     _onPress = (choice) => {
-        this.setState({status: true})
+        this.props.disableAnswer();
         if (choice == this.state.listQuiz[this.props.index].correctAnswer) {
           this.props.handleCorrect();
           this.props.plusScore();
@@ -122,13 +122,13 @@ class Quiz extends Component {
         }
     }
 
-    componentDidUpdate(prevProps) {
-      if (prevProps.index !== this.props.index) {
-        this.setState({
-          status: false
-        })
-      }
-    }
+    // componentDidUpdate(prevProps) {
+    //   if (prevProps.index !== this.props.index) {
+    //     this.setState({
+    //       status: false
+    //     })
+    //   }
+    // }
 
     render(){
         const index = this.props.index;
@@ -141,28 +141,28 @@ class Quiz extends Component {
               <View style = { styles.AnswerBox}>
               <View style = { styles.answerBoxRow}>
                 <TouchableOpacity
-                  disabled = {this.state.status}
+                  disabled = {this.props.isDisable}
                   onPress = {() => this._onPress('a')}> 
                     <Text style = { styles.textContent}>{quiz.answers.a}</Text>
                 </TouchableOpacity>
                 </View>
                 <View style = { styles.answerBoxRow}>
                   <TouchableOpacity
-                    disabled = {this.state.status}
+                    disabled = {this.props.isDisable}
                     onPress = {() => this._onPress('b')}> 
                       <Text style = { styles.textContent}>{quiz.answers.b}</Text>
                   </TouchableOpacity>
                 </View>
                 <View style = { styles.answerBoxRow}>
                   <TouchableOpacity 
-                    disabled = {this.state.status}
+                    disabled = {this.props.isDisable}
                     onPress = {() => this._onPress('c')}> 
                       <Text style = { styles.textContent}>{quiz.answers.c}</Text>
                   </TouchableOpacity>
                 </View>
                 <View style = { styles.answerBoxRow}>
                   <TouchableOpacity 
-                    disabled = {this.state.status}
+                    disabled = {this.props.isDisable}
                     onPress = {() => this._onPress('d')}> 
                       <Text style = { styles.textContent}>{quiz.answers.d}</Text>
                   </TouchableOpacity>
@@ -176,12 +176,11 @@ class Quiz extends Component {
 function mapStateToProps(state) {
   return {
      index: state.updateIndex,
-     disable: state.isCorrect
-
+     isDisable: state.disableAnswer
      };
 }
 
-export default connect(mapStateToProps, {handleCorrect, handleInCorrect, plusScore}) (Quiz);
+export default connect(mapStateToProps, {handleCorrect, handleInCorrect, plusScore, enableAnswer, disableAnswer}) (Quiz);
 
 const styles = StyleSheet.create({
     questionFrame: {

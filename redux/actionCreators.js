@@ -26,3 +26,12 @@ export function resetIndex() {
 export function updateSound() {
     return { type: 'UPDATE_SOUND' }
 }
+
+export function enableAnswer(){
+    return { type: 'ENABLE_ANSWER' }
+}
+
+export function disableAnswer(){
+    return { type: 'DISABLE_ANSWER' }
+}
+

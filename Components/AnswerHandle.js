@@ -4,8 +4,8 @@ import store from '../redux/store';
 import Sound from 'react-native-sound'
 import { Alert } from "react-native";
 
-let checkSwap = false;
-
+let checkFall = false;
+let isUpdated = false;
 const correctSound = new Sound(require('../Assets/sounds/correctSound.mp3'),
       (error, sound) => {
       if (error) {
@@ -38,25 +38,42 @@ const AnswerHandle = (entities, { touches, time, dispatch }) => {
     _isCorrect = store.getState().isCorrect;
 
     if (_isCorrect == true) {
-      console.log( soundStatus)
-      if (bird.position.x > (mainCharacter.position.x)){
+      // console.log( soundStatus)
+      if (bird.position.x > mainCharacter.position.x ){
         Matter.Body.translate( bird, {x: -10, y: 0});
+        
       }
-      else if (mainCharacter.position.y > Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2){
+      else if (mainCharacter.position.y > Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2 && checkFall == false){
+        console.log("nhay")
+        console.log(checkFall)
         Matter.Body.translate( mainCharacter, {x: 0, y: -10});
+      }  
+      else{
+        if( isUpdated == false ){
+          console.log("check")
+          checkFall = true;
+          dispatch({ type: "score"});        
+          if ( soundStatus == true ){
+            correctSound.play();
+          }
+          isUpdated = true;
+        }       
+        if (mainCharacter.position.y <= Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.MAIN_CHARACTER_SIZE/2 - 9){
+          console.log("sssss")
+          Matter.Body.translate( mainCharacter, {x: 0, y: +10});
+        }
+        else {
+          Matter.Body.setPosition( mainCharacter, { x: Constants.FLOOR_HEIGHT + Constants.MAIN_CHARACTER_SIZE/2, 
+                                                    y: Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.MAIN_CHARACTER_SIZE/2})
+          store.dispatch({ type: 'UPDATE_INDEX'})
+          store.dispatch({type: 'ENABLE_ANSWER'})
+          Matter.Body.setPosition( bird, { x:Constants.MAX_WIDTH + 2*Constants.BIRD_SIZE, 
+                                           y: Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2})
+          store.dispatch({type: 'RESET'});
+          checkFall = false;
+          isUpdated = false;
+        }
       }
-      
-      else {
-        if ( soundStatus == true ){
-          correctSound.play();
-        }
-        dispatch({type: "score"});
-        store.dispatch({type: 'RESET'});
-        Matter.Body.setPosition( bird, { x:Constants.MAX_WIDTH + 2*Constants.BIRD_SIZE, 
-                                         y: Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2})
-        checkSwap = true;
-        Matter.Body.setStatic( mainCharacter, false);
-        }
     }
 
     else if (_isCorrect == false){
@@ -75,11 +92,11 @@ const AnswerHandle = (entities, { touches, time, dispatch }) => {
           store.dispatch({type: 'RESET'});        
         } 
     }
-    if ( checkSwap == true && mainCharacter.position.y >= Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.MAIN_CHARACTER_SIZE/2){
-      checkSwap = false;
-      Matter.Body.setStatic(mainCharacter, true);
-      store.dispatch( { type: 'UPDATE_INDEX'});
-    }   
+    // if ( checkSwap == true && mainCharacter.position.y >= Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.MAIN_CHARACTER_SIZE/2){
+    //   checkSwap = false;
+    //   Matter.Body.setStatic(mainCharacter, true);
+    //   store.dispatch( { type: 'UPDATE_INDEX'});
+    // }   
     Matter.Engine.update(engine, time.delta);
     return entities;
 };
