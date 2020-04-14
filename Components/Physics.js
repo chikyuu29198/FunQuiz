@@ -10,7 +10,7 @@ let timeOut = false;
 const failedSound = new Sound(require('../Assets/sounds/failedSound.mp3'),
 (error, sound) => {
 if (error) {
-  alert('error');
+  console.log("Can not load failed sound")
   return;
 }})
 
@@ -21,7 +21,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
     let bird = entities.bird.body; 
     let _isCorrect = store.getState().isCorrect;
     let world = engine.world;
-
+    let soundStatus = store.getState().soundStatus;
     _isCorrect = store.getState().isCorrect;
 
     if ( _isCorrect == null && timeOut == false && bird.position.y == Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2){
@@ -40,9 +40,12 @@ const Physics = (entities, { touches, time, dispatch }) => {
         else{
             Matter.Body.setPosition(bird, {x: Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2,
                                            y: Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.BIRD_SIZE/2});
-            timeOut = false;
-            failedSound.play();
+            console.log(soundStatus)
+            if ( soundStatus == true ){
+                failedSound.play();
+            }
             dispatch({ type: "game-over"}); 
+            timeOut = false;
         }
     }
     Object.keys(entities).forEach(key => {

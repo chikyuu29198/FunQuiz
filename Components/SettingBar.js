@@ -1,10 +1,23 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button, Image } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Images from '../Assets/Images';
 import Constants from '../Components/Constants';
 import {ImageButton} from 'react-native-image-button-text';
 import { StackNavigator } from 'react-navigation';
+import store from '../redux/store';
+import Sound from 'react-native-sound';
+Sound.setCategory('Ambient')
+
+const backgroundSound = new Sound(require('../Assets/sounds/backgroundSound.mp3'),
+    (error, sound) => {
+    if (error) {
+      console.log("Can not load background sound")
+      return;
+    }
+    backgroundSound.setNumberOfLoops(-1)
+    })    
+
 
 class SettingBar extends Component {
     constructor(props){
@@ -15,13 +28,25 @@ class SettingBar extends Component {
       }
       
     changeSoundIcon(){
-        this.setState({
-            isMute: !this.state.isMute
-        })
+      store.dispatch({type: 'UPDATE_SOUND'})
+      this.setState({
+          isMute: !this.state.isMute
+      })
+      if (this.state.isMute == true){
+        backgroundSound.play()
+      }
+      else {
+        backgroundSound.stop()
+      }
+        
     }
-    
     exitPress(){
       {this.props.navigation.navigate('Home')}
+    }
+
+    UNSAFE_componentWillMount(){
+      backgroundSound.play();
+      // backgroundSound.stop();
     }
   render() {
     return (

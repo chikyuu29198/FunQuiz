@@ -33,18 +33,23 @@ const AnswerHandle = (entities, { touches, time, dispatch }) => {
     let bird = entities.bird.body; 
     let _isCorrect = store.getState().isCorrect;
     let world = engine.world;
+    let soundStatus = store.getState().soundStatus;
 
     _isCorrect = store.getState().isCorrect;
 
     if (_isCorrect == true) {
+      console.log( soundStatus)
       if (bird.position.x > (mainCharacter.position.x)){
         Matter.Body.translate( bird, {x: -10, y: 0});
       }
       else if (mainCharacter.position.y > Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2){
         Matter.Body.translate( mainCharacter, {x: 0, y: -10});
       }
+      
       else {
-        correctSound.play();
+        if ( soundStatus == true ){
+          correctSound.play();
+        }
         dispatch({type: "score"});
         store.dispatch({type: 'RESET'});
         Matter.Body.setPosition( bird, { x:Constants.MAX_WIDTH + 2*Constants.BIRD_SIZE, 
@@ -62,7 +67,9 @@ const AnswerHandle = (entities, { touches, time, dispatch }) => {
           Matter.Body.translate( bird, {x: 0, y: +6}); 
         }
         else {
-          failedSound.play();
+          if ( soundStatus == true ){
+            failedSound.play();
+          }      
           delete(entities.mainCharacter)
           dispatch({ type: "game-over"}); 
           store.dispatch({type: 'RESET'});        

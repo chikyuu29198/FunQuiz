@@ -93,7 +93,8 @@ class RunAway extends Component {
     store.dispatch({type: 'RESET_INDEX'});
     this.GameEngine.swap(this.setupWorld());
     this.setState({
-        running: true
+        running: true,
+        score: 0
     });
   };
 

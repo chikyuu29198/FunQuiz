@@ -22,3 +22,7 @@ export function updateIndex() {
 export function resetIndex() {
     return { type: 'RESET_INDEX'}
 }
+
+export function updateSound() {
+    return { type: 'UPDATE_SOUND' }
+}

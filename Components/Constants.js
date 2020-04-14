@@ -7,5 +7,5 @@ export default Constants = {
     PIPE_WIDTH: 100,
     FLOOR_HEIGHT: 50,
     BIRD_SIZE: 50,
-    MAIN_CHARACTER_SIZE: 70
+    MAIN_CHARACTER_SIZE: 70,
 }
