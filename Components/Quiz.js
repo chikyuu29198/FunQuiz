@@ -106,14 +106,13 @@ class Quiz extends Component {
         super(pros);
         this.state = {
             listQuiz: myQuestions,
-            // currentQuestion: 0,
-            status: this.props.isCorrect
+            status: false
         }
     }
 
     //  let index = this.props.index;
     _onPress = (choice) => {
-        // this.setState({status: true})
+        this.setState({status: true})
         if (choice == this.state.listQuiz[this.props.index].correctAnswer) {
           this.props.handleCorrect();
           this.props.plusScore();
@@ -122,15 +121,18 @@ class Quiz extends Component {
           this.props.handleInCorrect();
         }
     }
+
+    componentDidUpdate(prevProps) {
+      if (prevProps.index !== this.props.index) {
+        this.setState({
+          status: false
+        })
+      }
+    }
+
     render(){
         const index = this.props.index;
-        const quiz = this.state.listQuiz[index];
-        // let status = false;
-        // if (this.props.isCorrect != null)
-        //   { status = true }
-        // else
-        //   {status = false};
-
+        const quiz = this.state.listQuiz[index];    
         return(  
             <View style = { styles.questionFrame}>
               <View style = { styles.questionBox}>
@@ -139,28 +141,28 @@ class Quiz extends Component {
               <View style = { styles.AnswerBox}>
               <View style = { styles.answerBoxRow}>
                 <TouchableOpacity
-                  //  disabled = {this.state.status}
+                  disabled = {this.state.status}
                   onPress = {() => this._onPress('a')}> 
                     <Text style = { styles.textContent}>{quiz.answers.a}</Text>
                 </TouchableOpacity>
                 </View>
                 <View style = { styles.answerBoxRow}>
                   <TouchableOpacity
-                    // disabled = {this.state.status}
+                    disabled = {this.state.status}
                     onPress = {() => this._onPress('b')}> 
                       <Text style = { styles.textContent}>{quiz.answers.b}</Text>
                   </TouchableOpacity>
                 </View>
                 <View style = { styles.answerBoxRow}>
                   <TouchableOpacity 
-                    // disabled = {this.state.status}
+                    disabled = {this.state.status}
                     onPress = {() => this._onPress('c')}> 
                       <Text style = { styles.textContent}>{quiz.answers.c}</Text>
                   </TouchableOpacity>
                 </View>
                 <View style = { styles.answerBoxRow}>
                   <TouchableOpacity 
-                    // disabled = {this.state.status}
+                    disabled = {this.state.status}
                     onPress = {() => this._onPress('d')}> 
                       <Text style = { styles.textContent}>{quiz.answers.d}</Text>
                   </TouchableOpacity>

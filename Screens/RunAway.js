@@ -19,7 +19,8 @@ import MainCharacter from '../Components/MainCharacter';
 import Quiz from '../Components/Quiz';
 import store  from '../redux/store';
 import { Provider } from 'react-redux';
-import SettingBar from '../Components/SettingBar'
+import SettingBar from '../Components/SettingBar';
+import {ImageButton} from 'react-native-image-button-text';
 
 class RunAway extends Component {
   constructor(props){
@@ -78,15 +79,18 @@ class RunAway extends Component {
       this.setState({
         score: this.state.score + 1
       })
-    else if (ev.type === "reset-game"){
-      this.refs.engine.swap(setupWorld());
+    else if (ev.type === "reset-game"){    
+      // this.refs.engine.swap(setupWorld());
+      store.dispatch({type: 'RESET_INDEX'});
+      this.GameEngine.swap(this.setupWorld());
       this.setState({
         running: true
-    });
+       });  
     }  
   };
   
   reset = () => {
+    store.dispatch({type: 'RESET_INDEX'});
     this.GameEngine.swap(this.setupWorld());
     this.setState({
         running: true
@@ -121,17 +125,38 @@ class RunAway extends Component {
             <StatusBar hidden={true} />
           </GameEngine>   
           < Text style = { styles.score }> {this.state.score} </Text>
-          < SettingBar/>
+          < SettingBar />
         </View>
 
         <View style = { styles.questionFrame}>
             <Quiz />
         </View>
         {!this.state.running && 
-          <TouchableOpacity style={styles.fullScreenButton} onPress={this.reset}>
+          <TouchableOpacity style={styles.fullScreenButton}>
             <View style={styles.fullScreen}>
               <Text style={styles.gameOverText}>Game Over</Text>
-              
+              <View style = { styles.functionButton}>
+              <ImageButton
+                width = {30}
+                height = {30}
+                text = ""
+                onPress={() =>
+                  this.reset()    
+                }
+                source = { Images.replay}            
+              />
+              <View style = {{ width: 20}}></View>
+              <ImageButton
+                width = {30}
+                height = {30}
+                paddingRight = {0}
+                text = ""
+                onPress={() =>
+                  this.props.navigation.navigate('Home')   
+                }
+                source = { Images.back}
+              />
+              </View>
             </View>
             </TouchableOpacity>}
       </View>
@@ -234,6 +259,13 @@ const styles = StyleSheet.create({
     left: Constants.MAX_WIDTH - 50,
     backgroundColor: 'black',
     opacity: 0.8
+  },
+  functionButton: {
+    flexDirection: 'row',
+    width: 90,
+    height: 30,
+    alignItems: "center",
+    justifyContent: "center"
   },
   
 });

@@ -14,10 +14,8 @@ class Home extends Component {
       alert('error');
       return;
     }
-    // Sound.setCategory('Ambient');
     sound1.setNumberOfLoops(-1);
     sound1.play(() => {
-      // sound1.release();
     });
     });
   }

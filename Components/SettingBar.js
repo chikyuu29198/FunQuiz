@@ -4,6 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import Images from '../Assets/Images';
 import Constants from '../Components/Constants';
 import {ImageButton} from 'react-native-image-button-text';
+import { StackNavigator } from 'react-navigation';
 
 class SettingBar extends Component {
     constructor(props){
@@ -12,7 +13,7 @@ class SettingBar extends Component {
           isMute: false,
         }
       }
-    
+      
     changeSoundIcon(){
         this.setState({
             isMute: !this.state.isMute
@@ -20,7 +21,7 @@ class SettingBar extends Component {
     }
     
     exitPress(){
-      this.props.navigation.navigate('Home')
+      {this.props.navigation.navigate('Home')}
     }
   render() {
     return (
@@ -38,9 +39,7 @@ class SettingBar extends Component {
           height = {20}
           paddingRight = {0}
           text = ""
-          onPress={() =>
-            this.exitPress()    
-          }
+          onPress={this.exitPress.bind(this)}
           source = { Images.exit}
         
         />

@@ -16,4 +16,6 @@ export default Images = {
     mute: require('./images/mute.png'),
     speaker: require('./images/speaker.png'),
     exit: require('./images/exit.png'),
+    replay: require('./images/replay.png'),
+    back: require('./images/back.png'),
 }

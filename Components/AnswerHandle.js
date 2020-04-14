@@ -9,14 +9,14 @@ let checkSwap = false;
 const correctSound = new Sound(require('../Assets/sounds/correctSound.mp3'),
       (error, sound) => {
       if (error) {
-        alert('error');
+        console.log("Can not load correct sound");
         return;
       }})
 
 const failedSound = new Sound(require('../Assets/sounds/failedSound.mp3'),
 (error, sound) => {
 if (error) {
-  alert('error');
+  console.log("Can not load failed sound");
   return;
 }})
 function sleep(milliseconds) {

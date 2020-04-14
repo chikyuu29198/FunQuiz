@@ -18,3 +18,7 @@ export function reset() {
 export function updateIndex() {
     return { type: 'UPDATE_INDEX'}
 }
+
+export function resetIndex() {
+    return { type: 'RESET_INDEX'}
+}
