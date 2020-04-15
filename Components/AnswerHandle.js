@@ -39,7 +39,7 @@ const AnswerHandle = (entities, { touches, time, dispatch }) => {
 
     if (_isCorrect == true) {
       // console.log( soundStatus)
-      if (bird.position.x > mainCharacter.position.x ){
+      if (bird.position.x > mainCharacter.position.x && checkFall == false ){
         Matter.Body.translate( bird, {x: -10, y: 0});
         
       }
@@ -49,6 +49,8 @@ const AnswerHandle = (entities, { touches, time, dispatch }) => {
         Matter.Body.translate( mainCharacter, {x: 0, y: -10});
       }  
       else{
+        Matter.Body.setPosition( bird, { x:Constants.MAX_WIDTH + 2*Constants.BIRD_SIZE, 
+                                         y: Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2})
         if( isUpdated == false ){
           console.log("check")
           checkFall = true;
@@ -67,8 +69,6 @@ const AnswerHandle = (entities, { touches, time, dispatch }) => {
                                                     y: Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.MAIN_CHARACTER_SIZE/2})
           store.dispatch({ type: 'UPDATE_INDEX'})
           store.dispatch({type: 'ENABLE_ANSWER'})
-          Matter.Body.setPosition( bird, { x:Constants.MAX_WIDTH + 2*Constants.BIRD_SIZE, 
-                                           y: Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2})
           store.dispatch({type: 'RESET'});
           checkFall = false;
           isUpdated = false;
@@ -80,10 +80,12 @@ const AnswerHandle = (entities, { touches, time, dispatch }) => {
         if (bird.position.x > (mainCharacter.position.x  + 3)){
           Matter.Body.translate( bird, {x: -6, y: 0});
         }
-        else if (bird.position.y < Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.BIRD_SIZE/2){
-          Matter.Body.translate( bird, {x: 0, y: +6}); 
+        else if (bird.position.y < Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.BIRD_SIZE/2 - 9){
+          Matter.Body.translate( bird, {x: 0, y: +10}); 
         }
         else {
+          Matter.Body.setPosition(bird, {x: Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2,
+                                         y: Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.BIRD_SIZE/2});
           if ( soundStatus == true ){
             failedSound.play();
           }      
