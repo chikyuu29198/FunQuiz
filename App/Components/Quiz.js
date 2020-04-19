@@ -105,7 +105,7 @@ class Quiz extends Component {
     constructor(pros){
         super(pros);
         this.state = {
-            listQuiz: myQuestions,
+            // listQuiz: myQuestions,
             // status: false
             isLoading: true
         }
@@ -114,7 +114,7 @@ class Quiz extends Component {
     //  let index = this.props.index;
     _onPress = (choice) => {
         this.props.disableAnswer();
-        if (choice == this.state.listQuiz[this.props.index].correctAnswer) {
+        if (choice == this.props.listQuiz[this.props.index].correctAnswer) {
           this.props.handleCorrect();
           this.props.plusScore();
         }
@@ -162,7 +162,7 @@ class Quiz extends Component {
 
     render(){
         const index = this.props.index;
-        const quiz = this.state.listQuiz[index];    
+        const quiz = this.props.listQuiz[index];    
         // console.log(quiz)
         // console.log(quiz.question)
         // console.log(quiz.a)
@@ -210,7 +210,8 @@ class Quiz extends Component {
 function mapStateToProps(state) {
   return {
      index: state.updateIndex,
-     isDisable: state.disableAnswer
+     isDisable: state.disableAnswer,
+     listQuiz: state.quizData
      };
 }
 

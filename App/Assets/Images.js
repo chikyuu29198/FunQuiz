@@ -18,4 +18,5 @@ export default Images = {
     exit: require('./images/exit.png'),
     replay: require('./images/replay.png'),
     back: require('./images/back.png'),
+    loadingbg: require('./images/loadingbg.png'),
 }
