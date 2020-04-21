@@ -3,6 +3,7 @@ import Constants from "./Constants";
 import store from '../redux/store';
 import Sound from 'react-native-sound'
 import { Alert } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 
 let checkFall = false;
 let isUpdated = false;
@@ -38,21 +39,17 @@ const AnswerHandle = (entities, { touches, time, dispatch }) => {
     _isCorrect = store.getState().isCorrect;
 
     if (_isCorrect == true) {
-      // console.log( soundStatus)
       if (bird.position.x > mainCharacter.position.x && checkFall == false ){
         Matter.Body.translate( bird, {x: -10, y: 0});
         
       }
       else if (mainCharacter.position.y > Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2 && checkFall == false){
-        console.log("nhay")
-        console.log(checkFall)
         Matter.Body.translate( mainCharacter, {x: 0, y: -10});
       }  
       else{
         Matter.Body.setPosition( bird, { x:Constants.MAX_WIDTH + 2*Constants.BIRD_SIZE, 
                                          y: Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2})
         if( isUpdated == false ){
-          console.log("check")
           checkFall = true;
           dispatch({ type: "score"});        
           if ( soundStatus == true ){
@@ -61,13 +58,13 @@ const AnswerHandle = (entities, { touches, time, dispatch }) => {
           isUpdated = true;
         }       
         if (mainCharacter.position.y <= Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.MAIN_CHARACTER_SIZE/2 - 9){
-          console.log("sssss")
           Matter.Body.translate( mainCharacter, {x: 0, y: +10});
         }
         else {
           Matter.Body.setPosition( mainCharacter, { x: Constants.FLOOR_HEIGHT + Constants.MAIN_CHARACTER_SIZE/2, 
                                                     y: Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.MAIN_CHARACTER_SIZE/2})
           store.dispatch({ type: 'UPDATE_INDEX'})
+          AsyncStorage.setItem('CURRENT_QUIZ', (store.getState().updateIndex).toString())
           store.dispatch({type: 'ENABLE_ANSWER'})
           store.dispatch({type: 'RESET'});
           checkFall = false;

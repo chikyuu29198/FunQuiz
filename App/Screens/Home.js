@@ -22,25 +22,15 @@ class Home extends Component {
     const data_geted = await axios.get('http://192.168.1.80:5000/api')
     store.dispatch({type: 'GET_DATA', listQuiz: data_geted.data, totalLevel: data_geted.data[data_geted.data.length - 1].level})
     const data = JSON.stringify(data_geted.data)
-    // console.log(data)
     await AsyncStorage.setItem('quizData', data)
-    // store.dispatch({ type: 'GET_LEVEL', data: data_geted.data[data_geted.data.length - 1].level})
-    // console.log(data_geted)
-    // console.log(data_geted.data[data_geted.data.length - 1].level)
-        // .then((res) => {
-        //   console.log(res.data)
-        //   store.dispatch({type: 'GET_DATA', data: res.data})
-        // }).catch(err => console.log(err));
     }
 
     _onPress = async () => {
     let data =  await AsyncStorage.getItem('quizData')
-    // console.log(data)
+    data = (data == null) ? [] : JSON.parse(data);
     if (store.getState().quizData.listQuiz.length == 0){
       if (data.length != 0){
         console.log("have local data")
-        // console.log(data)
-        // let data =  await AsyncStorage.getItem('quizData')
         await store.dispatch({type: 'GET_DATA', listQuiz: data, totalLevel: data[data.length - 1].level})
         test = await store.getState().quizData.listQuiz
        console.log( " lenght " + test.length)
