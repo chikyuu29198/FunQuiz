@@ -163,7 +163,7 @@ class Quiz extends Component {
     render(){
         const index = this.props.index;
         const quiz = this.props.listQuiz[index];    
-        // console.log(quiz)
+        console.log(quiz)
         // console.log(quiz.question)
         // console.log(quiz.a)
         // console.log(quiz.correctAnswer)
@@ -211,7 +211,7 @@ function mapStateToProps(state) {
   return {
      index: state.updateIndex,
      isDisable: state.disableAnswer,
-     listQuiz: state.quizData
+     listQuiz: state.quizData.listQuiz
      };
 }
 
