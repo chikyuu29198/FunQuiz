@@ -5,6 +5,7 @@ import Sounds from '../Assets/Sounds.js'
 import store from '../redux/store'
 import Spinner from 'react-native-spinkit'
 import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
 import Loading from '../Components/Loading.js';
 Sound.setCategory('Ambient')
 
@@ -17,11 +18,15 @@ class Home extends Component {
     }
   }
   async getData (){
+
     const data_geted = await axios.get('http://192.168.1.80:5000/api')
-    store.dispatch({type: 'GET_DATA', data: data_geted.data})
+    store.dispatch({type: 'GET_DATA', listQuiz: data_geted.data, totalLevel: data_geted.data[data_geted.data.length - 1].level})
+    const data = JSON.stringify(data_geted.data)
+    // console.log(data)
+    await AsyncStorage.setItem('quizData', data)
     // store.dispatch({ type: 'GET_LEVEL', data: data_geted.data[data_geted.data.length - 1].level})
-    console.log(data_geted)
-    console.log(data_geted.data[data_geted.data.length - 1].level)
+    // console.log(data_geted)
+    // console.log(data_geted.data[data_geted.data.length - 1].level)
         // .then((res) => {
         //   console.log(res.data)
         //   store.dispatch({type: 'GET_DATA', data: res.data})
@@ -29,16 +34,54 @@ class Home extends Component {
     }
 
     _onPress = async () => {
-    this.setState({
-      isSPinner: true
-    })
-    await this.getData()
-    console.log(store.getState.quizData)
-    if(store.getState().quizData.length != 0){
-    this.setState({isSPinner: false})
-    this.props.navigation.navigate('RunAway')
-    
+    let data =  await AsyncStorage.getItem('quizData')
+    // console.log(data)
+    if (store.getState().quizData.listQuiz.length == 0){
+      if (data.length != 0){
+        console.log("have local data")
+        // console.log(data)
+        // let data =  await AsyncStorage.getItem('quizData')
+        await store.dispatch({type: 'GET_DATA', listQuiz: data, totalLevel: data[data.length - 1].level})
+        test = await store.getState().quizData.listQuiz
+       console.log( " lenght " + test.length)
+        if(test.length != 0){ this.props.navigation.navigate('RunAway')}
+      }
+      else{
+        console.log("NOT")
+        this.setState({
+          isSPinner: true
+        })
+        await this.getData()
+        
+                    // .then((value) => {
+
+                    //   console.log(value)
+                    // })
+        // console.log(store.getState().quizData.totalLevel)
+        if(store.getState().quizData.listQuiz.length != 0){
+        this.setState({isSPinner: false})
+        this.props.navigation.navigate('RunAway')
+        }   
     }
+  }
+    else {
+      console.log("done")
+      this.props.navigation.navigate('RunAway')
+      
+    }
+  }
+
+  createListLevel = (number_list) => {
+    var listLevel = []
+    var levelItem = {}
+    for( i = 1; i <= number_list; i++){
+      levelItem = {
+        key: i,
+        value: i
+      }
+      listLevel.push(levelItem)
+    }
+    return listLevel;
   }
 
   render() {
