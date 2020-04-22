@@ -162,7 +162,7 @@ class Quiz extends Component {
 
     render(){
         const index = this.props.index;
-        const quiz = this.props.listQuiz[index];    
+        const quiz = this.props.listQuiz[index]; 
         return(  
             <View style = { styles.questionFrame}>
               <View style = { styles.questionBox}>
