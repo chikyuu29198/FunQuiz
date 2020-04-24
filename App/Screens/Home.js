@@ -42,12 +42,6 @@ class Home extends Component {
           isSPinner: true
         })
         await this.getData()
-        
-                    // .then((value) => {
-
-                    //   console.log(value)
-                    // })
-        // console.log(store.getState().quizData.totalLevel)
         if(store.getState().quizData.listQuiz.length != 0){
         this.setState({isSPinner: false})
         this.props.navigation.navigate('RunAway')

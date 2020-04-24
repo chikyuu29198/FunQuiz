@@ -43,7 +43,7 @@ export default class SignupScreen extends Component {
       app.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
                 .then(() => {
                   console.log("successful")
-                  Alert.alert("Login successful!")
+                  // Alert.alert("Login successful!")
                   this.props.navigation.navigate('Home')
                 })
                 .catch(function(error){
