@@ -1,15 +1,8 @@
 const Tabletop = require('tabletop');
 
-function getData(key) {
-    var publicSpreadsheetUrl = '11uGBq9i-C4nOiyxNyco1j9gPEq1HYPuDlFpquf6rvSw';
+async function getData(publicSpreadsheetUrl) {
     var newQuizList = []
-    Tabletop.init( { key: publicSpreadsheetUrl,
-    callback: showInfo,
-    simpleSheet: true } )
-    function showInfo(data, tabletop) {
-    // console.log(data)
-    var quizList = data
-    // console.log(quizList)
+    let quizList = await Tabletop.init( { key: publicSpreadsheetUrl, simpleSheet: true } )
     let newQuiz = {}
     let correctIndex
     for (i = 0; i < quizList.length; i++){
@@ -37,10 +30,8 @@ function getData(key) {
             newQuiz.correctAnswer = 'a'
         break;
         }
-        //newQuiz.correctAnswer = correctIndex;
         newQuizList.push(newQuiz)
         console.log(newQuiz)
-    }
     }
     return newQuizList
 
