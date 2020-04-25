@@ -1,5 +1,7 @@
 const Tabletop = require('tabletop');
-var publicSpreadsheetUrl = '11uGBq9i-C4nOiyxNyco1j9gPEq1HYPuDlFpquf6rvSw';
+
+function getData(key) {
+    var publicSpreadsheetUrl = '11uGBq9i-C4nOiyxNyco1j9gPEq1HYPuDlFpquf6rvSw';
     var newQuizList = []
     Tabletop.init( { key: publicSpreadsheetUrl,
     callback: showInfo,
@@ -40,10 +42,14 @@ var publicSpreadsheetUrl = '11uGBq9i-C4nOiyxNyco1j9gPEq1HYPuDlFpquf6rvSw';
         console.log(newQuiz)
     }
     }
+    return newQuizList
 
- exports.getAll = function(req, res) {
-    var key = req.params.key
+}
+
+ exports.getAll = async function(req, res) {
+    var key = req.query.key
     console.log(key)
+    var newQuizList = await getData(key)
     console.log(newQuizList)
     res.send(newQuizList)
 };
