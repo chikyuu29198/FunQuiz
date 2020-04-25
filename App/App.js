@@ -6,7 +6,7 @@ import InputKey from './Screens/InputKey'
 class App extends Component {
   render(){
     return(
-      <InputKey/>
+      <AppNavigator/>
     );
   }
 };
