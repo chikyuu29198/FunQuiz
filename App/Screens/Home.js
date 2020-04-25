@@ -19,7 +19,11 @@ class Home extends Component {
   }
   async getData (){
 
-    const data_geted = await axios.get('http://192.168.1.80:5000/api')
+    const data_geted = await axios.get('http://192.168.1.80:5000/api', {
+      params : {
+        key: '11uGBq9i-C4nOiyxNyco1j9gPEq1HYPuDlFpquf6rvSw'
+      }
+    })
     store.dispatch({type: 'GET_DATA', listQuiz: data_geted.data, totalLevel: data_geted.data[data_geted.data.length - 1].level})
     const data = JSON.stringify(data_geted.data)
     await AsyncStorage.setItem('quizData', data)

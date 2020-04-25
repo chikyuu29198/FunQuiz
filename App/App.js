@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import AppNavigator from './Navigator';
 import LoginScreen from './Screens/Login'
-import SignupScreen from './Screens/Signup'
+import InputKey from './Screens/InputKey'
+
 class App extends Component {
   render(){
     return(
-      <AppNavigator/>
+      <InputKey/>
     );
   }
 };

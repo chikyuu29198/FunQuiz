@@ -42,7 +42,8 @@ var publicSpreadsheetUrl = '11uGBq9i-C4nOiyxNyco1j9gPEq1HYPuDlFpquf6rvSw';
     }
 
  exports.getAll = function(req, res) {
-    
+    var key = req.params.key
+    console.log(key)
     console.log(newQuizList)
     res.send(newQuizList)
 };
