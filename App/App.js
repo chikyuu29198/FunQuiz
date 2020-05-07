@@ -1,12 +1,16 @@
 import React, {Component} from 'react';
 import AppNavigator from './Navigator';
-import LoginScreen from './Screens/Login'
+import Level from './Screens/Level'
 import InputKey from './Screens/InputKey'
-
+import store  from './redux/store';
+import { Provider } from 'react-redux';
 class App extends Component {
   render(){
     return(
-      <AppNavigator/>
+      // <AppNavigator/>
+      <Provider store = {store}>
+        <AppNavigator />
+      </Provider>      
     );
   }
 };

@@ -1,64 +1,239 @@
-// import React, { Component } from 'react';
-// import { StyleSheet, Text, View, Button, Image, FlatList } from 'react-native';
-// import Sound from 'react-native-sound'
-// import store from '../redux/store'
-// import Spinner from 'react-native-spinkit'
-// import Images from '../Assets/Images'
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, Button, Image, FlatList, ImageBackground, TouchableOpacity } from 'react-native';
+import store from '../redux/store'
+import Spinner from 'react-native-spinkit'
+import Images from '../Assets/Images'
+import { connect } from 'react-redux';
+// import { handleCorrect, handleInCorrect, plusScore, enableAnswer, disableAnswer} from '../redux/actionCreators';
 
-// Sound.setCategory('Ambient')
+class FlatListItem extends Component {
+    constructor(props){
+        super(props)
+        // this.state = {
+        //     quizLevel: []
+        // }
+      }
 
-// class FlatListItem extends Component {
-//     render(){
-//         return(
-//             <View style = {{
-//                 flex: 1,
-//                 backgroundColor: "green",
-//                 borderRadius: 5
-//             }}>
-//                 <Image
-//                     source = {Images.bird}
-//                     style = {{
-//                         width: 70,
-//                         height: 70,
-//                         margin: 5
-//                     }}
-//                 />
-//                 <Text> Level + {this.props.item.level} </Text>
+    _onPress(level){
+       var data = store.getState().quizData.listQuiz
+       var quizLevel = data.filter((x)=>x.level == level);
+       console.log(quizLevel)
+       this.props.navigation.navigate('RunAway', {
+                                        data: quizLevel
+       })
+    }
 
-//             </View>
-//         )
-//     }
-// }
+    render(){
+        return(
+            this.props.item.key <= store.getState().quizData.totalLevel ?
+                this.props.item.key < 4 ?
+                <TouchableOpacity  onPress={() =>
+                    this._onPress(this.props.item.key)    
+                  } >
+                    <View style = {{
+                    flex: 1,
+                    backgroundColor: "#290136",
+                    borderRadius: 5,
+                    flexDirection: "row",
+                    marginVertical: 5,
+                    marginHorizontal: 10,
+                    alignItems: 'center',
+                    opacity: 1
+                }}>
+                    <View style = {{flex: 2}}>
+                        <Image
+                        source = {Images.bird}
+                        style = {{
+                            width: 50,
+                            height: 50,
+                            marginVertical: 5,
+                            marginLeft: 10,
+                        }}
+                        />
+                    </View>
+                    
+                    <View style = {{flex: 5}}>
+                        <Text style = {styles.flatListText}> {this.props.item.value} </Text>
+                    </View>
+                    <View  style =  {styles.rightText}>
+                        <Text style = {styles.compeletedText}> Completed!</Text>
+                    </View>
+                
+                </View>
+                </TouchableOpacity>
+                :
+                <TouchableOpacity>
+                    <View style = {{
+                    flex: 1,
+                    backgroundColor: "#290136",
+                    borderRadius: 5,
+                    flexDirection: "row",
+                    marginVertical: 5,
+                    marginHorizontal: 10,
+                    alignItems: 'center',
+                    opacity: 1
+                }}>
+                    <View style = {{flex: 2}}>
+                        <Image
+                        source = {Images.bird}
+                        style = {{
+                            width: 50,
+                            height: 50,
+                            marginVertical: 5,
+                            marginLeft: 10,
+                        }}
+                        />
+                    </View>
+                    
+                    <View style = {{flex: 5}}>
+                        <Text style = {styles.flatListText}> {this.props.item.value} </Text>
+                    </View>
+                    <View  style =  {styles.rightText}>
+                        <Image 
+                            source = {Images.currentPosition}
+                            style = {{
+                                width: 25,
+                                height: 25,
+                                marginRight: 15,
+                            }}
+                        />
+                    </View>
+                
+                </View>
+                </TouchableOpacity>
+            :
+            <TouchableOpacity disabled = {true}>
+                <View style = {{
+                flex: 1,
+                backgroundColor: "gray",
+                borderRadius: 5,
+                flexDirection: "row",
+                marginVertical: 5,
+                marginHorizontal: 10,
+                alignItems: 'center',
+                opacity: 0.5
+            }}> 
+            <View style = {{flex: 2}}>
+                <Image
+                source = {Images.bird}
+                style = {{
+                    width: 50,
+                    height: 50,
+                    marginVertical: 5,
+                    marginLeft: 10,
+                }}
+                />
+            </View>
+            
+            <View style = {{flex: 4}}>
+                <Text style = {styles.flatListText}> {this.props.item.value} </Text>
+            </View>
+        
+            <View  style =  {styles.rightText}>
+                <Text style = {styles.lockText}> Lock!</Text>
+            </View>
 
-// class Home extends Component {
-//   constructor(props){
-//     super(props)
-//   }
+            </View>
+            </TouchableOpacity>
+            
+        )
+    }
+}
+
+
+
+class Level extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+        listData: []
+    }
+  }
   
-//   render() {
-//     return (
-//       <View >
-//         <ImageBackground
-//         source = {Images.loadingbg}
-//         style = {{width: '100%', height: '100%'}}
-//         >
-//         <FlatList
-//             data = {this.props.listLevel}
-//             renderItem = {({item, index}) => {
-//                 return {
+  UNSAFE_componentWillMount(){
+    //   console.log(this.props.totalLevel)
+      let list = this.createListLevel(store.getState().quizData.totalLevel)
+      this.setState({
+          listData: list
+      })
+  }
 
-//                 }
-//             }}
-//         >
+  createListLevel = (numberLoop) => {
+    var listLevel = []
+    var levelItem = {}
+    for( i = 1; i <= numberLoop; i++){
+      levelItem = {
+        'key': i,
+        'value': 'Level '+ i
+      }
+      listLevel.push(levelItem)
+    }
+    return listLevel;
+  }
+  
+  render() {
+    return (
+      <View >
+        <ImageBackground
+        source = {Images.loadingbg}
+        style = {{width: '100%', height: '100%'}}
+        >
+        <FlatList
+            data = {this.state.listData}
+            renderItem = {({item, index}) => {
+                return (
+                    <FlatListItem 
+                        navigation = {this.props.navigation}
+                        item = {item}
+                        index = {index}
+                        keyExtractor = {item.key}
+                    />
+                )
+            }}
+        >
+        </FlatList>
+        </ImageBackground>
+      </View>
+    );
+  }
+}
 
-//         </FlatList>
-
-//         </ImageBackground>
-//       </View>
-//     );
-//   }
-// }
-// const styles = StyleSheet.create({
-   
-//   });
-// export default Home; 
+function mapStateToProps(state) {
+    return {
+       listQuiz: state.quizData.totalLevel
+       };
+  }
+export default connect(mapStateToProps)(Level); 
+const styles = StyleSheet.create({
+   flatListText: {
+       color: 'white',
+       fontSize: 16,
+       textAlign: 'center',
+       alignItems: 'center',
+       alignContent: 'center',
+       justifyContent: 'center',
+   },
+   compeletedText: {
+    color: 'green',
+    fontSize: 12,
+    fontStyle: 'italic'
+    // textAlign: 'center',
+    // alignItems: 'center',
+    // alignContent: 'center',
+    // justifyContent: 'center'
+   },
+   lockText: {
+    color: 'red',
+    fontSize: 12,
+    fontStyle: 'italic'
+    // textAlign: 'center',
+    // alignItems: 'center',
+    // alignContent: 'center',
+    // justifyContent: 'center'
+   },
+   rightText: {
+       flex: 3, 
+       alignItems: 'flex-end', 
+       marginRight: 10
+    }
+  });

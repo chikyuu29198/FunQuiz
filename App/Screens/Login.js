@@ -17,6 +17,11 @@ import {
 } from 'react-native';
 import {app} from '../firebaseConfig'
 import Spinner from 'react-native-spinkit';
+import AsyncStorage from '@react-native-community/async-storage';
+import { loginSuccess } from '../redux/actionCreators';
+import { connect } from 'react-redux';
+import store from '../redux/store'
+
 const { width, height } = Dimensions.get("window");
 
 const background = require("../Assets/images/loadingbg.png");
@@ -24,14 +29,14 @@ const mark = require("../Assets/images/login_Icon.png");
 const lockIcon = require("../Assets/images/login1_lock.png");
 const personIcon = require("../Assets/images/login1_person.png");
 
-export default class SignupScreen extends Component {
+class LoginScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
       loading: null,
       email: "",
-      password: "" 
-
+      password: "" ,
+      // userData: {}
     }
   }
 
@@ -41,9 +46,17 @@ export default class SignupScreen extends Component {
     })
     if (this.state.email.trim() !== "" && this.state.password.trim() !== ""){
       app.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
-                .then(() => {
+                .then((res) => {
                   console.log("successful")
-                  // Alert.alert("Login successful!")
+                  // console.log(JSON.stringify( res.user))
+                  let user = {
+                    email: this.state.email,
+                    password: this.state.password
+                  }
+                  store.dispatch({type: 'LOGIN_SUCCESS', user: user})
+                  // let data = JSON.stringify(user)
+                  AsyncStorage.setItem('userData', JSON.stringify(user))
+                  // console.log( AsyncStorage.getItem('userData1'))
                   this.props.navigation.navigate('Home')
                 })
                 .catch(function(error){
@@ -137,7 +150,7 @@ export default class SignupScreen extends Component {
     );
   }
 }
-
+export default LoginScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -16,6 +16,9 @@ import {
 import {ImageButton} from 'react-native-image-button-text';
 import Images from '../Assets/Images'
 import Spinner from 'react-native-spinkit';
+import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
+import store from '../redux/store'
 const { width, height } = Dimensions.get("window");
 const background = require("../Assets/images/loadingbg.png");
 const logo = require("../Assets/images/Bird.png");
@@ -29,10 +32,29 @@ export default class InputKey extends Component {
 
     }
   }
-  handleLoad(){
+  async getData (_key){
+    //'11uGBq9i-C4nOiyxNyco1j9gPEq1HYPuDlFpquf6rvSw'
+    const data_geted = await axios.get('http://e9d2a563.ngrok.io', {
+      params : {
+        key: _key
+      }
+    })
+    // console.log(data_geted)
+    store.dispatch({type: 'GET_DATA', listQuiz: data_geted.data, totalLevel: data_geted.data[data_geted.data.length - 1].level})
+    const data = JSON.stringify(data_geted.data)
+    await AsyncStorage.setItem('quizData', data)
+    }
+  async handleLoad(){
       this.setState({
           loading: true
       })
+      console.log(this.state.key)
+      await this.getData(this.state.key)
+      console.log( await AsyncStorage.getItem('quizData'))
+      if(store.getState().quizData.listQuiz.length != 0){
+        this.setState({loading: false})
+        this.props.navigation.navigate('Level')
+      }
   }
   exitPress(){
     Alert.alert(

@@ -131,10 +131,11 @@ class RunAway extends Component {
         </View>
 
         <View style = { styles.questionFrame}>
-            <Quiz />
+            <Quiz  listQuiz ={this.props.navigation.state.params.data}/>
         </View>
         {!this.state.running && 
           <TouchableOpacity style={styles.fullScreenButton}>
+            
             <View style={styles.fullScreen}>
               <Text style={styles.gameOverText}>Game Over</Text>
               <View style = { styles.functionButton}>

@@ -5,10 +5,24 @@ import Sounds from '../Assets/Sounds.js'
 import store from '../redux/store'
 import Spinner from 'react-native-spinkit'
 import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage'; 
 import Images from '../Assets/Images'
 Sound.setCategory('Ambient')
 
 class Loading extends Component {
+  constructor(props){
+    super(props)
+  }
+  async componentDidMount(){
+    let userData = await AsyncStorage.getItem('userData')
+    if (userData == null) {
+      this.props.navigation.navigate('Login')
+    }
+    else {
+      user = JSON.parse(userData)
+      this.props.navigation.navigate('Home')
+    }
+  }
   render() {
     return (
       <View >

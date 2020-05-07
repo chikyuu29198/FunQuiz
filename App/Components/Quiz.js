@@ -105,13 +105,9 @@ class Quiz extends Component {
     constructor(pros){
         super(pros);
         this.state = {
-            // listQuiz: myQuestions,
-            // status: false
             isLoading: true
         }
     }
-
-    //  let index = this.props.index;
     _onPress = (choice) => {
         this.props.disableAnswer();
         if (choice == this.props.listQuiz[this.props.index].correctAnswer) {
@@ -122,43 +118,6 @@ class Quiz extends Component {
           this.props.handleInCorrect();
         }
     }
-
-    // UNSAFE_componentWillMount(){
-    //   axios.get('http://192.168.1.80:5000/api/?_limit=10',{
-    //     params: {
-    //     _limit: 10
-    //     }
-    //   })
-    //        .then((result) => {
-    //         // console.log(result.data)
-    //          this.setState({listQuiz: result.data})
-    //          console.log(this.state.listQuiz)
-    //         }).catch(err => console.log(err));
-    // }
-    // UNSAFE_componentWillMount() {
-    //     axios.get('http://192.168.1.80:5000/api',{
-    //       params: {
-    //         _limit: 10
-    //        }
-    //     })
-    //     .then((res) => {
-    //       this.setState({
-    //         listQuiz: result.data,
-    //       });
-    //     })
-    // }
-    // componentDidMount() {
-    //   axios.get('https://jsonplaceholder.typicode.com/todos',{
-    //     params: {
-    //       _limit: 10
-    //      }
-    //   })
-    //     .then((res) => {
-    //       this.setState({
-    //         todos: res.data
-    //       });
-    //     })
-    // }
 
     render(){
         const index = this.props.index;
@@ -207,7 +166,7 @@ function mapStateToProps(state) {
   return {
      index: state.updateIndex,
      isDisable: state.disableAnswer,
-     listQuiz: state.quizData.listQuiz
+    //  listQuiz: state.quizData.listQuiz
      };
 }
 

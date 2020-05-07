@@ -38,3 +38,15 @@ export function disableAnswer(){
 export function getData(){
     return { type: 'GET_DATA'}
 }
+export function loginSuccess(){
+    return { type: 'LOGIN_SUCCESS'}
+}
+export function signupSuccess(){
+    return { type: 'SIGNUP_SUCCESS'}
+}
+export function syncAuthStatus(){
+    return { type: 'SYNC_AUTH_STATUS'}
+}
+export function logoutSuccess(){
+    return { type: 'LOGOUT_SUCCESS'}
+}

@@ -6,6 +6,7 @@ import updateIndexReducer from './updateIndexReducer';
 import soundReducer from './soundReducer';
 import disableAnswerReducer from './disableAnswerReducer';
 import getDataReducer from './getDataReducer';
+import userReducer from './userReducer';
 
 const reducer = combineReducers({
     plusScore: plusScoreReducer,
@@ -13,7 +14,8 @@ const reducer = combineReducers({
     updateIndex: updateIndexReducer,
     soundStatus: soundReducer,
     disableAnswer: disableAnswerReducer,
-    quizData: getDataReducer
+    quizData: getDataReducer,
+    user: userReducer
 });
 
 export default reducer;

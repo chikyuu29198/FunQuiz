@@ -6,7 +6,7 @@ import store from '../redux/store'
 import Spinner from 'react-native-spinkit'
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
-import Loading from '../Components/Loading.js';
+import Loading from './Loading.js';
 Sound.setCategory('Ambient')
 
 class Home extends Component {
@@ -19,7 +19,7 @@ class Home extends Component {
   }
   async getData (){
 
-    const data_geted = await axios.get('http://http://ee792a0d.ngrok.io', {
+    const data_geted = await axios.get('http://e9d2a563.ngrok.io', {
       params : {
         key: '11uGBq9i-C4nOiyxNyco1j9gPEq1HYPuDlFpquf6rvSw'
       }
@@ -31,46 +31,36 @@ class Home extends Component {
     }
 
     _onPress = async () => {
+    console.log(store.getState().quizData.totalLevel)
     let data =  await AsyncStorage.getItem('quizData')
-    data = (data == null) ? [] : JSON.parse(data);
+    data = (data == null) ? [] : JSON.parse(data)
     if (store.getState().quizData.listQuiz.length == 0){
       if (data.length != 0){
         console.log("have local data")
+        console.log(data[data.length - 1].level)
         await store.dispatch({type: 'GET_DATA', listQuiz: data, totalLevel: data[data.length - 1].level})
         test = await store.getState().quizData.listQuiz
        console.log( " lenght " + test.length)
-        if(test.length != 0){ this.props.navigation.navigate('RunAway')}
+        if(test.length != 0){ this.props.navigation.navigate('Level')}
       }
       else{
         console.log("NOT")
-        this.setState({
-          isSPinner: true
-        })
-        await this.getData()
-        if(store.getState().quizData.listQuiz.length != 0){
-        this.setState({isSPinner: false})
-        this.props.navigation.navigate('RunAway')
-        }   
+        this.props.navigation.navigate('InputKey')
+        // this.setState({
+        //   isSPinner: true
+        // })
+        // await this.getData()
+        // if(store.getState().quizData.listQuiz.length != 0){
+        // this.setState({isSPinner: false})
+        // this.props.navigation.navigate('Level')
+        // }   
     }
   }
     else {
       console.log("done")
-      this.props.navigation.navigate('RunAway')
+      this.props.navigation.navigate('Level')
       
     }
-  }
-
-  createListLevel = (number_list) => {
-    var listLevel = []
-    var levelItem = {}
-    for( i = 1; i <= number_list; i++){
-      levelItem = {
-        key: i,
-        value: i
-      }
-      listLevel.push(levelItem)
-    }
-    return listLevel;
   }
 
   render() {
