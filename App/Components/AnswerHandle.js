@@ -63,12 +63,33 @@ const AnswerHandle = (entities, { touches, time, dispatch }) => {
         else {
           Matter.Body.setPosition( mainCharacter, { x: Constants.FLOOR_HEIGHT + Constants.MAIN_CHARACTER_SIZE/2, 
                                                     y: Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.MAIN_CHARACTER_SIZE/2})
-          store.dispatch({ type: 'UPDATE_INDEX'})
-          AsyncStorage.setItem('CURRENT_QUIZ', (store.getState().updateIndex).toString())
-          store.dispatch({type: 'ENABLE_ANSWER'})
-          store.dispatch({type: 'RESET'});
-          checkFall = false;
-          isUpdated = false;
+         
+          if (store.getState().winFlag == true){
+            store.dispatch({type: 'ENABLE_ANSWER'})
+            store.dispatch({type: 'RESET'});
+            checkFall = false;
+            isUpdated = false;
+            // store.dispatch({ type: 'UPDATE_LEVEL'})
+            let currentLevel = store.getState().level.currentLevel
+            let doneLevel = store.getState().level.doneLevel
+            console.log( currentLevel + "   " + doneLevel)
+            if (currentLevel <= doneLevel && doneLevel < store.getState().quizData.totalLevel){
+              AsyncStorage.setItem('CURRENT_LEVEL', ((doneLevel + 1)).toString())
+              // console.log('Asyn' + AsyncStorage.getItem('CURRENT_LEVEL'))
+              store.dispatch({ type: 'LEVEL_UP'})
+              console.log("levelup test in answerHandle " + store.getState().level.doneLevel)
+            }
+              
+            dispatch({ type: "game-over"}); 
+          }
+          else{
+            store.dispatch({ type: 'UPDATE_INDEX'})
+            // AsyncStorage.setItem('CURRENT_QUIZ', (store.getState().updateIndex).toString())
+            store.dispatch({type: 'ENABLE_ANSWER'})
+            store.dispatch({type: 'RESET'});
+            checkFall = false;
+            isUpdated = false;
+          }
         }
       }
     }

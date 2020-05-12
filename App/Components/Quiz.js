@@ -6,7 +6,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux';
-import { handleCorrect, handleInCorrect, plusScore, enableAnswer, disableAnswer} from '../redux/actionCreators';
+import { handleCorrect, handleInCorrect, plusScore, enableAnswer, disableAnswer, flagWin} from '../redux/actionCreators';
 import store from '../redux/store';
 import axios from 'axios';
 const myQuestions = [
@@ -113,6 +113,10 @@ class Quiz extends Component {
         if (choice == this.props.listQuiz[this.props.index].correctAnswer) {
           this.props.handleCorrect();
           this.props.plusScore();
+          if (this.props.index == this.props.listQuiz.length - 1){
+            console.log(this.props.index)
+            this.props.flagWin();
+          }
         }
         else {
           this.props.handleInCorrect();
@@ -170,7 +174,7 @@ function mapStateToProps(state) {
      };
 }
 
-export default connect(mapStateToProps, {handleCorrect, handleInCorrect, plusScore, enableAnswer, disableAnswer}) (Quiz);
+export default connect(mapStateToProps, {handleCorrect, handleInCorrect, plusScore, enableAnswer, disableAnswer, flagWin}) (Quiz);
 
 const styles = StyleSheet.create({
     questionFrame: {

@@ -20,4 +20,5 @@ export default Images = {
     back: require('./images/back.png'),
     loadingbg: require('./images/loadingbg.png'),
     currentPosition: require('./images/currentPosition.png'),
+    purpleButton: require('./images/purpleButton.png'),
 }

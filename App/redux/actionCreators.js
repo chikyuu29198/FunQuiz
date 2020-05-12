@@ -7,12 +7,11 @@ export function handleCorrect() {
 }
 
 export function handleInCorrect() {
-    return { type: 'HANDLE_INCORRECT'};
-    
+    return { type: 'HANDLE_INCORRECT'};    
 }
+
 export function reset() {
-    return { type: 'RESET'};
-    
+    return { type: 'RESET'};    
 }
 
 export function updateIndex() {
@@ -38,15 +37,43 @@ export function disableAnswer(){
 export function getData(){
     return { type: 'GET_DATA'}
 }
+
 export function loginSuccess(){
     return { type: 'LOGIN_SUCCESS'}
 }
+
 export function signupSuccess(){
     return { type: 'SIGNUP_SUCCESS'}
 }
+
 export function syncAuthStatus(){
     return { type: 'SYNC_AUTH_STATUS'}
 }
 export function logoutSuccess(){
     return { type: 'LOGOUT_SUCCESS'}
+}
+
+export function updateLevel() {
+    return { type: 'UPDATE_LEVEL'}
+}
+
+export function resetLevel() {
+    return { type: 'RESET_LEVEL'}
+}
+
+export function levelUp() {
+    return { type: 'LEVEL_UP'}
+}
+
+
+export function setCurrentLevel() {
+    return { type: 'SET_CURRENT_LEVEL'}
+}
+
+export function flagWin() {
+    return { type: 'FLAG_WIN'}
+}
+
+export function unflaggedWin() {
+    return { type: 'UNFLAGGED_WIN'}
 }

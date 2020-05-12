@@ -92,12 +92,25 @@ class RunAway extends Component {
   reset = () => {
     store.dispatch({type: 'ENABLE_ANSWER'})
     store.dispatch({type: 'RESET_INDEX'});
+    store.dispatch({type: 'UNFLAGGED_WIN'})
     this.GameEngine.swap(this.setupWorld());
     this.setState({
         running: true,
         score: 0
     });
   };
+
+  next = () => {
+    store.dispatch({type: 'ENABLE_ANSWER'})
+    store.dispatch({type: 'RESET_INDEX'});
+    store.dispatch({type: 'UPDATE_LEVEL'})
+    store.dispatch({type: 'UNFLAGGED_WIN'})
+    this.GameEngine.swap(this.setupWorld());
+    this.setState({
+        running: true,
+        score: 0
+    });
+  }
 
   render(){
     return(
@@ -133,35 +146,63 @@ class RunAway extends Component {
         <View style = { styles.questionFrame}>
             <Quiz  listQuiz ={this.props.navigation.state.params.data}/>
         </View>
-        {!this.state.running && 
+        {this.state.running == false ?
+           store.getState().winFlag == false ? 
           <TouchableOpacity style={styles.fullScreenButton}>
-            
             <View style={styles.fullScreen}>
-              <Text style={styles.gameOverText}>Game Over</Text>
+              <View style = {styles.contentComponent}>
+                <View style = {{alignItems: 'center'}}> 
+                  <Text style={styles.gameOverText}>Game Over</Text>
+                  <Text style = {styles.contentText} > {'Score:    ' + this.state.score} </Text>
+                  <Text style = {styles.contentText} > {'Level:    ' + store.getState().level.currentLevel} </Text>
+            
+                </View>
+              
               <View style = { styles.functionButton}>
-              <ImageButton
-                width = {30}
-                height = {30}
-                text = ""
-                onPress={() =>
-                  this.reset()    
-                }
-                source = { Images.replay}            
-              />
-              <View style = {{ width: 20}}></View>
-              <ImageButton
-                width = {30}
-                height = {30}
-                paddingRight = {0}
-                text = ""
-                onPress={() =>
-                  this.props.navigation.navigate('Home')   
-                }
-                source = { Images.back}
-              />
+                <TouchableOpacity activeOpacity={.5} onPress={() => this.props.navigation.navigate('Level')}>    
+                  <View style={styles.button}>
+                    <Text style={styles.buttonText}>BACK</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={.5} onPress={() => this.reset()}>    
+                  <View style={styles.button}>
+                    <Text style={styles.buttonText}>RETRY</Text>
+                  </View>
+                </TouchableOpacity>             
+              </View>
               </View>
             </View>
-            </TouchableOpacity>}
+            </TouchableOpacity>
+            :
+            <TouchableOpacity style={styles.fullScreenButton}>
+            <View style={styles.fullScreen}>
+              <View style = {styles.contentComponent}>
+                <View style = {{alignItems: 'center'}}> 
+                  <Text style={styles.gameOverText}> { store.getState().level.currentLevel < store.getState().quizData.totalLevel ? 'Level Up' : 'Completed!' }</Text>
+                  <Text style = {styles.contentText} > {'Score:    ' + this.state.score} </Text>
+                  <Text style = {styles.contentText} > {'Level:    ' + store.getState().level.currentLevel} </Text>
+            
+                </View>
+              
+              <View style = { styles.functionButton}>
+                <TouchableOpacity activeOpacity={.5} onPress={() => this.props.navigation.navigate('Level')}>    
+                  <View style={styles.button}>
+                    <Text style={styles.buttonText}>BACK</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={.5} onPress={() => { store.getState().level.currentLevel < store.getState().quizData.totalLevel ? this.next() : this.reset()}}>    
+                  <View style={styles.button}>
+                    <Text style={styles.buttonText}>{ store.getState().level.currentLevel < store.getState().quizData.totalLevel ? 'NEXT' : 'RETRY' }</Text>
+                  </View>
+                </TouchableOpacity>             
+              </View>
+              </View>
+            </View>
+            </TouchableOpacity>
+            :
+            <View></View>
+              }
+
       </View>
       </Provider>
     );
@@ -220,8 +261,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   gameOverText: {
-    color: 'white',
-    fontSize: 48
+    color: '#2e0f05',
+    fontSize: 48,
+    fontWeight: "bold",
+    fontFamily: 'sans-serif',
+    textShadowColor: 'white',
+    textShadowOffset: {width: -5, height: 5},
+    textShadowRadius: 20,
+    shadowOpacity: 1,
+    marginTop: 15
+    // borderColor: 'white',
+    // borderRadius: 4,
+    // borderWidth: 4 
 },
   fullScreen: {
     position: 'absolute',
@@ -230,7 +281,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: 'black',
-    opacity: 0.8,
+    opacity: 0.85,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -265,11 +316,44 @@ const styles = StyleSheet.create({
   },
   functionButton: {
     flexDirection: 'row',
-    width: 90,
-    height: 30,
+    // marginHorizontal: 30,
+    marginBottom: 0,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: 'center'
   },
+  contentComponent: {
+    width: Constants.MAX_WIDTH/5*4,
+    height: Constants.MAX_HEIGHT/6*5,
+    backgroundColor: '#ffd633',
+    // justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    borderColor: '#fff',
+    borderWidth: 5
+
+  },
+  contentText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: 'white',
+    marginVertical: 5
+  },
+  button: {
+    width: 90,
+    height: 40,
+    marginHorizontal: 10,
+    backgroundColor: '#2e0f05',
+    borderRadius: 10,
+    borderWidth: 3,
+    borderColor: 'white',
+    // marginEnd : 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: "bold"
+  }
   
 });
 

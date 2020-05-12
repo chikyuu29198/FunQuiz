@@ -17,27 +17,18 @@ class Home extends Component {
       data : []
     }
   }
-  async getData (){
-
-    const data_geted = await axios.get('http://e9d2a563.ngrok.io', {
-      params : {
-        key: '11uGBq9i-C4nOiyxNyco1j9gPEq1HYPuDlFpquf6rvSw'
-      }
-    })
-    console.log(data_geted)
-    store.dispatch({type: 'GET_DATA', listQuiz: data_geted.data, totalLevel: data_geted.data[data_geted.data.length - 1].level})
-    const data = JSON.stringify(data_geted.data)
-    await AsyncStorage.setItem('quizData', data)
-    }
-
-    _onPress = async () => {
-    console.log(store.getState().quizData.totalLevel)
+  _onPress = async () => {
+    // console.log(store.getState().quizData.totalLevel)
     let data =  await AsyncStorage.getItem('quizData')
     data = (data == null) ? [] : JSON.parse(data)
     if (store.getState().quizData.listQuiz.length == 0){
       if (data.length != 0){
         console.log("have local data")
         console.log(data[data.length - 1].level)
+        let doneLevel = await AsyncStorage.getItem('CURRENT_LEVEL')
+        doneLevel = (doneLevel == null) ? 0 : parseInt(doneLevel)
+        console.log("done level in Home " + doneLevel)
+        await store.dispatch({type: ' SET_DONE_LEVEL', done_level: doneLevel})
         await store.dispatch({type: 'GET_DATA', listQuiz: data, totalLevel: data[data.length - 1].level})
         test = await store.getState().quizData.listQuiz
        console.log( " lenght " + test.length)
@@ -45,6 +36,10 @@ class Home extends Component {
       }
       else{
         console.log("NOT")
+        let doneLevel = await AsyncStorage.getItem('CURRENT_LEVEL')
+        doneLevel = (doneLevel == null) ? 0 : parseInt(doneLevel)
+        console.log("done level in Home " + doneLevel)
+        await store.dispatch({type: ' SET_DONE_LEVEL', done_level: doneLevel})
         this.props.navigation.navigate('InputKey')
         // this.setState({
         //   isSPinner: true

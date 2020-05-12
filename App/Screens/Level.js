@@ -4,7 +4,8 @@ import store from '../redux/store'
 import Spinner from 'react-native-spinkit'
 import Images from '../Assets/Images'
 import { connect } from 'react-redux';
-// import { handleCorrect, handleInCorrect, plusScore, enableAnswer, disableAnswer} from '../redux/actionCreators';
+import { handleCorrect, handleInCorrect, plusScore, enableAnswer, disableAnswer} from '../redux/actionCreators';
+import AsyncStorage from '@react-native-community/async-storage';
 
 class FlatListItem extends Component {
     constructor(props){
@@ -15,9 +16,18 @@ class FlatListItem extends Component {
       }
 
     _onPress(level){
+    //    let test = AsyncStorage.getItem('CURRENT_LEVEL')
+    //    console.log(test + "test Asyn in Level.js")
        var data = store.getState().quizData.listQuiz
        var quizLevel = data.filter((x)=>x.level == level);
-       console.log(quizLevel)
+       store.dispatch({type: 'SET_CURRENT_LEVEL', current_level: level})
+    //    let test = store.getState().level.currentLevel
+    //     console.log("level " + test)
+       store.dispatch({ type: 'RESET_INDEX'})
+       store.dispatch({type: 'UNFLAGGED_WIN'})
+       store.dispatch({type: 'ENABLE_ANSWER'})
+        // store.dispatch({type: 'RESET_LEVEL'})
+    //    console.log("test" + store.getState().updateLevel)
        this.props.navigation.navigate('RunAway', {
                                         data: quizLevel
        })
@@ -25,8 +35,8 @@ class FlatListItem extends Component {
 
     render(){
         return(
-            this.props.item.key <= store.getState().quizData.totalLevel ?
-                this.props.item.key < 4 ?
+            this.props.item.key <= store.getState().level.doneLevel + 1?
+                this.props.item.key < store.getState().level.doneLevel ?
                 <TouchableOpacity  onPress={() =>
                     this._onPress(this.props.item.key)    
                   } >
@@ -62,7 +72,10 @@ class FlatListItem extends Component {
                 </View>
                 </TouchableOpacity>
                 :
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() =>
+                    this._onPress(this.props.item.key)    
+                  }
+                >
                     <View style = {{
                     flex: 1,
                     backgroundColor: "#290136",
@@ -152,6 +165,7 @@ class Level extends Component {
   
   UNSAFE_componentWillMount(){
     //   console.log(this.props.totalLevel)
+
       let list = this.createListLevel(store.getState().quizData.totalLevel)
       this.setState({
           listData: list

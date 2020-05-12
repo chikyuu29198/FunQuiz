@@ -34,14 +34,17 @@ export default class InputKey extends Component {
   }
   async getData (_key){
     //'11uGBq9i-C4nOiyxNyco1j9gPEq1HYPuDlFpquf6rvSw'
-    const data_geted = await axios.get('http://e9d2a563.ngrok.io', {
+    const data_geted = await axios.get('http://1214b90a.ngrok.io', {
       params : {
         key: _key
       }
     })
-    // console.log(data_geted)
-    store.dispatch({type: 'GET_DATA', listQuiz: data_geted.data, totalLevel: data_geted.data[data_geted.data.length - 1].level})
-    const data = JSON.stringify(data_geted.data)
+    var total_level = data_geted.data[data_geted.data.length - 1].level
+    var list_quiz = data_geted.data
+    list_quiz.pop()
+    console.log('test list quiz' + list_quiz + " " + total_level)
+    store.dispatch({type: 'GET_DATA', listQuiz: list_quiz, totalLevel: total_level})
+    const data = JSON.stringify(list_quiz)
     await AsyncStorage.setItem('quizData', data)
     }
   async handleLoad(){
@@ -63,7 +66,7 @@ export default class InputKey extends Component {
       //body
       'Are you sure you want to cancle ?',
       [
-        {text: 'Yes', onPress: () => {}},
+        {text: 'Yes', onPress: () => {this.props.navigation.navigate('Home')}},
         {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
       ],
       { cancelable: false }
