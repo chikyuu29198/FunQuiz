@@ -3,12 +3,13 @@ import {
     StyleSheet,
     View,
     Text,
-    TouchableOpacity
+    TouchableOpacity,
+    ImageBackground
 } from 'react-native';
 import { connect } from 'react-redux';
 import { handleCorrect, handleInCorrect, plusScore, enableAnswer, disableAnswer, flagWin} from '../redux/actionCreators';
+import Images from '../Assets/Images'
 import store from '../redux/store';
-import axios from 'axios';
 const myQuestions = [
 {
     question: "Who invented JavaScript?",
@@ -126,7 +127,11 @@ class Quiz extends Component {
     render(){
         const index = this.props.index;
         const quiz = this.props.listQuiz[index]; 
-        return(  
+        return(
+          <ImageBackground
+          source = {Images.loadingbg}
+          style = {{width: '100%', height: '100%'}}
+          >
             <View style = { styles.questionFrame}>
               <View style = { styles.questionBox}>
                 <Text style = { styles.textQuestion}>{quiz.question}</Text>  
@@ -162,6 +167,7 @@ class Quiz extends Component {
                 </View>
               </View>
             </View>
+          </ImageBackground>
         );
     }
 };
@@ -179,15 +185,17 @@ export default connect(mapStateToProps, {handleCorrect, handleInCorrect, plusSco
 const styles = StyleSheet.create({
     questionFrame: {
       flex: 1,
-      backgroundColor: '#ffffff',
+      margin: 0,
+      padding: 0,
+      // backgroundColor: '#ffffff',
       flexDirection : "column",
     },
     questionBox: {
       flex : 2,
-      margin: 5 ,
-      borderColor: 'gray',
+      marginHorizontal: 5 ,
+      borderColor: 'white',
       justifyContent: 'center',
-      borderWidth: 3,
+      // borderWidth: 3,
       borderRadius: 6,
       backgroundColor: '#DC7C9D'
   
@@ -195,15 +203,16 @@ const styles = StyleSheet.create({
     AnswerBox: {
       flex : 4,
       flexDirection : "column",
+      marginVertical: 5
     },
     answerBoxRow: {
       flex: 1,
       borderColor: 'blue',
       justifyContent: 'center',
-      marginVertical: 1,
+      marginVertical: 1.5,
       marginHorizontal:5,
-      padding: 2,
-      borderWidth: 1,
+      // padding: 2,
+      // borderWidth: 1,
       textAlign: 'center',
       color: '#ffffff',
       backgroundColor: '#64B5F6',

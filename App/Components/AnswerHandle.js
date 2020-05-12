@@ -73,7 +73,7 @@ const AnswerHandle = (entities, { touches, time, dispatch }) => {
             let currentLevel = store.getState().level.currentLevel
             let doneLevel = store.getState().level.doneLevel
             console.log( currentLevel + "   " + doneLevel)
-            if (currentLevel <= doneLevel && doneLevel < store.getState().quizData.totalLevel){
+            if (currentLevel > doneLevel && doneLevel < store.getState().quizData.totalLevel){
               AsyncStorage.setItem('CURRENT_LEVEL', ((doneLevel + 1)).toString())
               // console.log('Asyn' + AsyncStorage.getItem('CURRENT_LEVEL'))
               store.dispatch({ type: 'LEVEL_UP'})

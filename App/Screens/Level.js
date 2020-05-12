@@ -36,7 +36,7 @@ class FlatListItem extends Component {
     render(){
         return(
             this.props.item.key <= store.getState().level.doneLevel + 1?
-                this.props.item.key < store.getState().level.doneLevel ?
+                this.props.item.key <= store.getState().level.doneLevel ?
                 <TouchableOpacity  onPress={() =>
                     this._onPress(this.props.item.key)    
                   } >

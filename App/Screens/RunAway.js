@@ -5,7 +5,8 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  StatusBar
+  StatusBar,
+  ImageBackground
 } from 'react-native';
 import { GameEngine, dispatch} from 'react-native-game-engine';
 import Matter from 'matter-js';
@@ -20,7 +21,7 @@ import Quiz from '../Components/Quiz';
 import store  from '../redux/store';
 import { Provider } from 'react-redux';
 import SettingBar from '../Components/SettingBar';
-import {ImageButton} from 'react-native-image-button-text';
+// import {ImageButton} from 'react-native-image-button-text';
 
 class RunAway extends Component {
   constructor(props){
@@ -115,6 +116,10 @@ class RunAway extends Component {
   render(){
     return(
       <Provider store = { store }>
+       <ImageBackground
+          source = {Images.loadingbg}
+          style = {{width: '100%', height: '100%'}}
+          >
       <View style = {styles.container}>
         <View style = {styles.gameEngine}>
           <Image
@@ -204,6 +209,7 @@ class RunAway extends Component {
               }
 
       </View>
+      </ImageBackground>
       </Provider>
     );
   }
@@ -216,49 +222,15 @@ const styles = StyleSheet.create({
     // backgroundColor: '#ffffff',
   },
   gameEngine: {
+    margin: 0,
     flex: 5,
   },
   questionFrame: {
+    margin: 0,
+    padding: 0,
     flex: 4,
     backgroundColor: '#ffffff',
     flexDirection : "column",
-  },
-  questionBox: {
-    flex : 2,
-    margin: 5 ,
-    borderColor: 'gray',
-    justifyContent: 'center',
-    borderWidth: 3,
-    borderRadius: 6,
-    backgroundColor: '#DC7C9D'
-
-  },
-  AnswerBox: {
-    flex : 4,
-    flexDirection : "column",
-  },
-  answerBoxRow: {
-    flex: 1,
-    borderColor: 'blue',
-    justifyContent: 'center',
-    marginVertical: 1,
-    marginHorizontal:5,
-    padding: 2,
-    borderWidth: 1,
-    textAlign: 'center',
-    color: '#ffffff',
-    backgroundColor: '#64B5F6',
-    borderRadius: 5
-  },
-  textContent: {
-    color: '#ffffff',
-    textAlign: 'center',
-  },
-  textQuestion: {
-    color: '#ffffff',
-    textAlign: 'center',
-    fontSize: 20,
-    fontWeight: 'bold'
   },
   gameOverText: {
     color: '#2e0f05',
@@ -270,9 +242,6 @@ const styles = StyleSheet.create({
     textShadowRadius: 20,
     shadowOpacity: 1,
     marginTop: 15
-    // borderColor: 'white',
-    // borderRadius: 4,
-    // borderWidth: 4 
 },
   fullScreen: {
     position: 'absolute',
