@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/a11d8cf2-a863-4873-8676-dd8c861cced2/resourceGroups/EducationGame/providers/Microsoft.Web/sites/EducationGame",
+    "appService.deploySubpath": ""
+}

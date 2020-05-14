@@ -1,56 +1,62 @@
 import React, { Component } from "react";
-import { View , Text, StyleSheet } from "react-native";
+import { View , Text, StyleSheet, Image } from "react-native";
 import Images from '../Assets/Images';
 import Constants from './Constants';
 import store from '../redux/store';
 import { connect } from 'react-redux';
-
+var RNFS = require('react-native-fs');
 class Score extends Component {
-    render() {
-        const width = this.props.size[0];
-        const height = this.props.size[1];
-        const x = this.props.body.position.x - width/2;
-        const y = this.props.body.position.y - height/2;
-        const score = this.props.score;
-        return (
-            <View
-                style={{
-                    position: "absolute",
-                    left: x,
-                    top: y,
-                    width: width,
-                    height: height,
-                    backgroundColor: 'DC7C9D'
-                }} >
-                <View style = { styles.scoreFrame }>
-                    <Text style = { styles.scoreText }>Score: </Text>
-                    <Text style = { styles.scoreText }> {score} </Text>
-                </View>
-            </View>
+    downloadImage = () => {
+    // download(this.props.image.url, '_Subiz/image_' + this.props.image.name);
+ 
+    this.download('https://i.pinimg.com/474x/c8/a9/9e/c8a99eb00f3269dc7673400b65f59e62--games-images-for-kids.jpg', `${RNFS.DocumentDirectoryPath}/react-native.png`)
+ 
+   };
+ 
+ 
+   download = async (target, destination) => {
+     try{
+       let options = {
+         fromUrl: target,
+         toFile: destination,
+         begin: (res) => {
+           console.log(res)
+         },
+         progress: (data) => {
+           console.log(data)
+         },
+         background: true,
+         progressDivider: 1
+       };
+       console.log(options);
+       const request = await RNFS.downloadFile(options).promise
+       console.log(request)
+     }catch(e){
+       console.log(e)
+     }
+   };
+
+   UNSAFE_componentWillMount() {
+    this.downloadImage()
+   }
+  render() {
+    return (     
+      <View>
+        <Image
+            style={styles.img_test}
+            source={{
+              uri: `${RNFS.DocumentDirectoryPath}/react-native.png`,
+            }}
+      />
+      </View>
     );
   }
 }
-function mapStateToProps(state) {
-    return { 
-        score: state.plusScore
-    };
-}
-export default connect(mapStateToProps)(Score);
 
 const styles = StyleSheet.create({
-    scoreFrame: {
-      flex: 1,
-      flexDirection : "row",
-      justifyContent: 'center',
-      borderWidth: 1,
-      borderRadius: 6,
-      backgroundColor: '#f2e5b6',
-      borderColor: 'gray',
-    },
-    scoreText: {
-        color: '#234ae8',
-        textAlign: "center",
-        fontSize: 15,
-        fontWeight: "bold"
-    }
-})
+  img_test: {
+    width: 100,
+    height: 100
+  },
+ 
+});
