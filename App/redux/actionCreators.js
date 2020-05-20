@@ -77,3 +77,11 @@ export function flagWin() {
 export function unflaggedWin() {
     return { type: 'UNFLAGGED_WIN'}
 }
+
+export function configBackground() {
+    return { type: 'CONFIG_BACKGROUND'}
+}
+
+export function configBtnColor() {
+    return { type: 'CONFIG_BTN_COLOR'}
+}

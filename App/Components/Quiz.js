@@ -10,98 +10,7 @@ import { connect } from 'react-redux';
 import { handleCorrect, handleInCorrect, plusScore, enableAnswer, disableAnswer, flagWin} from '../redux/actionCreators';
 import Images from '../Assets/Images'
 import store from '../redux/store';
-const myQuestions = [
-{
-    question: "Who invented JavaScript?",
-    answers: {
-    a: "Douglas Crockford",
-    b: "Sheryl Sandberg",
-    c: "Brendan Eich",
-    d: "xyz"
-    },
-    correctAnswer: "c"
-},
-{
-    question: "Which one of these is a JavaScript package manager?",
-    answers: {
-    a: "Node.js",
-    b: "TypeScript",
-    c: "npm",
-    d: "xyz",
-    },
-    correctAnswer: "c"
-},
-{
-    question: "Which tool can you use to ensure code quality?",
-    answers: {
-    a: "Angular",
-    b: "jQuery",
-    c: "RequireJS",
-    d: "ESLint"
-    },
-    correctAnswer: "d"
-},
-{
-  question: "Who invented JavaScript?",
-  answers: {
-  a: "Douglas Crockford",
-  b: "Sheryl Sandberg",
-  c: "Brendan Eich",
-  d: "xyz"
-  },
-  correctAnswer: "c"
-},
-{
-  question: "Which one of these is a JavaScript package manager?",
-  answers: {
-  a: "Node.js",
-  b: "TypeScript",
-  c: "npm",
-  d: "xyz",
-  },
-  correctAnswer: "c"
-},
-{
-  question: "Which tool can you use to ensure code quality?",
-  answers: {
-  a: "Angular",
-  b: "jQuery",
-  c: "RequireJS",
-  d: "ESLint"
-  },
-  correctAnswer: "d"
-},
-{
-  question: "Who invented JavaScript?",
-  answers: {
-  a: "Douglas Crockford",
-  b: "Sheryl Sandberg",
-  c: "Brendan Eich",
-  d: "xyz"
-  },
-  correctAnswer: "c"
-},
-{
-  question: "Which one of these is a JavaScript package manager?",
-  answers: {
-  a: "Node.js",
-  b: "TypeScript",
-  c: "npm",
-  d: "xyz",
-  },
-  correctAnswer: "c"
-},
-{
-  question: "Which tool can you use to ensure code quality?",
-  answers: {
-  a: "Angular",
-  b: "jQuery",
-  c: "RequireJS",
-  d: "ESLint"
-  },
-  correctAnswer: "d"
-}
-];
+
 class Quiz extends Component {
     constructor(pros){
         super(pros);
@@ -127,6 +36,19 @@ class Quiz extends Component {
     render(){
         const index = this.props.index;
         const quiz = this.props.listQuiz[index]; 
+        let btn_color
+        this.props.userCustom.btn_color ? btn_color = this.props.userCustom.btn_color : btn_color = '#64B5F6'
+        const answerBoxRow = {
+          flex: 1,
+          borderColor: 'blue',
+          justifyContent: 'center',
+          marginVertical: 1.5,
+          marginHorizontal:5,
+          textAlign: 'center',
+          color: '#ffffff',
+          borderRadius: 5,
+          backgroundColor: btn_color
+        }
         return(
           <ImageBackground
           source = {Images.loadingbg}
@@ -137,28 +59,28 @@ class Quiz extends Component {
                 <Text style = { styles.textQuestion}>{quiz.question}</Text>  
               </View>
               <View style = { styles.AnswerBox}>
-              <View style = { styles.answerBoxRow}>
+              <View style = { answerBoxRow}>
                 <TouchableOpacity
                   disabled = {this.props.isDisable}
                   onPress = {() => this._onPress('a')}> 
                     <Text style = { styles.textContent}>{quiz.a}</Text>
                 </TouchableOpacity>
                 </View>
-                <View style = { styles.answerBoxRow}>
+                <View style = { answerBoxRow}>
                   <TouchableOpacity
                     disabled = {this.props.isDisable}
                     onPress = {() => this._onPress('b')}> 
                       <Text style = { styles.textContent}>{quiz.b}</Text>
                   </TouchableOpacity>
                 </View>
-                <View style = { styles.answerBoxRow}>
+                <View style = {answerBoxRow}>
                   <TouchableOpacity 
                     disabled = {this.props.isDisable}
                     onPress = {() => this._onPress('c')}> 
                       <Text style = { styles.textContent}>{quiz.c}</Text>
                   </TouchableOpacity>
                 </View>
-                <View style = { styles.answerBoxRow}>
+                <View style = { answerBoxRow}>
                   <TouchableOpacity 
                     disabled = {this.props.isDisable}
                     onPress = {() => this._onPress('d')}> 
@@ -176,7 +98,7 @@ function mapStateToProps(state) {
   return {
      index: state.updateIndex,
      isDisable: state.disableAnswer,
-    //  listQuiz: state.quizData.listQuiz
+     userCustom: state.userCustom,
      };
 }
 
@@ -215,7 +137,8 @@ const styles = StyleSheet.create({
       // borderWidth: 1,
       textAlign: 'center',
       color: '#ffffff',
-      backgroundColor: '#64B5F6',
+      // {store.getState().}
+      backgroundColor: '#637cd6', //'#64B5F6',
       borderRadius: 5
     },
     textContent: {

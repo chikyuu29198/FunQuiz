@@ -5,20 +5,6 @@ let initalState = {
 }
 
 const levelReducer = (state = initalState, action) => {
-    // if (action.type == 'SET_CURRENT_LEVEL') return state.map(e => {
-    //     return { ...e, currentLevel: action.current_level };
-    // });
-    // if (action.type == 'UPDATE_LEVEL') return state.map(e => {
-    //     return { ...e, currentLevel: e.currentLevel + 1 };
-    // });
-    // if ( action.type == 'RESET_LEVEL' )
-    // return {
-    //     doneLevel: 0,
-    //     currentLevel: 0
-    // };
-    // if (action.type == 'LEVEL_UP') return state.map(e => {
-    //     return { ...e, doneLevel: e.doneLevel + 1 };
-    // });
     if (action.type == 'SET_CURRENT_LEVEL') return {
         doneLevel: state.doneLevel,
         currentLevel: action.current_level

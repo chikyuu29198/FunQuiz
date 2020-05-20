@@ -21,4 +21,10 @@ export default Images = {
     loadingbg: require('./images/loadingbg.png'),
     currentPosition: require('./images/currentPosition.png'),
     purpleButton: require('./images/purpleButton.png'),
+
+    woodFloor: require('./images/wood_floor.png'),
+    cake: require('./images/cake.png'),
+    mouse11: require('./images/mouse11.png'),
+    mouse12: require('./images/mouse12.png'),
+    mouse13: require('./images/mouse13.png'),
 }

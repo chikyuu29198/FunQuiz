@@ -114,6 +114,8 @@ class RunAway extends Component {
   }
 
   render(){
+    let imgSource
+    store.getState().userCustom.background ? imgSource = {uri: store.getState().userCustom.background} : imgSource = Images.gameBackground
     return(
       <Provider store = { store }>
        <ImageBackground
@@ -123,7 +125,7 @@ class RunAway extends Component {
       <View style = {styles.container}>
         <View style = {styles.gameEngine}>
           <Image
-            source={Images.gameBackground}
+            source={imgSource}
             style={{
               position: 'absolute',
               top: 0,

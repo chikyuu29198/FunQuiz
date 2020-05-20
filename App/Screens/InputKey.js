@@ -19,6 +19,10 @@ import Spinner from 'react-native-spinkit';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import store from '../redux/store'
+import CustomConfig from '../Components/CustomConfig'
+
+var RNFS = require('react-native-fs');
+
 const { width, height } = Dimensions.get("window");
 const background = require("../Assets/images/loadingbg.png");
 const logo = require("../Assets/images/Bird.png");
@@ -32,20 +36,87 @@ export default class InputKey extends Component {
 
     }
   }
+  
+  // setCustomize = async (key, value) => {
+  //   setCustomize = async ( value) => {
+  //   AsyncStorage.setItem(key, value)
+  // }
+
+  downloadImage = (linkDownload) => {
+    // downloadImage = (key, linkDownload) => {
+    // download(this.props.image.url, '_Subiz/image_' + this.props.image.name);
+    //'https://i.pinimg.com/474x/c8/a9/9e/c8a99eb00f3269dc7673400b65f59e62--games-images-for-kids.jpg'
+    var destination = linkDownload.replace(/\//g, "");
+    console.log("replace: " + destination)
+    // return this.download(key, linkDownload, `${RNFS.DocumentDirectoryPath}` + "/" +destination)
+    return this.download(linkDownload, `${RNFS.DocumentDirectoryPath}` + "/" +destination)
+ 
+   };
+   download = async (target, destination) => {
+    // download = async (key ,target, destination) => {
+     try{
+       let options = {
+         fromUrl: target,
+         toFile: destination,
+         begin: (res) => {
+         },
+         progress: (data) => {
+         },
+         background: true,
+         progressDivider: 1
+       };
+       console.log("options");
+       const request = await RNFS.downloadFile(options).promise
+       console.log(request)
+      //  AsyncStorage.setItem('file://' + destination)
+      //  AsyncStorage.setItem(key, 'file://' + destination)
+       store.dispatch({type: 'CONFIG_BACKGROUND', bg_uri: 'file://' + destination})
+     }catch(e){
+       console.log("error")
+       console.log(e)
+     }
+     return 'file://' + destination
+   };
+
   async getData (_key){
     //'11uGBq9i-C4nOiyxNyco1j9gPEq1HYPuDlFpquf6rvSw'
-    const data_geted = await axios.get('http://1214b90a.ngrok.io', {
+    const data_geted = await axios.get('http://37298336.ngrok.io', {
       params : {
         key: _key
       }
     })
-    var total_level = data_geted.data[data_geted.data.length - 1].level
-    var list_quiz = data_geted.data
+    console.log(data_geted)
+    let nameOfKey = Object.keys(data_geted.data)
+    var list_quiz = data_geted.data[nameOfKey[0]]
+    var user_custom = data_geted.data[nameOfKey[1]]
+    var total_level = list_quiz[list_quiz.length - 1].level
     list_quiz.pop()
     console.log('test list quiz' + list_quiz + " " + total_level)
     store.dispatch({type: 'GET_DATA', listQuiz: list_quiz, totalLevel: total_level})
     const data = JSON.stringify(list_quiz)
     await AsyncStorage.setItem('quizData', data)
+    // handle custom config
+    var userCustom = {}
+    for (i = 0; i<user_custom.length; i++){
+      let lowerKey = user_custom[i].key.toLowerCase()
+      console.log(lowerKey)
+      if (lowerKey.includes("background")){
+        // let uriBg = await this.downloadImage(CustomConfig.ASYN_URI_BACKGROUND, user_custom[i].value)
+        let uriBg = await this.downloadImage(user_custom[i].value)
+        console.log(uriBg)
+        userCustom[CustomConfig.ASYN_URI_BACKGROUND] = uriBg
+       
+      }
+      else {
+        // AsyncStorage.setItem(CustomConfig.ASYN_BUTTON_COLOR, user_custom[i].value)
+        store.dispatch({type: 'CONFIG_BTN_COLOR', btn_color: user_custom[i].value})
+        console.log("test butoon: " + user_custom[i].value)
+        userCustom[CustomConfig.ASYN_BUTTON_COLOR] = user_custom[i].value
+      }
+    }
+    AsyncStorage.setItem(CustomConfig.ASYN_ALL_CONFIG, JSON.stringify(userCustom))
+    let test = await  AsyncStorage.getItem(CustomConfig.ASYN_ALL_CONFIG)
+    console.log("Test save: " + test)
     }
   async handleLoad(){
       this.setState({
@@ -133,12 +204,9 @@ background: {
   container: {
     flex: 1,
     flexDirection: "column",
-    // justifyContent: "center",
-    // alignItems: "center"
   },
   exit: {
       flex: 1,
-    //   justifyContent: 'center',
     marginLeft: width - 40
   },
   logo: {
@@ -158,22 +226,16 @@ background: {
       alignItems: 'center'
   },
   textInput: {
-    //   flex: 1,
       backgroundColor: "black",
       width: width - 40,
       maxHeight: height/7,
       paddingHorizontal: 15,
-    //   height: height/6,
-    //   alignItems: 'center',
-    //   justifyContent: 'center',
-    //   alignContent: 'center'
       opacity: 0.2,
       color: "white",
       borderRadius: 20
   },
   button: {
     backgroundColor: "#FF3366",
-    // paddingVertical: 20,
     alignItems: "center",
     justifyContent: "center",
     marginTop: 20,
