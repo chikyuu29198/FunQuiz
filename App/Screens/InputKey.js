@@ -159,14 +159,24 @@ export default class InputKey extends Component {
                     onPress={this.exitPress.bind(this)}
                     source = { Images.exit }                                
                  />
-                  </View>                
-                <Image source = {logo} style = {styles.logoImg}/>
+                  </View>
+                  <View style = {{justifyContent: 'center', alignItems: 'center'}}>
+                  <Image source = {logo} style = {styles.logoImg}/>
+                  </View>
+                  <View style = {{alignItems: 'center'}}>
+                  <Image source = {require('../Assets/images/RunAway_text.png')}
+                  style={{
+                     position: 'absolute',
+                  }}
+                />
+                  </View>           
+               
               </View>
               <View style = {styles.content}>
               <View style = {styles.input}>
               <TextInput 
                 placeholderTextColor="#FFF"
-                placeholder="Please input key to load quiz data!" 
+                placeholder="Please input link to load data!" 
                 autoCapitalize="none"
                 onChangeText={key => this.setState({ key })}
                 value={this.state.key}
@@ -210,9 +220,9 @@ background: {
     marginLeft: width - 40
   },
   logo: {
-      flex: 6,
+      flex: 5,
       justifyContent: 'flex-end',
-      alignItems: 'center'
+      marginBottom: 40
   },
   content: {
       flex: 12,
@@ -221,14 +231,14 @@ background: {
       paddingVertical: 70
   },
   input: {
-
+      marginBottom: 20,
       justifyContent: 'center',
       alignItems: 'center'
   },
   textInput: {
       backgroundColor: "black",
       width: width - 40,
-      maxHeight: height/7,
+      maxHeight: height/6,
       paddingHorizontal: 15,
       opacity: 0.2,
       color: "white",
@@ -241,16 +251,17 @@ background: {
     marginTop: 20,
     marginHorizontal: 20,
     borderRadius: 15,
-    height: 40,
-    width: 90
+    height: 45,
+    width: 100
   },
   buttonText: {
     color: "#FFF",
-    fontSize: 18,
+    fontSize: 20,
+    fontWeight: 'bold'
   },
   logoImg: {
-      width: 90,
-      height: 90,
+      width: 70,
+      height: 70,
   }
 
 })

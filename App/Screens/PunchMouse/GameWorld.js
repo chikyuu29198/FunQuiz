@@ -37,34 +37,40 @@ class GameWorld extends Component {
   setupWorld = () => {
     let engine = Matter.Engine.create({ enableSleeping: false });
     let world = engine.world;
-    // engine.world.gravity = 1
-    let mouse = Matter.Bodies.rectangle( Constants.MAX_WIDTH/2, 
-                                        Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2,
-                                        Constants.BIRD_SIZE, 
-                                        Constants.BIRD_SIZE, 
-                                        { isStatic: false,}                                        
-                                        );
+    let mouse_list = []
+    for (i = 0; i<13; i++){
+      let x = Math.floor(Math.random() * (Constants.MAX_WIDTH - 0 + 1) ) + 0;
+      let y = Math.floor(Math.random() * (Constants.MAX_HEIGHT - 0 + 1) ) + 0;
+      let width = Math.floor(Math.random() * (60 - 50 + 1) ) + 50;
+      var mouse = Matter.Bodies.rectangle( x, 
+                                           y,
+                                          width, 
+                                          width, 
+                                          { isStatic: true,}                                        
+                                          );
+      mouse_list.push(mouse);
+    }
                                         
     let cake = Matter.Bodies.rectangle( Constants.MAX_WIDTH/2, 
                                                  Constants.MAX_HEIGHT - Constants.FLOOR_HEIGHT - Constants.CAKE_SIZE/2, 
                                                  Constants.CAKE_SIZE, Constants.CAKE_SIZE, 
                                                  { isStatic: true },                                                 
                                                 );
-    // let mouse1 = {body: mouse, pose: 1, color: 1, size: [Constants.BIRD_SIZE, Constants.BIRD_SIZE], renderer: Mouse}
-    // let mouse2 = {body: mouse, pose: 1, color: 2, size:[Constants.BIRD_SIZE, Constants.BIRD_SIZE], renderer: Mouse}
-    Matter.World.add(world, [mouse, cake]);
+    mouse_list.push(cake)
+    // console.log(mouse_list)
+    Matter.World.add(world, mouse_list);
     let l = {physics: { engine: engine, world: world},
     cake: { body: cake, size: [Constants.BIRD_SIZE, Constants.BIRD_SIZE], renderer: Cake},
-    mouse: { body: mouse, pose: 1, size: [Constants.BIRD_SIZE, Constants.BIRD_SIZE], renderer: Mouse},
   }
+    for (i = 0; i<13; i++){
+      let _pose = Math.floor(Math.random() * (3 - 1 + 1) ) + 1
+      let key = 'mouse' + i;
+      let _size = Math.floor(Math.random() * (60 - 40 + 1) ) + 40
+      let _color = Math.floor(Math.random() * (3 - 1 + 1) ) + 1
+      let _speed = Math.floor(Math.random() * (5 - 2 + 1) ) + 2
+      l[key] = {body: mouse_list[i], pose: _pose, size: _size, color: _color, speed: _speed, renderer: Mouse}
+    }
     return l
-      
-        // physics: { engine: engine, world: world},
-        // cake: { body: cake, size: [Constants.BIRD_SIZE, Constants.BIRD_SIZE], renderer: Cake},
-        // mouse: { body: mouse, pose: 1, size: [Constants.BIRD_SIZE, Constants.BIRD_SIZE], renderer: Mouse},
-        // floor1: { body: floor1, size: [Constants.FLOOR_HEIGHT, Constants.MAX_WIDTH], renderer: Floor },
-        // floor2: { body: floor2, size: [Constants.FLOOR_HEIGHT, Constants.MAX_WIDTH], renderer: Floor },
-    
   }
 
   render(){

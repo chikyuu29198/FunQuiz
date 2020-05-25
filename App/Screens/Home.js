@@ -138,7 +138,7 @@ class Home extends Component {
       resizeMode="stretch"
        />
        <View style = {{flex:3, justifyContent: 'center', alignItems: 'center'}}>
-          <Image source = {require('../Assets/images/cooltext-357159411869381.png')}
+          <Image source = {require('../Assets/images/RunAway_text.png')}
                   style={{
                      position: 'absolute',
                   }}
@@ -168,11 +168,25 @@ class Home extends Component {
           </ImageBackground>
        </TouchableOpacity>
        </View>
-       <View style = {{flex:3}}></View>
-        
+       <View style = {{flex:3, flexDirection: 'row', justifyContent: 'flex-end', paddingRight: 15, paddingBottom: 15}}>
+       <View style = {{justifyContent: 'flex-end', marginEnd: 0}}>
+       <ImageButton
+            width = {70}
+            height = {70}
+            text = ""
+            // onPress={this.exitPress.bind(this)}
+            source = { Images.back}
+
+          />
+
+       </View>
+       </View>
+      
+       
      
       {/* </ImageBackground> */}
       </View>
+
     );
   }
 }
@@ -180,8 +194,8 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
+      // alignItems: 'center',
+      // justifyContent: 'center',
       backgroundColor: '#7ebcf2'
     },
     loading: {

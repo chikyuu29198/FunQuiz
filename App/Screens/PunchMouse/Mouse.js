@@ -13,11 +13,17 @@ export default class Mouse extends Component {
    
     render() {
         //Math.floor(Math.random() * (40 - 20) + 20);
-        const width = 40
+        const width = this.props.size
         // const height = this.props.size[1];
         const x = this.props.body.position.x - width/2;
         const y = this.props.body.position.y - width/2;
-        let img = Images["mouse1" + this.props.pose];
+        let img = Images["mouse3" + this.props.pose];
+        if (this.props.color == 1)
+            img = Images["mouse1" + this.props.pose];
+        else if (this.props.color == 2)
+            img = Images["mouse2" + this.props.pose];
+        else
+            img = Images["mouse3" + this.props.pose];
         return (
             <Image
                 style={{

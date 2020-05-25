@@ -18,24 +18,38 @@ let mouse = Matter.Bodies.rectangle( Constants.MAX_WIDTH/2,
 const Physics = (entities, { touches, time, dispatch }) => {
 
     let engine = entities.physics.engine;
-    let mouse = entities.mouse.body;
+    // let mouse = entities.mouse.body;
     let cake = entities.cake.body; 
     let world = engine.world;
     tick += 1;
-    if (tick%15 == 0 && mouse){
-        if (pose>=3){
-            check = false
+    Object.keys(entities).forEach(key => {
+       
+        if (key.indexOf("mouse") === 0) {
+            if (tick%15 == 0 ){
+                entities[key].pose = entities[key].pose + 1
+                if ( entities[key].pose == 4){
+                    entities[key].pose = 1
+                }
+            }
+            if (entities[key].body.position.y > Constants.MAX_HEIGHT - 30){
+
+            }
+            // console.log("key " +key)
+            let _x = Math.floor(Math.random() * (5 - 2 + 1) ) + 2
+            let direction = Math.floor(Math.random() * (2 - 1 + 1) ) + 1
+            if (direction == 1){           
+                Matter.Body.rotate(entities[key].body, Math.PI)
+                Matter.Body.translate( entities[key].body, {x: +_x, y: + entities[key].speed});  
+            }
+                
+            else{
+                Matter.Body.rotate(entities[key].body, -Math.PI/6)
+                Matter.Body.translate( entities[key].body, {x: -_x, y: + entities[key].speed});  
+            }
+                
         }
-        if (pose <= 1){
-            check = true
-        }
-        if (check == true)
-            pose ++;
-        else if(check == false){
-            pose --;
-        }
-        entities.mouse.pose = pose;
-    }
+    })
+    
     Matter.Engine.update(engine, time.delta);
     return entities;
 };

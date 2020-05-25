@@ -27,4 +27,10 @@ export default Images = {
     mouse11: require('./images/mouse11.png'),
     mouse12: require('./images/mouse12.png'),
     mouse13: require('./images/mouse13.png'),
+    mouse21: require('./images/mouse21.png'),
+    mouse22: require('./images/mouse22.png'),
+    mouse23: require('./images/mouse23.png'),
+    mouse31: require('./images/mouse31.png'),
+    mouse32: require('./images/mouse32.png'),
+    mouse33: require('./images/mouse33.png'),
 }

@@ -6,7 +6,7 @@ import Images from '../Assets/Images'
 import { connect } from 'react-redux';
 import { handleCorrect, handleInCorrect, plusScore, enableAnswer, disableAnswer} from '../redux/actionCreators';
 import AsyncStorage from '@react-native-community/async-storage';
-
+import { ImageButton } from "react-native-image-button-text";
 class FlatListItem extends Component {
     constructor(props){
         super(props)
@@ -184,6 +184,9 @@ class Level extends Component {
     }
     return listLevel;
   }
+  _goBack(){
+    this.props.navigation.navigate('Home')
+    console.log("hhh")}
   
   render() {
     return (
@@ -192,6 +195,19 @@ class Level extends Component {
         source = {Images.loadingbg}
         style = {{width: '100%', height: '100%'}}
         >
+        <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Image source = {require('../Assets/images/select_level.png')}
+         style={{
+          position: 'absolute',
+        //   top: Constants.MAX_HEIGHT,
+        //   left: Constants.MAX_WIDTH/2,
+        //   width: 120,
+        //   height: 90,
+      }} 
+    //   resizeMode="stretch"
+       />
+        </View>
+        <View style = {{flex: 7}}>
         <FlatList
             data = {this.state.listData}
             renderItem = {({item, index}) => {
@@ -206,6 +222,22 @@ class Level extends Component {
             }}
         >
         </FlatList>
+
+        </View>
+        
+        <View style = {{flex:1, flexDirection: 'row', justifyContent: 'flex-end', paddingRight: 15, paddingBottom: 15}}>
+       <View style = {{justifyContent: 'flex-end', marginEnd: 0}}>
+       <ImageButton
+            width = {60}
+            height = {60}
+            text = ""
+            onPress={() => this.props.navigation.navigate('Home')}
+            source = { Images.back}
+
+          />
+
+       </View>
+       </View>
         </ImageBackground>
       </View>
     );
@@ -226,6 +258,7 @@ const styles = StyleSheet.create({
        alignItems: 'center',
        alignContent: 'center',
        justifyContent: 'center',
+       fontWeight: 'bold'
    },
    compeletedText: {
     color: 'green',
