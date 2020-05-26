@@ -24,18 +24,20 @@ const Physics = (entities, { touches, time, dispatch }) => {
     tick += 1;
     Object.keys(entities).forEach(key => {
        
-        if (key.indexOf("mouse") === 0 ) {
+        if (key.indexOf("mouse") === 0 || key.indexOf("porcupine") === 0) {
             // console.log(entities[key].isBroke)
-            if (tick%15 == 0 ){
+            //create animate by change image for mouse
+            if (tick%5 == 0 && key.indexOf("mouse") === 0){
                 entities[key].pose = entities[key].pose + 1
-                if ( entities[key].pose == 4){
+                if ( entities[key].pose == 5){
                     entities[key].pose = 1
                 }
             }
-            if (entities[key].body.position.y > Constants.MAX_HEIGHT - 30){
-
+            if (entities[key].body.position.y > Constants.MAX_HEIGHT/3){
+                console.log("<10")
             }
             // console.log("key " +key)
+            //Random translate(x,y) for mouse and porcupine
             let _x = Math.floor(Math.random() * (5 - 2 + 1) ) + 2
             let direction = Math.floor(Math.random() * (2 - 1 + 1) ) + 1
             if (direction == 1){           

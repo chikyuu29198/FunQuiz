@@ -14,6 +14,7 @@ import Constants from './Constants';
 import Mouse from './Mouse';
 import Cake from './Cake'
 import Physics from './Components/Physics';
+import Porcupine from './Porcupine'
 // import AnswerHandle from '../Components/AnswerHandle.js';
 import Images from '../../Assets/Images.js';
 // import Quiz from '../Components/Quiz';
@@ -56,21 +57,41 @@ class GameWorld extends Component {
                                                  Constants.CAKE_SIZE, Constants.CAKE_SIZE, 
                                                  { isStatic: true },                                                 
                                                 );
-    mouse_list.push(cake)
+    let porcupine_list = []
+    for (i = 0; i<5; i++){
+      let x = Math.floor(Math.random() * (Constants.MAX_WIDTH - 0 + 1) ) + 0;
+      let y = Math.floor(Math.random() * (Constants.MAX_HEIGHT - 0 + 1) ) + 0;
+      let width = 60;
+      var porcupine = Matter.Bodies.rectangle( x, 
+                                            y,
+                                          width, 
+                                          width, 
+                                          { isStatic: true,}                                        
+                                          );
+      porcupine_list.push(porcupine);
+    }
+    // mouse_list.push(cake)
+    let entity_list = mouse_list.concat(porcupine_list)
+    entity_list.push(cake)
+
     // console.log(mouse_list)
-    Matter.World.add(world, mouse_list);
-    let l = {physics: { engine: engine, world: world},
+    Matter.World.add(world, entity_list);
+    let game_world = {physics: { engine: engine, world: world},
     cake: { body: cake, size: [Constants.BIRD_SIZE, Constants.BIRD_SIZE], renderer: Cake},
   }
-    for (i = 0; i<13; i++){
+    for (i = 0; i<mouse_list.length; i++){
       let _pose = Math.floor(Math.random() * (3 - 1 + 1) ) + 1
       let key = 'mouse' + i;
       let _size = Math.floor(Math.random() * (60 - 40 + 1) ) + 40
       let _color = Math.floor(Math.random() * (3 - 1 + 1) ) + 1
       let _speed = Math.floor(Math.random() * (5 - 2 + 1) ) + 2
-      l[key] = {body: mouse_list[i], isBroke: false, pose: _pose, size: _size, color: _color, speed: _speed, renderer: Mouse}
+      game_world[key] = {body: mouse_list[i], isBroke: false, pose: _pose, size: _size, color: _color, speed: _speed, renderer: Mouse}
     }
-    return l
+    for (i = 0; i<porcupine_list.length; i++){
+      let key = 'porcupine' + i;
+      game_world[key] = {body: porcupine_list[i], size: 60, speed: 7, renderer: Porcupine}
+    }
+    return game_world
   }
 
   render(){
