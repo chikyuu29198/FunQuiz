@@ -1,16 +1,23 @@
 import React, {Component} from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity, ImageBackground, TouchableHighlight, Text, TouchableWithoutFeedback } from 'react-native';
 import Images from '../../Assets/Images.js';
 import Constants from './Constants';
 
 export default class Mouse extends Component { 
     constructor (props) {
-        super(props)
-        this.state = {
-          isRun: true
-        }
+        super(props);
+        // this.isBroke = false
+
+        // this.state = {
+        //   isBroke: false
+        // }
      }
-   
+     async kill(){
+        // await this.setState({
+        //      isBroke: true
+        // //  })
+    };
+
     render() {
         //Math.floor(Math.random() * (40 - 20) + 20);
         const width = this.props.size
@@ -22,10 +29,18 @@ export default class Mouse extends Component {
             img = Images["mouse1" + this.props.pose];
         else if (this.props.color == 2)
             img = Images["mouse2" + this.props.pose];
-        else
+        else{
             img = Images["mouse3" + this.props.pose];
+        };
+            
         return (
-            <Image
+            <TouchableWithoutFeedback onPress = {() => {this.kill()
+            }} style = {{ position: 'absolute',
+            top: y,
+            left: x,
+            width: width,
+            height: width,}}>
+                <Image
                 style={{
                     position: 'absolute',
                     top: y,
@@ -35,8 +50,8 @@ export default class Mouse extends Component {
                 }} 
                 resizeMode="stretch"
                 source={img}
-            
-            />             
+            />
+            </TouchableWithoutFeedback>
                
         )
     }

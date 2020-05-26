@@ -68,7 +68,7 @@ class GameWorld extends Component {
       let _size = Math.floor(Math.random() * (60 - 40 + 1) ) + 40
       let _color = Math.floor(Math.random() * (3 - 1 + 1) ) + 1
       let _speed = Math.floor(Math.random() * (5 - 2 + 1) ) + 2
-      l[key] = {body: mouse_list[i], pose: _pose, size: _size, color: _color, speed: _speed, renderer: Mouse}
+      l[key] = {body: mouse_list[i], isBroke: false, pose: _pose, size: _size, color: _color, speed: _speed, renderer: Mouse}
     }
     return l
   }

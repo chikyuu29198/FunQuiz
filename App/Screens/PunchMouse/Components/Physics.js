@@ -8,12 +8,12 @@ let pose = 1;
 let timeOut = false;
 let check = true;
 
-let mouse = Matter.Bodies.rectangle( Constants.MAX_WIDTH/2, 
-    Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2,
-    Constants.BIRD_SIZE, 
-    Constants.BIRD_SIZE, 
-    { isStatic: false,}                                        
-    );
+// let mouse = Matter.Bodies.rectangle( Constants.MAX_WIDTH/2, 
+//     Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2,
+//     Constants.BIRD_SIZE, 
+//     Constants.BIRD_SIZE, 
+//     { isStatic: false,}                                        
+//     );
     
 const Physics = (entities, { touches, time, dispatch }) => {
 
@@ -24,7 +24,8 @@ const Physics = (entities, { touches, time, dispatch }) => {
     tick += 1;
     Object.keys(entities).forEach(key => {
        
-        if (key.indexOf("mouse") === 0) {
+        if (key.indexOf("mouse") === 0 ) {
+            // console.log(entities[key].isBroke)
             if (tick%15 == 0 ){
                 entities[key].pose = entities[key].pose + 1
                 if ( entities[key].pose == 4){
