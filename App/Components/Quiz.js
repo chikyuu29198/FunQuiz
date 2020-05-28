@@ -9,7 +9,6 @@ import {
 import { connect } from 'react-redux';
 import { handleCorrect, handleInCorrect, plusScore, enableAnswer, disableAnswer, flagWin} from '../redux/actionCreators';
 import Images from '../Assets/Images'
-import store from '../redux/store';
 
 class Quiz extends Component {
     constructor(pros){

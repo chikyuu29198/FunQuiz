@@ -85,3 +85,10 @@ export function configBackground() {
 export function configBtnColor() {
     return { type: 'CONFIG_BTN_COLOR'}
 }
+export function pause() {
+    return { type: 'PAUSE'}
+}
+
+export function unPause() {
+    return { type: 'UN_PAUSE'}
+}

@@ -17,10 +17,10 @@ import Physics from './Components/Physics';
 import Porcupine from './Porcupine'
 // import AnswerHandle from '../Components/AnswerHandle.js';
 import Images from '../../Assets/Images.js';
-// import Quiz from '../Components/Quiz';
-// import store  from '../redux/store';
-// import { Provider } from 'react-redux';
+import Quiz from './Quiz';
+import { Provider } from 'react-redux';
 import SettingBar from '../../Components/SettingBar';
+import store from '../../redux/store';
 // import {ImageButton} from 'react-native-image-button-text';
 
 class GameWorld extends Component {
@@ -30,7 +30,8 @@ class GameWorld extends Component {
     this.entities = this.setupWorld();
     this.state = {
       running: true,
-      score: 0
+      score: 0,
+      // pausing: store.getState().pausing
     }
   }
   
@@ -94,9 +95,26 @@ class GameWorld extends Component {
     return game_world
   }
 
+  handleEvent = (ev) => {
+		if (ev.type === "game-over")
+			this.setState({
+        running: false
+      });
+    else if (ev.type === "score")
+      this.setState({
+        score: this.state.score + 1
+      })
+    else if (ev.type === "pause"){ 
+      console.log(store.getState().pausing)   
+      this.setState({
+        running: false,
+      });
+    }  
+  };
+
   render(){
     return(
-    //   <Provider store = { store }>
+      <Provider store = { store }>
        <ImageBackground
           source = {Images.woodFloor}
           style = {{width: '100%', height: '100%'}}
@@ -108,8 +126,8 @@ class GameWorld extends Component {
             style = {styles.gameContainer} 
             systems = {[Physics]}
             entities = {this.entities}
-            running = {this.state.running}
-            // onEvent = {this.handleEvent}
+            running = {!store.getState().pausing}
+            onEvent = {this.handleEvent}
             status = {this.status}
             >
             <StatusBar hidden={true} />
@@ -117,11 +135,19 @@ class GameWorld extends Component {
           < Text style = { styles.score }> {this.state.score} </Text>
           < SettingBar />
         </View>
-
-        
+      {/* {
+        store.getState().pausing == true ?
+          <Quiz/>
+          :
+          store.getState().pausing == false ?
+          <View></View>
+          :
+          <View></View>
+      } */}
+      {store.getState().pausing == true && <Quiz />}
       </View>
       </ImageBackground>
-    //   </Provider>
+    </Provider>
     );
   }
 };

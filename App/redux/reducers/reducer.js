@@ -8,8 +8,9 @@ import disableAnswerReducer from './disableAnswerReducer';
 import getDataReducer from './getDataReducer';
 import userReducer from './userReducer';
 import levelReducer from './levelReducer';
-import winFlagReducer from './winFlagReducer'
-import userCustom from './userCustom'
+import winFlagReducer from './winFlagReducer';
+import userCustom from './userCustom';
+import pausingReducer from './pausingReducer';
 
 const reducer = combineReducers({
     plusScore: plusScoreReducer,
@@ -21,7 +22,8 @@ const reducer = combineReducers({
     quizData: getDataReducer,
     user: userReducer,
     winFlag: winFlagReducer,
-    userCustom: userCustom 
+    userCustom: userCustom,
+    pausing: pausingReducer
 });
 
 export default reducer;
