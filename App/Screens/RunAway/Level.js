@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button, Image, FlatList, ImageBackground, TouchableOpacity } from 'react-native';
-import store from '../redux/store'
+import store from '../../redux/store'
 import Spinner from 'react-native-spinkit'
-import Images from '../Assets/Images'
+import Images from '../../Assets/Images'
 import { connect } from 'react-redux';
-import { handleCorrect, handleInCorrect, plusScore, enableAnswer, disableAnswer} from '../redux/actionCreators';
+import { handleCorrect, handleInCorrect, plusScore, enableAnswer, disableAnswer} from '../../redux/actionCreators';
 import AsyncStorage from '@react-native-community/async-storage';
 import { ImageButton } from "react-native-image-button-text";
 class FlatListItem extends Component {
@@ -28,7 +28,7 @@ class FlatListItem extends Component {
        store.dispatch({type: 'ENABLE_ANSWER'})
         // store.dispatch({type: 'RESET_LEVEL'})
     //    console.log("test" + store.getState().updateLevel)
-       this.props.navigation.navigate('RunAway', {
+       this.props.navigation.navigate('GameWorld', {
                                         data: quizLevel
        })
     }
@@ -185,7 +185,7 @@ class Level extends Component {
     return listLevel;
   }
   _goBack(){
-    this.props.navigation.navigate('Home')
+    this.props.navigation.navigate('RunAwayHome')
     console.log("hhh")}
   
   render() {
@@ -196,15 +196,11 @@ class Level extends Component {
         style = {{width: '100%', height: '100%'}}
         >
         <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Image source = {require('../Assets/images/select_level.png')}
+        <Image source = {require('../../Assets/images/select_level.png')}
          style={{
           position: 'absolute',
-        //   top: Constants.MAX_HEIGHT,
-        //   left: Constants.MAX_WIDTH/2,
-        //   width: 120,
-        //   height: 90,
       }} 
-    //   resizeMode="stretch"
+
        />
         </View>
         <View style = {{flex: 7}}>
@@ -231,7 +227,7 @@ class Level extends Component {
             width = {60}
             height = {60}
             text = ""
-            onPress={() => this.props.navigation.navigate('Home')}
+            onPress={() => this.props.navigation.navigate('RunAwayHome')}
             source = { Images.back}
 
           />

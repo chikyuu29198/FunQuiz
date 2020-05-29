@@ -1,20 +1,20 @@
 import Matter, { World, Sleeping } from "matter-js";
 import Constants from "./Constants";
-import store from '../redux/store';
+import store from '../../redux/store';
 import Sound from 'react-native-sound'
 import { Alert } from "react-native";
 import AsyncStorage from '@react-native-community/async-storage';
 
 let checkFall = false;
 let isUpdated = false;
-const correctSound = new Sound(require('../Assets/sounds/correctSound.mp3'),
+const correctSound = new Sound(require('../../Assets/sounds/correctSound.mp3'),
       (error, sound) => {
       if (error) {
         console.log("Can not load correct sound");
         return;
       }})
 
-const failedSound = new Sound(require('../Assets/sounds/failedSound.mp3'),
+const failedSound = new Sound(require('../../Assets/sounds/failedSound.mp3'),
 (error, sound) => {
 if (error) {
   console.log("Can not load failed sound");

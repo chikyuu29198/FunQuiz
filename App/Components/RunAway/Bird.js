@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { View, Image, StyleSheet } from 'react-native';
-import Images from '../Assets/Images.js';
+import Images from '../../Assets/Images.js';
 import Constants from './Constants';
 
 export default class Bird extends Component { 

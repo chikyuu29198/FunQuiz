@@ -12,17 +12,17 @@ import {
 
 } from 'react-native';
 import {ImageButton} from 'react-native-image-button-text';
-import Images from '../Assets/Images'
+import Images from '../../Assets/Images'
 import Spinner from 'react-native-spinkit';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
-import store from '../redux/store'
-import CustomConfig from '../Components/CustomConfig';
+import store from '../../redux/store'
+import CustomConfig from '../../Components/CustomConfig';
 import ToggleSwitch from 'toggle-switch-react-native';
 
 const { width, height } = Dimensions.get("window");
-const background = require("../Assets/images/loadingbg.png");
-const logo = require("../Assets/images/Bird.png");
+const background = require("../../Assets/images/loadingbg.png");
+const logo = require("../../Assets/images/Bird.png");
 
 export default class InputKey extends Component {
   constructor(props) {
@@ -39,7 +39,7 @@ export default class InputKey extends Component {
         <ImageBackground source={background} style={styles.background} resizeMode="cover">
           <View style = {styles.container}>
             <View style = {{alignItems: 'center'}}>
-              <Image source = {require('../Assets/images/setting_text.png')}
+              <Image source = {require('../../Assets/images/setting_text.png')}
                       style = {{top: -25}} />
             </View>
             <View>

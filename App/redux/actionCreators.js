@@ -92,3 +92,10 @@ export function pause() {
 export function unPause() {
     return { type: 'UN_PAUSE'}
 }
+export function runaway() {
+    return { type: 'RUNAWAY'}
+}
+
+export function punchMouse() {
+    return { type: 'PUNCH_MOUSE'}
+}

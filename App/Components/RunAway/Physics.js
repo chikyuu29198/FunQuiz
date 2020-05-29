@@ -1,13 +1,13 @@
 import Matter from "matter-js";
 import Constants from "./Constants";
-import store from '../redux/store';
+import store from '../../redux/store';
 import { Alert } from "react-native";
 import Sound from 'react-native-sound'
 let tick = 1;
 let pose = 1;
 let timeOut = false;
 
-const failedSound = new Sound(require('../Assets/sounds/failedSound.mp3'),
+const failedSound = new Sound(require('../../Assets/sounds/failedSound.mp3'),
 (error, sound) => {
 if (error) {
   console.log("Can not load failed sound")

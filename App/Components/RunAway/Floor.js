@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View , StyleSheet, Image, ScrollView} from "react-native";
-import Images from '../Assets/Images';
+import Images from '../../Assets/Images';
 import Constants from './Constants';
 
 export default class Floor extends Component {

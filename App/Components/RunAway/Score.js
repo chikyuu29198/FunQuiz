@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { View , Text, StyleSheet, Image } from "react-native";
-import Images from '../Assets/Images';
+import Images from '../../Assets/Images';
 import Constants from './Constants';
-import store from '../redux/store';
+import store from '../../redux/store';
 import { connect } from 'react-redux';
 var RNFS = require('react-native-fs');
 class Score extends Component {

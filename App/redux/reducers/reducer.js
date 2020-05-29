@@ -11,6 +11,7 @@ import levelReducer from './levelReducer';
 import winFlagReducer from './winFlagReducer';
 import userCustom from './userCustom';
 import pausingReducer from './pausingReducer';
+import gamePlayingReducer from './gamePlayingReducer';
 
 const reducer = combineReducers({
     plusScore: plusScoreReducer,
@@ -23,7 +24,8 @@ const reducer = combineReducers({
     user: userReducer,
     winFlag: winFlagReducer,
     userCustom: userCustom,
-    pausing: pausingReducer
+    pausing: pausingReducer,
+    gamePlaying: gamePlayingReducer
 });
 
 export default reducer;

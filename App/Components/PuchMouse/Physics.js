@@ -1,6 +1,6 @@
 import Matter from "matter-js";
-import Constants from "../Constants";
-import store from '../../../redux/store';
+import Constants from "./Constants";
+import store from '../../redux/store';
 import { Alert } from "react-native";
 import Sound from 'react-native-sound'
 let tick = 1;
@@ -46,7 +46,6 @@ const Physics = (entities, { touches, time, dispatch }) => {
                         }
                         else {
                             dispatch({ type: "pause"}); 
-                            store.dispatch({type: 'PAUSE'});
                             
                         }
                         

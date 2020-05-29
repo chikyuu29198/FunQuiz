@@ -8,20 +8,19 @@ import {
     Animated,
     Image
 } from 'react-native';
-// import ProgressBarAnimated from 'react-native-progress-bar-animated';
 import { connect } from 'react-redux';
-import { handleCorrect, handleInCorrect, reset, plusScore, enableAnswer, disableAnswer, flagWin, unPause} from '../../redux/actionCreators';
+import { handleCorrect, handleInCorrect, reset, updateIndex, enableAnswer, disableAnswer, flagWin, unPause} from '../../redux/actionCreators';
 import Images from '../../Assets/Images'
 import store from '../../redux/store';
 import Constants from './Constants';
-// import store from '../redux/store';
 
 class Quiz extends Component {
     constructor(pros){
         super(pros);
         this.state = {
             isLoading: true,
-            progressStatus: 0,  
+            progressStatus: 0,
+            timeout: false
             // isCorrect: null,
         }
     }
@@ -32,63 +31,46 @@ class Quiz extends Component {
           currentDate = Date.now();
         } while (currentDate - date < milliseconds);
       }
+
     _onPress = (choice) => {
-      // console.log("pasu: " + store.getState().pausing)
-      // this.props.unPause();
-      // console.log("pasu: " + store.getState().pausing)
-        // this.props.disableAnswer();
-        // store.dispatch({type: 'HANDLE_CORRECT'});
-        // console.log("test correc " + this.props.isCorrect)
-        // console.log("Test" + store.getState().isCorrect)
-        // if (choice == this.props.listQuiz[this.props.index].correctAnswer) {
-        //   this.props.handleCorrect();
-        //   this.props.plusScore();
-        //   if (this.props.index == this.props.listQuiz.length - 1){
-        //     console.log(this.props.index)
-        //     this.props.flagWin();
-        //   }
-        // }
-        // else {
-        //   this.props.handleInCorrect();
-        // }
-        if (choice == 'a'){
+      this.props.disableAnswer();
+        if (choice == this.props.listQuiz[this.props.index].correctAnswer){
+            this.props.updateIndex();
             this.props.handleCorrect();
-            // store.dispatch({type: 'HANDLE_CORRECT'});
-            // console.log("is correct: " + store.getState().isCorrect)
-            // this.sleep(500);
-            // this.props.reset();
-            // this.props.enableAnswer
-            // console.log("is pause: " + store.getState().pausing)
-            //  this.sleep(500).then({
-            //   this.props.reset();
-            //   this.props.enableAnswer
-            //   this.props.unPause();
-            //  }
+            this.props.plusScore();
+            console.log("plus score in punch quiz " + store.getState.plusScore)
              setTimeout(() => {  
-              this.props.reset();
-              this.props.enableAnswer
-              this.props.unPause();
+              this.props.updateRuningStatus();
               console.log("is pause: " + store.getState().pausing)
               }, 500);
-            // store.dispatch({type: 'UN_PAUSE'});
-            // this.props.unPause();
             console.log("is correct: " + this.props.isCorrect)
+            if (this.props.index == this.props.listQuiz.length - 1){
+              console.log(this.props.index)
+              this.props.flagWin();
+            }
         }
         else{
             this.props.handleInCorrect();
+            setTimeout(() => {  
+              this.props.updateRuningStatus();
+              console.log("is pause: " + store.getState().pausing)
+              }, 500);
         }
         
     }
-
+    UNSAFE_componentWillMount(){
+      this.props.reset();
+      this.props.enableAnswer();
+    }
     anim = new Animated.Value(0);  
     componentDidMount(){  
         this.onAnimate();  
     }  
     componentDidUpdate(prevState) {
       if (prevState.progressStatus !== this.state.progressStatus) {
-          if (this.state.progressStatus == 100) {
+          if (this.state.progressStatus == 100 ) {
             console.log(this.state.progressStatus)
-            this.props.unPause
+            // this.props.unPause
           }
       }
     }
@@ -103,8 +85,8 @@ class Quiz extends Component {
     }  
 
     render(){
-        // const index = this.props.index;
-        // const quiz = this.props.listQuiz[index]; 
+        const index = this.props.index;
+        const quiz = this.props.listQuiz[index]; 
         // let btn_color
         // this.props.userCustom.btn_color ? btn_color = this.props.userCustom.btn_color : 
         let btn_color = '#64B5F6'
@@ -136,35 +118,35 @@ class Quiz extends Component {
             />  
               </View>
               <View style = { styles.questionBox}>
-                <Text style = { styles.textQuestion}>quiz</Text>  
+                <Text style = { styles.textQuestion}>{quiz.question}</Text>  
               </View>
               <View style = { styles.AnswerBox}>
               <View style = { answerBoxRow}>
                 <TouchableOpacity
                   disabled = {this.props.isDisable}
                   onPress = {() => this._onPress('a')}> 
-                    <Text style = { styles.textContent}>a</Text>
+                    <Text style = { styles.textContent}>{quiz.a}</Text>
                 </TouchableOpacity>
                 </View>
                 <View style = { answerBoxRow}>
                   <TouchableOpacity
                     disabled = {this.props.isDisable}
                     onPress = {() => this._onPress('b')}> 
-                      <Text style = { styles.textContent}>b</Text>
+                      <Text style = { styles.textContent}>{quiz.b}</Text>
                   </TouchableOpacity>
                 </View>
                 <View style = {answerBoxRow}>
                   <TouchableOpacity 
                     disabled = {this.props.isDisable}
                     onPress = {() => this._onPress('c')}> 
-                      <Text style = { styles.textContent}>c</Text>
+                      <Text style = { styles.textContent}>{quiz.c}</Text>
                   </TouchableOpacity>
                 </View>
                 <View style = { answerBoxRow}>
                   <TouchableOpacity 
                     disabled = {this.props.isDisable}
                     onPress = {() => this._onPress('d')}> 
-                      <Text style = { styles.textContent}>d</Text>
+                      <Text style = { styles.textContent}>{quiz.d}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -218,7 +200,7 @@ function mapStateToProps(state) {
      };
 }
 
-export default connect(mapStateToProps, {handleCorrect, reset, handleInCorrect, plusScore, enableAnswer, disableAnswer, flagWin, unPause}) (Quiz);
+export default connect(mapStateToProps, {handleCorrect, reset, handleInCorrect, updateIndex, enableAnswer, disableAnswer, flagWin, unPause}) (Quiz);
 
 const styles = StyleSheet.create({
     questionFrame: {

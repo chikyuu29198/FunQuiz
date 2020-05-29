@@ -10,27 +10,28 @@ import {
 } from 'react-native';
 import { GameEngine, dispatch} from 'react-native-game-engine';
 import Matter from 'matter-js';
-import Constants from '../Components/Constants';
-import Bird from '../Components/Bird';
-import Physics from '../Components/Physics.js';
-import AnswerHandle from '../Components/AnswerHandle.js';
-import Images from '../Assets/Images.js';
-import Floor from '../Components/Floor';
-import MainCharacter from '../Components/MainCharacter';
-import Quiz from '../Components/Quiz';
-import store  from '../redux/store';
+import Constants from '../../Components/RunAway/Constants';
+import Bird from '../../Components/RunAway/Bird';
+import Physics from '../../Components/RunAway/Physics.js';
+import AnswerHandle from '../../Components/RunAway/AnswerHandle.js';
+import Images from '../../Assets/Images.js';
+import Floor from '../../Components/RunAway/Floor';
+import MainCharacter from '../../Components/RunAway/MainCharacter';
+import Quiz from '../../Components/RunAway/Quiz';
+import store  from '../../redux/store';
 import { Provider } from 'react-redux';
-import SettingBar from '../Components/SettingBar';
+import SettingBar from '../../Components/SettingBar';
 // import {ImageButton} from 'react-native-image-button-text';
 
-class RunAway extends Component {
+class GameWorld extends Component {
   constructor(props){
     super(props);
     this.GameEngine = null;
     this.entities = this.setupWorld();
     this.state = {
       running: true,
-      score: 0
+      score: 0,
+      listQuiz: this.props.navigation.state.params.data
     }
   }
   
@@ -105,7 +106,16 @@ class RunAway extends Component {
     store.dispatch({type: 'ENABLE_ANSWER'})
     store.dispatch({type: 'RESET_INDEX'});
     store.dispatch({type: 'UPDATE_LEVEL'})
+    console.log("test level next: " + store.getState().level.currentLevel)
     store.dispatch({type: 'UNFLAGGED_WIN'})
+    var data = store.getState().quizData.listQuiz
+    console.log(data)
+    var current_level = store.getState().level.currentLevel
+    var quizLevel = data.filter((x)=>x.level == current_level);
+    console.log(quizLevel)
+    this.setState({
+      listQuiz: quizLevel
+    })
     this.GameEngine.swap(this.setupWorld());
     this.setState({
         running: true,
@@ -151,7 +161,7 @@ class RunAway extends Component {
         </View>
 
         <View style = { styles.questionFrame}>
-            <Quiz  listQuiz ={this.props.navigation.state.params.data}/>
+            <Quiz  listQuiz ={this.state.listQuiz}/>
         </View>
         {this.state.running == false ?
            store.getState().winFlag == false ? 
@@ -328,4 +338,4 @@ const styles = StyleSheet.create({
   
 });
 
-export default RunAway;
+export default GameWorld;

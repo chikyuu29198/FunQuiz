@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button, Image, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Images from '../Assets/Images';
-import Constants from '../Components/Constants';
+import Constants from './RunAway/Constants';
 import {ImageButton} from 'react-native-image-button-text';
 import { StackNavigator } from 'react-navigation';
 import store from '../redux/store';

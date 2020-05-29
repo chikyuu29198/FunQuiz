@@ -14,18 +14,18 @@ import {
 
 } from 'react-native';
 import {ImageButton} from 'react-native-image-button-text';
-import Images from '../Assets/Images'
+import Images from '../../Assets/Images'
 import Spinner from 'react-native-spinkit';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
-import store from '../redux/store'
-import CustomConfig from '../Components/CustomConfig'
+import store from '../../redux/store'
+import CustomConfig from '../../Components/RunAway/CustomConfig'
 
 var RNFS = require('react-native-fs');
 
 const { width, height } = Dimensions.get("window");
-const background = require("../Assets/images/loadingbg.png");
-const logo = require("../Assets/images/Bird.png");
+const background = require("../../Assets/images/loadingbg.png");
+const logo = require("../../Assets/images/Bird.png");
 
 export default class InputKey extends Component {
   constructor(props) {
@@ -80,7 +80,7 @@ export default class InputKey extends Component {
 
   async getData (_key){
     //'11uGBq9i-C4nOiyxNyco1j9gPEq1HYPuDlFpquf6rvSw'
-    const data_geted = await axios.get('http://37298336.ngrok.io', {
+    const data_geted = await axios.get('http://238821ac4857.ngrok.io', {
       params : {
         key: _key
       }
@@ -164,7 +164,7 @@ export default class InputKey extends Component {
                   <Image source = {logo} style = {styles.logoImg}/>
                   </View>
                   <View style = {{alignItems: 'center'}}>
-                  <Image source = {require('../Assets/images/RunAway_text.png')}
+                  <Image source = {require('../../Assets/images/RunAway_text.png')}
                   style={{
                      position: 'absolute',
                   }}

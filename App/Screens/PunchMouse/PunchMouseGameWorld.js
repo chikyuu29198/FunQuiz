@@ -10,27 +10,29 @@ import {
 } from 'react-native';
 import { GameEngine, dispatch} from 'react-native-game-engine';
 import Matter from 'matter-js';
-import Constants from './Constants';
-import Mouse from './Mouse';
-import Cake from './Cake'
-import Physics from './Components/Physics';
-import Porcupine from './Porcupine'
+import Constants from '../../Components/PuchMouse/Constants';
+import Mouse from '../../Components/PuchMouse/Mouse';
+import Cake from '../../Components/PuchMouse/Cake'
+import Physics from '../../Components/PuchMouse/Physics';
+import Porcupine from '../../Components/PuchMouse/Porcupine'
 // import AnswerHandle from '../Components/AnswerHandle.js';
 import Images from '../../Assets/Images.js';
-import Quiz from './Quiz';
+import Quiz from '../../Components/PuchMouse/Quiz';
 import { Provider } from 'react-redux';
 import SettingBar from '../../Components/SettingBar';
 import store from '../../redux/store';
 // import {ImageButton} from 'react-native-image-button-text';
 
-class GameWorld extends Component {
+class PunchMouseGameWorld extends Component {
   constructor(props){
     super(props);
     this.GameEngine = null;
     this.entities = this.setupWorld();
+    this.updateRuningStatus = this.updateRuningStatus.bind(this);
     this.state = {
       running: true,
       score: 0,
+      listQuiz: this.props.navigation.state.params.data
       // pausing: store.getState().pausing
     }
   }
@@ -101,16 +103,29 @@ class GameWorld extends Component {
         running: false
       });
     else if (ev.type === "score")
-      this.setState({
-        score: this.state.score + 1
-      })
+    this.setState({
+      score: this.state.score + 1
+    })
     else if (ev.type === "pause"){ 
-      console.log(store.getState().pausing)   
+      // console.log(store.getState().pausing)   
       this.setState({
         running: false,
       });
     }  
   };
+
+  updateRuningStatus(){
+    this.setState({
+      running: true
+    })
+    console.log("runing: " + this.state.running)
+  }
+
+  plusScore(){
+    this.setState({
+      score: this.state.score + 1
+    })
+  }
 
   render(){
     return(
@@ -126,7 +141,7 @@ class GameWorld extends Component {
             style = {styles.gameContainer} 
             systems = {[Physics]}
             entities = {this.entities}
-            running = {!store.getState().pausing}
+            running = {this.state.running}
             onEvent = {this.handleEvent}
             status = {this.status}
             >
@@ -135,16 +150,8 @@ class GameWorld extends Component {
           < Text style = { styles.score }> {this.state.score} </Text>
           < SettingBar />
         </View>
-      {/* {
-        store.getState().pausing == true ?
-          <Quiz/>
-          :
-          store.getState().pausing == false ?
-          <View></View>
-          :
-          <View></View>
-      } */}
-      {store.getState().pausing == true && <Quiz />}
+
+      {this.state.running == false && <Quiz plusScore = {this.plusScore} updateRuningStatus = {this.updateRuningStatus} listQuiz ={this.state.listQuiz} />}
       </View>
       </ImageBackground>
     </Provider>
@@ -263,4 +270,4 @@ const styles = StyleSheet.create({
   
 });
 
-export default GameWorld;
+export default PunchMouseGameWorld;

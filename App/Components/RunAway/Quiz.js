@@ -7,8 +7,8 @@ import {
     ImageBackground
 } from 'react-native';
 import { connect } from 'react-redux';
-import { handleCorrect, handleInCorrect, plusScore, enableAnswer, disableAnswer, flagWin} from '../redux/actionCreators';
-import Images from '../Assets/Images'
+import { handleCorrect, handleInCorrect, plusScore, enableAnswer, disableAnswer, flagWin} from '../../redux/actionCreators';
+import Images from '../../Assets/Images'
 
 class Quiz extends Component {
     constructor(pros){

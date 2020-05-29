@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { View , Text, StyleSheet } from "react-native";
-import Images from '../Assets/Images';
+import Images from '../../Assets/Images';
 import Constants from './Constants';
-import store from '../redux/store';
+import store from '../../redux/store';
 import { connect } from 'react-redux';
 import { ImageButton } from "react-native-image-button-text";
 
