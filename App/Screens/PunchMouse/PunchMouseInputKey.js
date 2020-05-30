@@ -19,7 +19,7 @@ import Spinner from 'react-native-spinkit';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import store from '../../redux/store'
-import CustomConfig from '../../Components/RunAway/CustomConfig'
+import CustomConfig from '../../Components/PuchMouse/CustomConfig'
 
 var RNFS = require('react-native-fs');
 
@@ -27,7 +27,7 @@ const { width, height } = Dimensions.get("window");
 const background = require("../../Assets/images/loadingbg.png");
 const logo = require("../../Assets/images/Bird.png");
 
-export default class InputKey extends Component {
+export default class PunchMouseInputKey extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -36,24 +36,14 @@ export default class InputKey extends Component {
 
     }
   }
-  
-  // setCustomize = async (key, value) => {
-  //   setCustomize = async ( value) => {
-  //   AsyncStorage.setItem(key, value)
-  // }
 
   downloadImage = (linkDownload) => {
-    // downloadImage = (key, linkDownload) => {
-    // download(this.props.image.url, '_Subiz/image_' + this.props.image.name);
-    //'https://i.pinimg.com/474x/c8/a9/9e/c8a99eb00f3269dc7673400b65f59e62--games-images-for-kids.jpg'
     var destination = linkDownload.replace(/\//g, "");
     console.log("replace: " + destination)
-    // return this.download(key, linkDownload, `${RNFS.DocumentDirectoryPath}` + "/" +destination)
     return this.download(linkDownload, `${RNFS.DocumentDirectoryPath}` + "/" +destination)
  
    };
    download = async (target, destination) => {
-    // download = async (key ,target, destination) => {
      try{
        let options = {
          fromUrl: target,
@@ -68,8 +58,6 @@ export default class InputKey extends Component {
        console.log("options");
        const request = await RNFS.downloadFile(options).promise
        console.log(request)
-      //  AsyncStorage.setItem('file://' + destination)
-      //  AsyncStorage.setItem(key, 'file://' + destination)
        store.dispatch({type: 'CONFIG_BACKGROUND', bg_uri: 'file://' + destination})
      }catch(e){
        console.log("error")
@@ -94,7 +82,7 @@ export default class InputKey extends Component {
     console.log('test list quiz' + list_quiz + " " + total_level)
     store.dispatch({type: 'GET_DATA', listQuiz: list_quiz, totalLevel: total_level})
     const data = JSON.stringify(list_quiz)
-    await AsyncStorage.setItem('quizData1', data)
+    await AsyncStorage.setItem('quizData2', data)
     // handle custom config
     var userCustom = {}
     for (i = 0; i<user_custom.length; i++){
@@ -124,10 +112,10 @@ export default class InputKey extends Component {
       })
       console.log(this.state.key)
       await this.getData(this.state.key)
-      console.log( await AsyncStorage.getItem('quizData1'))
+      console.log( await AsyncStorage.getItem('quizData2'))
       if(store.getState().quizData.listQuiz.length != 0){
         this.setState({loading: false})
-        this.props.navigation.navigate('Level')
+        this.props.navigation.navigate('PunchMouseLevel')
       }
   }
   exitPress(){
@@ -137,7 +125,7 @@ export default class InputKey extends Component {
       //body
       'Are you sure you want to cancle ?',
       [
-        {text: 'Yes', onPress: () => {this.props.navigation.navigate('Home')}},
+        {text: 'Yes', onPress: () => {this.props.navigation.navigate('PunchMouseHome')}},
         {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
       ],
       { cancelable: false }

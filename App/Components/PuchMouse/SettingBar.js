@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button, Image, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import Images from '../Assets/Images';
-import Constants from './RunAway/Constants';
+import Images from '../../Assets/Images';
+import Constants from './Constants';
 import {ImageButton} from 'react-native-image-button-text';
 import { StackNavigator } from 'react-navigation';
-import store from '../redux/store';
+import store from '../../redux/store';
 import Sound from 'react-native-sound';
 Sound.setCategory('Ambient')
 
-const backgroundSound = new Sound(require('../Assets/sounds/backgroundSound.mp3'),
+const backgroundSound = new Sound(require('../../Assets/sounds/backgroundSound.mp3'),
     (error, sound) => {
     if (error) {
       console.log("Can not load background sound")
@@ -48,7 +48,7 @@ class SettingBar extends Component {
         //body
         'Are you sure you want to exit ?',
         [
-          {text: 'Yes', onPress: () => {this.props.navigation.navigate('Home')}},
+          {text: 'Yes', onPress: () => {this.props.navigation.navigate('PunchMouseLevel')}},
           {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
         ],
         { cancelable: false }

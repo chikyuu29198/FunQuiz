@@ -16,8 +16,9 @@ class FlatListItem extends Component {
       }
 
     _onPress(level){
-    //    let test = AsyncStorage.getItem('CURRENT_LEVEL')
-    //    console.log(test + "test Asyn in Level.js")
+    //    let test = AsyncStorage.getItem('CURRENT_LEVEL1')
+    //    console.log(test + "test Asyn in runaway Level.js")
+       console.log("done level getSate in Level: " + store.getState().level.doneLevel)
        var data = store.getState().quizData.listQuiz
        var quizLevel = data.filter((x)=>x.level == level);
        store.dispatch({type: 'SET_CURRENT_LEVEL', current_level: level})

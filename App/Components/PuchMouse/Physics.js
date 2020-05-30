@@ -42,7 +42,8 @@ const Physics = (entities, { touches, time, dispatch }) => {
                         // delete(entities[key].body)
                         if (key.indexOf("mouse") === 0){
                             Matter.Body.setPosition( entities[key].body, { x: 10*Constants.MAX_WIDTH, 
-                                y: 10*Constants.MAX_HEIGHT})
+                                                                           y: 10*Constants.MAX_HEIGHT})
+                            dispatch({ type: "score"}); 
                         }
                         else {
                             dispatch({ type: "pause"}); 

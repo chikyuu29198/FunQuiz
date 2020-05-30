@@ -7,8 +7,8 @@ import Spinner from 'react-native-spinkit'
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import Loading from '../Loading.js';
-import CustomConfig from '../../Components/RunAway/CustomConfig';
-import Constants from '../../Components/RunAway/Constants'
+import CustomConfig from '../../Components/PuchMouse/CustomConfig';
+import Constants from '../../Components/PuchMouse/Constants'
 import { ImageButton } from "react-native-image-button-text";
 Sound.setCategory('Ambient')
 
@@ -34,42 +34,43 @@ class PunchMouseHome extends Component {
     }
   }
   _onPress = async () => {
-    // console.log(Constants.MAX_HEIGHT + "  " + Constants.MAX_WIDTH)
-    let data =  await AsyncStorage.getItem('quizData')
+    console.log("game: " +store.getState().gamePlaying)
+    let data =  await AsyncStorage.getItem('quizData2')
     let userCustom = await AsyncStorage.getItem(CustomConfig.ASYN_ALL_CONFIG)
+    console.log(data)
     data = (data == null) ? [] : JSON.parse(data)
-    console.log("test list custom in Home" + userCustom)
+    console.log("test list custom in PunchHome" + data + ",lengh: " + data.length)
     userCustom = ( userCustom == null) ? [] : JSON.parse(userCustom)
 
     // await this.settingCustom(userCustom)
-    if (store.getState().quizData.listQuiz.length == 0){
+    // if (store.getState().quizData.listQuiz.length == 0){
       if (data.length != 0){
         console.log("have local data")
         console.log(data[data.length - 1].level)
-        let doneLevel = await AsyncStorage.getItem('CURRENT_LEVEL')
+        let doneLevel = await AsyncStorage.getItem('CURRENT_LEVEL2')
         doneLevel = (doneLevel == null) ? 0 : parseInt(doneLevel)
-        console.log("done level in Home " + doneLevel)
         await store.dispatch({type: ' SET_DONE_LEVEL', done_level: doneLevel})
+        console.log("done level in PuchMouseHome " + store.getState().level.doneLevel)
         await store.dispatch({type: 'GET_DATA', listQuiz: data, totalLevel: data[data.length - 1].level})
         test = await store.getState().quizData.listQuiz
        console.log( " lenght " + test.length)
-        if(test.length != 0){ this.props.navigation.navigate('Level')}
+        if(test.length != 0){ this.props.navigation.navigate('PunchMouseLevel')}
       }
       else{
         console.log("NOT")
-        let doneLevel = await AsyncStorage.getItem('CURRENT_LEVEL')
+        let doneLevel = await AsyncStorage.getItem('CURRENT_LEVEL2')
         doneLevel = (doneLevel == null) ? 0 : parseInt(doneLevel)
-        console.log("done level in Home " + doneLevel)
         await store.dispatch({type: ' SET_DONE_LEVEL', done_level: doneLevel})
-        this.props.navigation.navigate('InputKey')
+        console.log("done level in PuchMouseHome " + store.getState().level.doneLevel)
+        this.props.navigation.navigate('PunchMouseInputKey')
     }
   }
-    else {
-      console.log("done")
-      this.props.navigation.navigate('PunchMouseLevel')
+  //   else {
+  //     console.log("done")
+  //     this.props.navigation.navigate('PunchMouseLevel')
       
-    }
-  }
+  //   }
+  // }
 
   render() {
     return (

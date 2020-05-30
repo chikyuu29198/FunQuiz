@@ -13,6 +13,7 @@ import InputKey from './Screens/RunAway/InputKey'
 import PunchMouseGameWorld from './Screens/PunchMouse/PunchMouseGameWorld'
 import PunchMouseHome from './Screens/PunchMouse/PunchMouseHome'
 import PunchMouseLevel from './Screens/PunchMouse/PunchMouseLevel'
+import PunchMouseInputKey from './Screens/PunchMouse/PunchMouseInputKey'
 
 const switchNavigator = createSwitchNavigator(
     {
@@ -26,7 +27,8 @@ const switchNavigator = createSwitchNavigator(
     InputKey: InputKey,
     PunchMouseGameWorld: PunchMouseGameWorld,
     PunchMouseHome: PunchMouseHome,
-    PunchMouseLevel: PunchMouseLevel
+    PunchMouseLevel: PunchMouseLevel,
+    PunchMouseInputKey: PunchMouseInputKey
     },
     {
         initialRouteName: "Loading",

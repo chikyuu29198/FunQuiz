@@ -15,13 +15,17 @@ class Home extends Component {
     }
   }
 
-  runAway = async () => {
+  runAway() {
     store.dispatch({type: 'RUNAWAY'})
     this.props.navigation.navigate('RunAwayHome')
   }
   punchMouse(){
     store.dispatch({type: 'PUNCH_MOUSE'})
     this.props.navigation.navigate('PunchMouseHome')
+  }
+  UNSAFE_componentWillMount(){
+    store.dispatch({type: 'RESET_LEVEL'})
+    console.log("reset done level before navigate: " + store.getState().level.doneLevel)
   }
 
   render() {

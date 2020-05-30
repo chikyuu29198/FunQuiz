@@ -20,7 +20,7 @@ import MainCharacter from '../../Components/RunAway/MainCharacter';
 import Quiz from '../../Components/RunAway/Quiz';
 import store  from '../../redux/store';
 import { Provider } from 'react-redux';
-import SettingBar from '../../Components/SettingBar';
+import SettingBar from '../../Components/RunAway/SettingBar';
 // import {ImageButton} from 'react-native-image-button-text';
 
 class GameWorld extends Component {

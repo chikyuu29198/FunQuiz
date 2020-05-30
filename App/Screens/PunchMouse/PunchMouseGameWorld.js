@@ -19,7 +19,7 @@ import Porcupine from '../../Components/PuchMouse/Porcupine'
 import Images from '../../Assets/Images.js';
 import Quiz from '../../Components/PuchMouse/Quiz';
 import { Provider } from 'react-redux';
-import SettingBar from '../../Components/SettingBar';
+import SettingBar from '../../Components/PuchMouse/SettingBar';
 import store from '../../redux/store';
 // import {ImageButton} from 'react-native-image-button-text';
 
@@ -32,13 +32,17 @@ class PunchMouseGameWorld extends Component {
     this.state = {
       running: true,
       score: 0,
-      listQuiz: this.props.navigation.state.params.data
+      // listQuiz: this.props.navigation.state.params.data
       // pausing: store.getState().pausing
     }
   }
   
 
   setupWorld = () => {
+    console.log(this + 'this')
+    let numberOfQuiz = this.props.navigation.state.params.data.length
+    // let numberOfQuiz = () => { return this.state.listQuiz.length }
+    console.log(numberOfQuiz + "test numberOfQuiz")
     let engine = Matter.Engine.create({ enableSleeping: false });
     let world = engine.world;
     let mouse_list = []
@@ -61,7 +65,7 @@ class PunchMouseGameWorld extends Component {
                                                  { isStatic: true },                                                 
                                                 );
     let porcupine_list = []
-    for (i = 0; i<5; i++){
+    for (i = 0; i<numberOfQuiz; i++){
       let x = Math.floor(Math.random() * (Constants.MAX_WIDTH - 0 + 1) ) + 0;
       let y = Math.floor(Math.random() * (Constants.MAX_HEIGHT - 0 + 1) ) + 0;
       let width = 60;
@@ -121,9 +125,10 @@ class PunchMouseGameWorld extends Component {
     console.log("runing: " + this.state.running)
   }
 
-  plusScore(){
+  plusScore = () =>{
+    console.log(this.state.score + " Score test")
     this.setState({
-      score: this.state.score + 1
+      score: this.state.score + 10
     })
   }
 
@@ -148,10 +153,10 @@ class PunchMouseGameWorld extends Component {
             <StatusBar hidden={true} />
           </GameEngine>   
           < Text style = { styles.score }> {this.state.score} </Text>
-          < SettingBar />
+          < SettingBar navigation = {this.props.navigation} />
         </View>
 
-      {this.state.running == false && <Quiz plusScore = {this.plusScore} updateRuningStatus = {this.updateRuningStatus} listQuiz ={this.state.listQuiz} />}
+      {this.state.running == false && <Quiz plusScore = {this.plusScore} updateRuningStatus = {this.updateRuningStatus} listQuiz = {this.props.navigation.state.params.data} />}
       </View>
       </ImageBackground>
     </Provider>

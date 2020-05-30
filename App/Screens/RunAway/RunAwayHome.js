@@ -34,41 +34,40 @@ class RunAwayHome extends Component {
     }
   }
   _onPress = async () => {
-    console.log(Constants.MAX_HEIGHT + "  " + Constants.MAX_WIDTH)
-    let data =  await AsyncStorage.getItem('quizData')
+    console.log("game: " +store.getState().gamePlaying)
+    let data =  await AsyncStorage.getItem('quizData1')
     let userCustom = await AsyncStorage.getItem(CustomConfig.ASYN_ALL_CONFIG)
     data = (data == null) ? [] : JSON.parse(data)
     console.log("test list custom in Home" + userCustom)
     userCustom = ( userCustom == null) ? [] : JSON.parse(userCustom)
 
     await this.settingCustom(userCustom)
-    if (store.getState().quizData.listQuiz.length == 0){
+    // if (store.getState().quizData.listQuiz.length == 0){
       if (data.length != 0){
-        console.log("have local data")
         console.log(data[data.length - 1].level)
-        let doneLevel = await AsyncStorage.getItem('CURRENT_LEVEL')
+        let doneLevel = await AsyncStorage.getItem('CURRENT_LEVEL1')
         doneLevel = (doneLevel == null) ? 0 : parseInt(doneLevel)
-        console.log("done level in Home " + doneLevel)
+        console.log("done level in RunAwayHome " + doneLevel)
         await store.dispatch({type: ' SET_DONE_LEVEL', done_level: doneLevel})
         await store.dispatch({type: 'GET_DATA', listQuiz: data, totalLevel: data[data.length - 1].level})
         test = await store.getState().quizData.listQuiz
-       console.log( " lenght " + test.length)
+        console.log( " test done level after ditpach in RunAay homw " + store.getState().level.doneLevel)
         if(test.length != 0){ this.props.navigation.navigate('Level')}
       }
       else{
         console.log("NOT")
-        let doneLevel = await AsyncStorage.getItem('CURRENT_LEVEL')
+        let doneLevel = await AsyncStorage.getItem('CURRENT_LEVEL1')
         doneLevel = (doneLevel == null) ? 0 : parseInt(doneLevel)
         console.log("done level in Home " + doneLevel)
         await store.dispatch({type: ' SET_DONE_LEVEL', done_level: doneLevel})
         this.props.navigation.navigate('InputKey')
     }
-  }
-    else {
-      console.log("done")
-      this.props.navigation.navigate('Level')
+  // }
+    // else {
+    //   console.log("done")
+    //   this.props.navigation.navigate('Level')
       
-    }
+    // }
   }
   _goBack(){
     this.props.navigation.navigate('Home')
