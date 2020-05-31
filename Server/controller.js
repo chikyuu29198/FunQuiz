@@ -71,6 +71,15 @@ async function getData(publicSpreadsheetUrl) {
  exports.getAll = async function(req, res) {
     var key = req.query.key
     console.log(key)
+	let start = key.indexOf("/d/")
+	console.log(start)
+	if (start != -1){
+	key = key.slice(start + 3)
+	console.log(key)}
+	let end = key.indexOf("/")
+	if (end != -1) {
+	key = key.slice(0,end)
+	console.log(key)}
     var newQuizList = await getData(key)
     // console.log(newQuizList)
     res.send(newQuizList)
