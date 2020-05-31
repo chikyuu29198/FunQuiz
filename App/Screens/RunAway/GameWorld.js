@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
   contentComponent: {
     width: Constants.MAX_WIDTH/5*4,
     height: Constants.MAX_HEIGHT/6*5,
-    backgroundColor: '#ffd633',
+    backgroundColor: '#c2995b',
     // justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,

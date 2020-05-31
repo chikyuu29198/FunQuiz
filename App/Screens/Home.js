@@ -5,13 +5,15 @@ import Spinner from 'react-native-spinkit'
 import Loading from './Loading.js';
 import Constants from '../Components/PuchMouse/Constants'
 import { ImageButton } from "react-native-image-button-text";
+import AsyncStorage from '@react-native-community/async-storage';
 import Images from '../Assets/Images'
 class Home extends Component {
   constructor(props){
     super(props)
     this.state = {
       isSPinner : null,
-      data : []
+      data : [],
+      sound: store.getState().soundStatus
     }
   }
 
@@ -27,7 +29,22 @@ class Home extends Component {
     store.dispatch({type: 'RESET_LEVEL'})
     console.log("reset done level before navigate: " + store.getState().level.doneLevel)
   }
+  async logout() {
+    await AsyncStorage.removeItem("userData");
+    let test = await AsyncStorage.getItem("userData")
+    console.log( test)
+    this.props.navigation.navigate('Login')
+  }
+  changeSound(){
+   let _sound = store.getState().soundStatus
+    this.setState({
+      sound: !_sound
+    })
+    store.dispatch({type: 'UPDATE_SOUND'})
+  }
+  help(){
 
+  }
   render() {
     return (
       this.state.isSPinner ?
@@ -116,21 +133,21 @@ class Home extends Component {
       
        </View>
        <View style = {{flex:2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 0}}>
-       <TouchableOpacity  onPress={() => this._onPress() }>
+       <TouchableOpacity  onPress={() => this.logout() }>
         <Image
             source = {require('../Assets/images/logout.png')}
             style = {{width: 60, height: 60, borderRadius: 60}}
             />
        </TouchableOpacity>
        <View style = {{width:10}}></View>
-       <TouchableOpacity  onPress={() => this._onPress() }>
+       <TouchableOpacity  onPress={() => this.changeSound() }>
          <Image
-          source = {require('../Assets/images/sound.png')}
+          source = { this.state.sound ? Images.sound :  Images.unSound}
           style = {{width: 60, height: 60, borderRadius: 60}}
           />
        </TouchableOpacity>
        <View style = {{width:10}}></View>
-       <TouchableOpacity  onPress={() => this._onPress() }>
+       <TouchableOpacity  onPress={() => this.help() }>
          <Image
           source = {require('../Assets/images/help.png')}
           style = {{width: 60, height: 60, borderRadius: 60}}

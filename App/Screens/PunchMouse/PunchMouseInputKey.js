@@ -25,7 +25,7 @@ var RNFS = require('react-native-fs');
 
 const { width, height } = Dimensions.get("window");
 const background = require("../../Assets/images/loadingbg.png");
-const logo = require("../../Assets/images/Bird.png");
+const logo = require("../../Assets/images/punchMouse_icon.png");
 
 export default class PunchMouseInputKey extends Component {
   constructor(props) {
@@ -152,7 +152,7 @@ export default class PunchMouseInputKey extends Component {
                   <Image source = {logo} style = {styles.logoImg}/>
                   </View>
                   <View style = {{alignItems: 'center'}}>
-                  <Image source = {require('../../Assets/images/RunAway_text.png')}
+                  <Image source = {require('../../Assets/images/PunchMouse_text.png')}
                   style={{
                      position: 'absolute',
                   }}

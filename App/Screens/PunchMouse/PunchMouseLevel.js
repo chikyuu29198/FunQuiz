@@ -52,12 +52,13 @@ class FlatListItem extends Component {
                 }}>
                     <View style = {{flex: 2}}>
                         <Image
-                        source = {Images.bird}
+                        source = {Images.punchMouse_icon}
                         style = {{
                             width: 50,
                             height: 50,
                             marginVertical: 5,
                             marginLeft: 10,
+                            borderRadius: 50
                         }}
                         />
                     </View>
@@ -88,12 +89,13 @@ class FlatListItem extends Component {
                 }}>
                     <View style = {{flex: 2}}>
                         <Image
-                        source = {Images.bird}
+                        source = {Images.punchMouse_icon}
                         style = {{
                             width: 50,
                             height: 50,
                             marginVertical: 5,
                             marginLeft: 10,
+                            borderRadius: 50
                         }}
                         />
                     </View>
@@ -128,12 +130,13 @@ class FlatListItem extends Component {
             }}> 
             <View style = {{flex: 2}}>
                 <Image
-                source = {Images.bird}
+                source = {Images.punchMouse_icon}
                 style = {{
                     width: 50,
                     height: 50,
                     marginVertical: 5,
                     marginLeft: 10,
+                    borderRadius: 50
                 }}
                 />
             </View>
