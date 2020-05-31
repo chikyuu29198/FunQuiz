@@ -49,11 +49,11 @@ class PunchMouseGameWorld extends Component {
       target: _target
     })
   }
-  setupWorld = () =>{
+  setupWorld() {
     function getListQuiz(n){
       return this.state.listQuiz.length;
    }
-    let numberOfQuiz = getListQuiz.bind(this)
+    let numberOfQuiz = 5 //getListQuiz.bind(this)
     let numberOfMouse = store.getState().level.currentLevel*5 + 40
     // let numberOfQuiz = () => { return this.state.listQuiz.length }
     console.log(numberOfQuiz + "test numberOfQuiz")
@@ -105,7 +105,7 @@ class PunchMouseGameWorld extends Component {
       let key = 'mouse' + i;
       let _size = Math.floor(Math.random() * (60 - 40 + 1) ) + 40
       let _color = Math.floor(Math.random() * (3 - 1 + 1) ) + 1
-      let _speed = Math.floor(Math.random() * (5 - 2 + 1) ) + 2
+      let _speed = Math.floor(Math.random() * (8 - 4 + 1) ) + 4
       game_world[key] = {body: mouse_list[i], isBroke: false, pose: _pose, size: _size, color: _color, speed: _speed, renderer: Mouse}
     }
     for (i = 0; i<porcupine_list.length; i++){

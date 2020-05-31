@@ -14,7 +14,8 @@ import PunchMouseGameWorld from './Screens/PunchMouse/PunchMouseGameWorld'
 import PunchMouseHome from './Screens/PunchMouse/PunchMouseHome'
 import PunchMouseLevel from './Screens/PunchMouse/PunchMouseLevel'
 import PunchMouseInputKey from './Screens/PunchMouse/PunchMouseInputKey'
-
+import Setting from './Screens/RunAway/Setting'
+import PunchMouseSetting from './Screens/PunchMouse/PunchMouseSetting'
 const switchNavigator = createSwitchNavigator(
     {
     SignUp: SignUp,
@@ -28,7 +29,9 @@ const switchNavigator = createSwitchNavigator(
     PunchMouseGameWorld: PunchMouseGameWorld,
     PunchMouseHome: PunchMouseHome,
     PunchMouseLevel: PunchMouseLevel,
-    PunchMouseInputKey: PunchMouseInputKey
+    PunchMouseInputKey: PunchMouseInputKey,
+    Setting: Setting,
+    PunchMouseSetting: PunchMouseSetting
     },
     {
         initialRouteName: "Loading",

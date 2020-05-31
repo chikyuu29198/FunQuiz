@@ -60,17 +60,17 @@ class PunchMouseHome extends Component {
         console.log("NOT")
         let doneLevel = await AsyncStorage.getItem('CURRENT_LEVEL2')
         doneLevel = (doneLevel == null) ? 0 : parseInt(doneLevel)
-        await store.dispatch({type: ' SET_DONE_LEVEL', done_level: doneLevel})
+        await store.dispatch({type: 'SET_DONE_LEVEL', done_level: doneLevel})
         console.log("done level in PuchMouseHome " + store.getState().level.doneLevel)
         this.props.navigation.navigate('PunchMouseInputKey')
     }
   }
-  //   else {
-  //     console.log("done")
-  //     this.props.navigation.navigate('PunchMouseLevel')
-      
-  //   }
-  // }
+  help(){
+
+  }
+  setting(){
+    this.props.navigation.navigate("PunchMouseSetting")
+  }
 
   render() {
     return (
@@ -107,7 +107,7 @@ class PunchMouseHome extends Component {
           >          
           </ImageBackground>
        </TouchableOpacity>
-       <TouchableOpacity  onPress={() => this._onPress() }>
+       <TouchableOpacity  onPress={() => this.setting() }>
          <ImageBackground
           source = {require('../../Assets/images/setting_text.png')}
           style = {{width: 180, height: 60}}

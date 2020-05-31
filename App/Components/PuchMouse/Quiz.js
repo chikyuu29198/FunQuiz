@@ -54,6 +54,7 @@ class Quiz extends Component {
             setTimeout(() => {  
               this.props.updateRuningStatus();
               console.log("is pause: " + store.getState().pausing)
+              this.props.gameOverHandle();
               }, 500);
         }
         
@@ -69,8 +70,9 @@ class Quiz extends Component {
     componentDidUpdate(prevState) {
       if (prevState.progressStatus !== this.state.progressStatus) {
           if (this.state.progressStatus == 100 ) {
-            console.log(this.state.progressStatus)
-            // this.props.unPause
+            setTimeout(() => {  
+              this.props.gameOverHandle();
+              }, 500);
           }
       }
     }

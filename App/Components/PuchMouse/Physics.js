@@ -10,13 +10,25 @@ let check = true;
 let porcupineTouch = null;
 let poseOfCake = 1;
 
-    
+const mouseSound = new Sound(require('../../Assets/sounds/punchedMouse.mp3'),
+      (error, sound) => {
+      if (error) {
+        console.log("Can not load correct sound");
+        return;
+      }}) 
+const eatCakeSound = new Sound(require('../../Assets/sounds/eatCake.mp3'),
+(error, sound) => {
+if (error) {
+console.log("Can not load correct sound");
+return;
+}}) 
 const Physics = (entities, { touches, time, dispatch }) => {
 
     let engine = entities.physics.engine;
     let cake = entities.cake.body; 
     let world = engine.world;
     tick += 1;
+    let soundStatus = store.getState().soundStatus;
     if (porcupineTouch!=null)
     Matter.Body.setPosition( entities[porcupineTouch].body, { x: 10*Constants.MAX_WIDTH, 
                                                               y: 10*Constants.MAX_HEIGHT})
@@ -47,19 +59,6 @@ const Physics = (entities, { touches, time, dispatch }) => {
                         Matter.Body.translate( entities[key].body, {x: + 10, y: + entities[key].speed});
                     }
                 }
-                // if (entities[key].body.position.y >= Constants.MAX_HEIGHT - cake)
-                // if( entities[key].body.position.y >= Constants.MAX_HEIGHT - 3*Constants.CAKE_SIZE ){
-                //     if (entities[key].body.position.x > Constants.MAX_WIDTH + 2*Constants.CAKE_SIZE){
-                //         Matter.Body.translate( entities[key].body, {x: + 0, y: -8});
-                //     }
-                //     else if (entities[key].body.position.x < Constants.MAX_WIDTH - 2*Constants.CAKE_SIZE){
-                //         Matter.Body.translate( entities[key].body, {x: + 0, y: +8});
-                //     }
-                //     else {
-                //         Matter.Body.setPosition(entities[key].body, {x: Constants.MAX_WIDTH/2,
-                //                                                      y: Constants.MAX_HEIGHT - Constants.CAKE_SIZE - entities[key].size});
-                //     }
-                // }
                 let bounds = entities[key].body.bounds;
                 points.forEach(p => {
                     // console.log(store.getState().pausing)
@@ -67,12 +66,18 @@ const Physics = (entities, { touches, time, dispatch }) => {
                         console.log("touch1111 " + key )
                         // delete(entities[key].body)
                         if (key.indexOf("mouse") === 0){
+                            if ( soundStatus == true ){
+                                mouseSound.play();
+                              }
                             Matter.Body.setPosition( entities[key].body, { x: 10*Constants.MAX_WIDTH, 
                                                                            y: 10*Constants.MAX_HEIGHT})
                             dispatch({ type: "score"}); 
                         }
                         else {
                             porcupineTouch = key
+                            if ( soundStatus == true ){
+                                mouseSound.play();
+                              }
                             dispatch({ type: "pause"}); 
                             
                         }
@@ -89,7 +94,10 @@ const Physics = (entities, { touches, time, dispatch }) => {
                 Matter.Body.setPosition(entities[key].body, {x: Constants.MAX_WIDTH/2 - entities[key].size/2,
                                                              y: Constants.MAX_HEIGHT - Constants.CAKE_SIZE - entities[key].size});
                 poseOfCake++;
-                if (poseOfCake == 5){
+                if (poseOfCake == 4){
+                    if ( soundStatus == true ){
+                        eatCakeSound.play();
+                      }
                     entities.cake.pose = entities.cake.pose + 1
                     poseOfCake = 1
                     if(entities.cake.pose == 4){
@@ -100,12 +108,18 @@ const Physics = (entities, { touches, time, dispatch }) => {
                 points.forEach(p => {
                     if (Matter.Bounds.contains(bounds, p)){
                         if (key.indexOf("mouse") === 0){
+                            if ( soundStatus == true ){
+                                mouseSound.play();
+                              }
                             Matter.Body.setPosition( entities[key].body, { x: 10*Constants.MAX_WIDTH, 
                                                                             y: 10*Constants.MAX_HEIGHT})
                             dispatch({ type: "score"}); 
                         }
                         else {
                             porcupineTouch = key
+                            if ( soundStatus == true ){
+                                mouseSound.play();
+                              }
                             dispatch({ type: "pause"});
                         }
                         

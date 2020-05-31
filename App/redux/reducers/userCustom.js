@@ -13,6 +13,11 @@ const userCustom = (state = initalState, action) => {
         ...state,
         btn_color: action.btn_color
     };
+    if (action.type == 'RESET_CUSTOM')
+    return {
+        background: null,
+        btn_color: null
+    }
     return state;
 };
 

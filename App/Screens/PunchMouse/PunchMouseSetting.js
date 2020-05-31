@@ -18,14 +18,14 @@ import Spinner from 'react-native-spinkit';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import store from '../../redux/store'
-import CustomConfig from '../../Components/RunAway/CustomConfig';
+import CustomConfig from '../../Components/PuchMouse/CustomConfig'
 import ToggleSwitch from 'toggle-switch-react-native';
 
 const { width, height } = Dimensions.get("window");
 const background = require("../../Assets/images/loadingbg.png");
-const logo = require("../../Assets/images/Bird.png");
+const logo = require("../../Assets/images/punchMouse_icon.png");
 
-export default class Setting extends Component {
+export default class PunchMouseSetting extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -34,13 +34,13 @@ export default class Setting extends Component {
     }
   }
   newData(){
-    this.props.navigation.navigate('InputKey')
+    this.props.navigation.navigate('PunchMouseInputKey')
   }
   async resetLevel(){
     store.dispatch({type: 'RESET_LEVEL'})
     // AsyncStorage.removeItem( 'CURRENT_LEVEL2')
     try {
-      await AsyncStorage.removeItem( 'CURRENT_LEVEL1');
+      await AsyncStorage.removeItem( 'CURRENT_LEVEL2');
       Alert.alert("Reset level successful")
     }
     catch(exception) {
@@ -123,7 +123,7 @@ export default class Setting extends Component {
                 width = {60}
                 height = {60}
                 text = ""
-                onPress={() => this.props.navigation.navigate('RunAwayHome')}
+                onPress={() => this.props.navigation.navigate('PunchMouseHome')}
                 source = { Images.back}
 
               />

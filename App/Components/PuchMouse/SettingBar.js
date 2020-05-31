@@ -9,7 +9,7 @@ import store from '../../redux/store';
 import Sound from 'react-native-sound';
 Sound.setCategory('Ambient')
 
-const backgroundSound = new Sound(require('../../Assets/sounds/backgroundSound.mp3'),
+const backgroundSound = new Sound(require('../../Assets/sounds/punchMouseSound.mp3'),
     (error, sound) => {
     if (error) {
       console.log("Can not load background sound")

@@ -155,6 +155,8 @@ export default class PunchMouseInputKey extends Component {
                   <Image source = {require('../../Assets/images/PunchMouse_text.png')}
                   style={{
                      position: 'absolute',
+                     width: 320,
+                     height: 55
                   }}
                 />
                   </View>           
@@ -248,8 +250,9 @@ background: {
     fontWeight: 'bold'
   },
   logoImg: {
-      width: 70,
-      height: 70,
+      width: 80,
+      height: 80,
+      borderRadius: 70
   }
 
 })

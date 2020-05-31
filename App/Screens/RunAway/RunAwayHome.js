@@ -48,7 +48,8 @@ class RunAwayHome extends Component {
         let doneLevel = await AsyncStorage.getItem('CURRENT_LEVEL1')
         doneLevel = (doneLevel == null) ? 0 : parseInt(doneLevel)
         console.log("done level in RunAwayHome " + doneLevel)
-        await store.dispatch({type: ' SET_DONE_LEVEL', done_level: doneLevel})
+        await store.dispatch({type: 'SET_DONE_LEVEL', done_level: doneLevel})
+        console.log("done level in RunAwayHome " + store.getState().level.doneLevel)
         await store.dispatch({type: 'GET_DATA', listQuiz: data, totalLevel: data[data.length - 1].level})
         test = await store.getState().quizData.listQuiz
         console.log( " test done level after ditpach in RunAay homw " + store.getState().level.doneLevel)
@@ -72,7 +73,12 @@ class RunAwayHome extends Component {
   _goBack(){
     this.props.navigation.navigate('Home')
     console.log("hhh")}
+  help(){
 
+  }
+  setting(){
+    this.props.navigation.navigate("Setting")
+  }
   render() {
     return (
       this.state.isSPinner ?
@@ -155,14 +161,14 @@ class RunAwayHome extends Component {
           >          
           </ImageBackground>
        </TouchableOpacity>
-       <TouchableOpacity  onPress={() => this._onPress() }>
+       <TouchableOpacity  onPress={() => this.setting() }>
          <ImageBackground
           source = {require('../../Assets/images/setting_text.png')}
           style = {{width: 180, height: 60}}
           >          
           </ImageBackground>
        </TouchableOpacity>
-       <TouchableOpacity  onPress={() => this._onPress() }>
+       <TouchableOpacity  onPress={() => this.help() }>
          <ImageBackground
           source = {require('../../Assets/images/help_text.png')}
           style = {{width: 120, height: 60}}
