@@ -32,24 +32,38 @@ class PunchMouseGameWorld extends Component {
     this.state = {
       running: true,
       score: 0,
-      // listQuiz: this.props.navigation.state.params.data
+      gameOver: false,
+      target: 0,
+      listQuiz: this.props.navigation.state.params.data
       // pausing: store.getState().pausing
     }
   }
   
-
-  setupWorld = () => {
-    console.log(this + 'this')
-    let numberOfQuiz = this.props.navigation.state.params.data.length
+  UNSAFE_componentWillMount = () => {
+    function getListQuiz(n){
+      return this.state.listQuiz.length;
+   }
+    let numberOfQuiz = getListQuiz.bind(this)
+    let _target =numberOfQuiz*10 + store.getState().level.currentLevel*5 + 40
+    this.setState({
+      target: _target
+    })
+  }
+  setupWorld = () =>{
+    function getListQuiz(n){
+      return this.state.listQuiz.length;
+   }
+    let numberOfQuiz = getListQuiz.bind(this)
+    let numberOfMouse = store.getState().level.currentLevel*5 + 40
     // let numberOfQuiz = () => { return this.state.listQuiz.length }
     console.log(numberOfQuiz + "test numberOfQuiz")
     let engine = Matter.Engine.create({ enableSleeping: false });
     let world = engine.world;
     let mouse_list = []
-    for (i = 0; i<13; i++){
+    for (i = 0; i<numberOfMouse; i++){
       let x = Math.floor(Math.random() * (Constants.MAX_WIDTH - 0 + 1) ) + 0;
-      let y = Math.floor(Math.random() * (Constants.MAX_HEIGHT - 0 + 1) ) + 0;
-      let width = Math.floor(Math.random() * (60 - 50 + 1) ) + 50;
+      let y = - Math.floor(Math.random() * (Constants.MAX_HEIGHT*3 - 0 + 1) ) + 0;
+      let width = Math.floor(Math.random() * (70 - 50 + 1) ) + 50;
       var mouse = Matter.Bodies.rectangle( x, 
                                            y,
                                           width, 
@@ -67,7 +81,7 @@ class PunchMouseGameWorld extends Component {
     let porcupine_list = []
     for (i = 0; i<numberOfQuiz; i++){
       let x = Math.floor(Math.random() * (Constants.MAX_WIDTH - 0 + 1) ) + 0;
-      let y = Math.floor(Math.random() * (Constants.MAX_HEIGHT - 0 + 1) ) + 0;
+      let y = -(Math.floor(Math.random() * (Constants.MAX_HEIGHT*3 - 0 + 1) ) + Constants.MAX_HEIGHT);
       let width = 60;
       var porcupine = Matter.Bodies.rectangle( x, 
                                             y,
@@ -84,7 +98,7 @@ class PunchMouseGameWorld extends Component {
     // console.log(mouse_list)
     Matter.World.add(world, entity_list);
     let game_world = {physics: { engine: engine, world: world},
-    cake: { body: cake, size: [Constants.BIRD_SIZE, Constants.BIRD_SIZE], renderer: Cake},
+    cake: { body: cake, pose: 1, size: [Constants.BIRD_SIZE, Constants.BIRD_SIZE], renderer: Cake},
   }
     for (i = 0; i<mouse_list.length; i++){
       let _pose = Math.floor(Math.random() * (3 - 1 + 1) ) + 1
@@ -104,7 +118,8 @@ class PunchMouseGameWorld extends Component {
   handleEvent = (ev) => {
 		if (ev.type === "game-over")
 			this.setState({
-        running: false
+        running: false,
+        gameOver: true
       });
     else if (ev.type === "score")
     this.setState({
@@ -117,6 +132,12 @@ class PunchMouseGameWorld extends Component {
       });
     }  
   };
+  gameOverHandle = () =>{
+    this.setState({
+      running: false,
+      gameOver: true
+    })
+  }
 
   updateRuningStatus(){
     this.setState({
@@ -131,7 +152,38 @@ class PunchMouseGameWorld extends Component {
       score: this.state.score + 10
     })
   }
+  reset = () => {
+    store.dispatch({type: 'ENABLE_ANSWER'})
+    store.dispatch({type: 'RESET_INDEX'});
+    // store.dispatch({type: 'UNFLAGGED_WIN'})
+    this.GameEngine.swap(this.setupWorld());
+    this.setState({
+        running: true,
+        score: 0,
+        gameOver: false,
+    });
+  };
 
+  next = () => {
+    store.dispatch({type: 'ENABLE_ANSWER'})
+    store.dispatch({type: 'RESET_INDEX'});
+    store.dispatch({type: 'UPDATE_LEVEL'})
+    // console.log("test level next: " + store.getState().level.currentLevel)
+    // store.dispatch({type: 'UNFLAGGED_WIN'})
+    var data = store.getState().quizData.listQuiz
+    console.log(data)
+    var current_level = store.getState().level.currentLevel
+    var quizLevel = data.filter((x)=>x.level == current_level);
+    console.log(quizLevel)
+    this.GameEngine.swap(this.setupWorld());
+    this.setState({
+        running: true,
+        score: 0,
+        gameOver: false,
+        target: quizLevel.length + current_level*5 + 40,
+        listQuiz: quizLevel
+    });
+  }
   render(){
     return(
       <Provider store = { store }>
@@ -155,8 +207,72 @@ class PunchMouseGameWorld extends Component {
           < Text style = { styles.score }> {this.state.score} </Text>
           < SettingBar navigation = {this.props.navigation} />
         </View>
-
-      {this.state.running == false && <Quiz plusScore = {this.plusScore} updateRuningStatus = {this.updateRuningStatus} listQuiz = {this.props.navigation.state.params.data} />}
+      {
+        this.state.gameOver == false && this.state.running == false ?   
+        <Quiz plusScore = {this.plusScore} updateRuningStatus = {this.updateRuningStatus} gameOverHandle = {this.gameOverHandle} listQuiz = {this.state.listQuiz} />
+        :
+        null
+      }
+      {
+        this.state.gameOver == true ?
+        <TouchableOpacity style={styles.fullScreenButton}>
+            <View style={styles.fullScreen}>
+              <View style = {styles.contentComponent}>
+                <View style = {{alignItems: 'center'}}> 
+                  <Text style={styles.gameOverText}>Game Over</Text>
+                  <Text style = {styles.contentText} > {'Score:    ' + this.state.score} </Text>
+                  <Text style = {styles.contentText} > {'Level:    ' + store.getState().level.currentLevel} </Text>
+            
+                </View>
+              
+              <View style = { styles.functionButton}>
+                <TouchableOpacity activeOpacity={.5} onPress={() => this.props.navigation.navigate('PunchMouseLevel')}>    
+                  <View style={styles.button}>
+                    <Text style={styles.buttonText}>BACK</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={.5} onPress={() => this.reset()}>    
+                  <View style={styles.button}>
+                    <Text style={styles.buttonText}>RETRY</Text>
+                  </View>
+                </TouchableOpacity>             
+              </View>
+              </View>
+            </View>
+            </TouchableOpacity>
+          :
+          null
+      }
+      {
+        this.state.target == this.state.score ?
+          <TouchableOpacity style={styles.fullScreenButton}>
+            <View style={styles.fullScreen}>
+              <View style = {styles.contentComponent}>
+                <View style = {{alignItems: 'center'}}> 
+                  <Text style={styles.gameOverText}> { store.getState().level.currentLevel < store.getState().quizData.totalLevel ? 'Level Up' : 'Completed!' }</Text>
+                  <Text style = {styles.contentText} > {'Score:    ' + this.state.score} </Text>
+                  <Text style = {styles.contentText} > {'Level:    ' + store.getState().level.currentLevel} </Text>
+            
+                </View>
+              
+              <View style = { styles.functionButton}>
+                <TouchableOpacity activeOpacity={.5} onPress={() => this.props.navigation.navigate('Level')}>    
+                  <View style={styles.button}>
+                    <Text style={styles.buttonText}>BACK</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={.5} onPress={() => { store.getState().level.currentLevel < store.getState().quizData.totalLevel ? this.next() : this.reset()}}>    
+                  <View style={styles.button}>
+                    <Text style={styles.buttonText}>{ store.getState().level.currentLevel < store.getState().quizData.totalLevel ? 'NEXT' : 'RETRY' }</Text>
+                  </View>
+                </TouchableOpacity>             
+              </View>
+              </View>
+            </View>
+            </TouchableOpacity>
+          :
+          null
+      }
       </View>
       </ImageBackground>
     </Provider>
@@ -190,7 +306,7 @@ const styles = StyleSheet.create({
     textShadowOffset: {width: -5, height: 5},
     textShadowRadius: 20,
     shadowOpacity: 1,
-    marginTop: 15
+    // marginTop: 15
 },
   fullScreen: {
     position: 'absolute',
@@ -241,13 +357,14 @@ const styles = StyleSheet.create({
   },
   contentComponent: {
     width: Constants.MAX_WIDTH/5*4,
-    height: Constants.MAX_HEIGHT/6*5,
-    backgroundColor: '#ffd633',
+    height: Constants.MAX_HEIGHT/5*2,
+    backgroundColor: '#c2995b',
     // justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
     borderColor: '#fff',
-    borderWidth: 5
+    borderWidth: 5,
+    justifyContent: 'center'
 
   },
   contentText: {
@@ -260,6 +377,7 @@ const styles = StyleSheet.create({
     width: 90,
     height: 40,
     marginHorizontal: 10,
+    marginStart: 20,
     backgroundColor: '#2e0f05',
     borderRadius: 10,
     borderWidth: 3,

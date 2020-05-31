@@ -24,7 +24,9 @@ export default Images = {
     homebg: require('./images/homebg1.png'),
 
     woodFloor: require('./images/wood_floor.png'),
-    cake: require('./images/cake.png'),
+    cake1: require('./images/cake1.png'),
+    cake2: require('./images/cake2.png'),
+    cake3: require('./images/cake3.png'),
     mouse11: require('./images/mouse11.png'),
     mouse12: require('./images/mouse12.png'),
     mouse13: require('./images/mouse13.png'),

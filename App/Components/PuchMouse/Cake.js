@@ -16,6 +16,8 @@ export default class Cake extends Component {
         const height = this.props.size[1];
         const x = this.props.body.position.x - width/2;
         const y = this.props.body.position.y - height/2;
+        let img = Images["cake" + this.props.pose];
+        console.log(img)
         return (
             <Image
                 style={{
@@ -26,7 +28,7 @@ export default class Cake extends Component {
                     height: height,
                 }} 
                 resizeMode="stretch"
-                source={Images.cake}
+                source={img}
             
             />             
                

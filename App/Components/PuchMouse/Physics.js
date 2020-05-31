@@ -7,6 +7,8 @@ let tick = 1;
 let pose = 1;
 let timeOut = false;
 let check = true;
+let porcupineTouch = null;
+let poseOfCake = 1;
 
     
 const Physics = (entities, { touches, time, dispatch }) => {
@@ -15,14 +17,17 @@ const Physics = (entities, { touches, time, dispatch }) => {
     let cake = entities.cake.body; 
     let world = engine.world;
     tick += 1;
+    if (porcupineTouch!=null)
+    Matter.Body.setPosition( entities[porcupineTouch].body, { x: 10*Constants.MAX_WIDTH, 
+                                                              y: 10*Constants.MAX_HEIGHT})
+    porcupineTouch = null
     let points = touches.filter(t => t.type === "press").map(t => {
         return {x: t.event.pageX, y: t.event.pageY};
     });
     Object.keys(entities).forEach(key => {
         if (key.indexOf("mouse") === 0 || key.indexOf("porcupine") === 0) {
-            // console.log(entities[key].isBroke)
             //create animate by change image for mouse
-            if (entities[key].body.position.x != 10*Constants.MAX_WIDTH){
+            if (entities[key].body.position.x != 10*Constants.MAX_WIDTH && entities[key].body.position.y < Constants.MAX_HEIGHT - Constants.CAKE_SIZE - entities[key].size){
                 let _x = Math.floor(Math.random() * (5 - 2 + 1) ) + 2
                 let direction = Math.floor(Math.random() * (2 - 1 + 1) ) + 1
                 if (direction == 1){           
@@ -34,6 +39,27 @@ const Physics = (entities, { touches, time, dispatch }) => {
                     Matter.Body.rotate(entities[key].body, -Math.PI/6)
                     Matter.Body.translate( entities[key].body, {x: -_x, y: + entities[key].speed});  
                 }
+                if(entities[key].body.position.y > Constants.MAX_HEIGHT/5*3){
+                    if (entities[key].body.position.x > Constants.MAX_WIDTH/2){
+                        Matter.Body.translate( entities[key].body, {x: - 10, y: + entities[key].speed});  
+                    }
+                    else {
+                        Matter.Body.translate( entities[key].body, {x: + 10, y: + entities[key].speed});
+                    }
+                }
+                // if (entities[key].body.position.y >= Constants.MAX_HEIGHT - cake)
+                // if( entities[key].body.position.y >= Constants.MAX_HEIGHT - 3*Constants.CAKE_SIZE ){
+                //     if (entities[key].body.position.x > Constants.MAX_WIDTH + 2*Constants.CAKE_SIZE){
+                //         Matter.Body.translate( entities[key].body, {x: + 0, y: -8});
+                //     }
+                //     else if (entities[key].body.position.x < Constants.MAX_WIDTH - 2*Constants.CAKE_SIZE){
+                //         Matter.Body.translate( entities[key].body, {x: + 0, y: +8});
+                //     }
+                //     else {
+                //         Matter.Body.setPosition(entities[key].body, {x: Constants.MAX_WIDTH/2,
+                //                                                      y: Constants.MAX_HEIGHT - Constants.CAKE_SIZE - entities[key].size});
+                //     }
+                // }
                 let bounds = entities[key].body.bounds;
                 points.forEach(p => {
                     // console.log(store.getState().pausing)
@@ -46,12 +72,10 @@ const Physics = (entities, { touches, time, dispatch }) => {
                             dispatch({ type: "score"}); 
                         }
                         else {
+                            porcupineTouch = key
                             dispatch({ type: "pause"}); 
                             
                         }
-                        
-                        // Matter.World.remove(world, entities[key].body, true)
-                        // Matter.Composite.remove(world, entities[key])
                     }
                 })
                 if (tick%5 == 0 && key.indexOf("mouse") === 0){
@@ -61,13 +85,33 @@ const Physics = (entities, { touches, time, dispatch }) => {
                     }
                 }
             }
-            
-            // if (entities[key].body.position.y > Constants.MAX_HEIGHT/3){
-            //     console.log("<10")
-            // }
-            // console.log("key " +key)
-            //Random translate(x,y) for mouse and porcupine
-                
+            else if (entities[key].body.position.x != 10*Constants.MAX_WIDTH && entities[key].body.position.y >= Constants.MAX_HEIGHT - Constants.CAKE_SIZE -entities[key].size){
+                Matter.Body.setPosition(entities[key].body, {x: Constants.MAX_WIDTH/2 - entities[key].size/2,
+                                                             y: Constants.MAX_HEIGHT - Constants.CAKE_SIZE - entities[key].size});
+                poseOfCake++;
+                if (poseOfCake == 5){
+                    entities.cake.pose = entities.cake.pose + 1
+                    poseOfCake = 1
+                    if(entities.cake.pose == 4){
+                        dispatch({type: "game-over"})
+                    }
+                }
+                let bounds = entities[key].body.bounds;
+                points.forEach(p => {
+                    if (Matter.Bounds.contains(bounds, p)){
+                        if (key.indexOf("mouse") === 0){
+                            Matter.Body.setPosition( entities[key].body, { x: 10*Constants.MAX_WIDTH, 
+                                                                            y: 10*Constants.MAX_HEIGHT})
+                            dispatch({ type: "score"}); 
+                        }
+                        else {
+                            porcupineTouch = key
+                            dispatch({ type: "pause"});
+                        }
+                        
+                    }
+                })
+            }
         }
     })
     
