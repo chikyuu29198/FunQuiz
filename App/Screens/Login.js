@@ -54,6 +54,7 @@ class LoginScreen extends Component {
                     password: this.state.password
                   }
                   store.dispatch({type: 'LOGIN_SUCCESS', user: user})
+                  // console.log(JSON.stringify(user))
                   // let data = JSON.stringify(user)
                   AsyncStorage.setItem('userData', JSON.stringify(user))
                   // console.log( AsyncStorage.getItem('userData1'))

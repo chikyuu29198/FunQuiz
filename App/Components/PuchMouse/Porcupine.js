@@ -14,7 +14,12 @@ export default class Porcupine extends Component {
         const width = this.props.size
         const x = this.props.body.position.x - width/2;
         const y = this.props.body.position.y - width/2;
-        let img = Images.porcupine;
+        let img
+        if (this.props.pose == 0)
+        img = Images.porcupine;
+        else
+        img = Images.punched;
+
             
         return (
             <TouchableWithoutFeedback onPress = {() => {this.kill()

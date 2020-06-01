@@ -25,14 +25,19 @@ export default class Mouse extends Component {
         const x = this.props.body.position.x - width/2;
         const y = this.props.body.position.y - width/2;
         let img = Images["mouse3" + this.props.pose];
-        if (this.props.color == 1)
+        if(this.props.pose == 6){
+            img = Images["punched"];
+        }
+        else{
+            if (this.props.color == 1)
             img = Images["mouse1" + this.props.pose];
         else if (this.props.color == 2)
             img = Images["mouse2" + this.props.pose];
-        else{
+        else {
             img = Images["mouse3" + this.props.pose];
-        };
-            
+        }
+       
+        }  
         return (
             <TouchableWithoutFeedback onPress = {() => {this.kill()
             }} style = {{ position: 'absolute',

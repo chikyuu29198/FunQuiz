@@ -39,6 +39,11 @@ const Physics = (entities, { touches, time, dispatch }) => {
     Object.keys(entities).forEach(key => {
         if (key.indexOf("mouse") === 0 || key.indexOf("porcupine") === 0) {
             //create animate by change image for mouse
+            if(entities[key].pose == 6 && key.indexOf("mouse") === 0 ){
+                 Matter.Body.setPosition( entities[key].body, { x: 10*Constants.MAX_WIDTH, 
+                                                                           y: 10*Constants.MAX_HEIGHT})
+                entities[key].pose = 1
+            }
             if (entities[key].body.position.x != 10*Constants.MAX_WIDTH && entities[key].body.position.y < Constants.MAX_HEIGHT - Constants.CAKE_SIZE - entities[key].size){
                 let _x = Math.floor(Math.random() * (5 - 2 + 1) ) + 2
                 let direction = Math.floor(Math.random() * (2 - 1 + 1) ) + 1
@@ -69,8 +74,9 @@ const Physics = (entities, { touches, time, dispatch }) => {
                             if ( soundStatus == true ){
                                 mouseSound.play();
                               }
-                            Matter.Body.setPosition( entities[key].body, { x: 10*Constants.MAX_WIDTH, 
-                                                                           y: 10*Constants.MAX_HEIGHT})
+                            entities[key].pose = 6
+                            // Matter.Body.setPosition( entities[key].body, { x: 10*Constants.MAX_WIDTH, 
+                            //                                                y: 10*Constants.MAX_HEIGHT})
                             dispatch({ type: "score"}); 
                         }
                         else {
@@ -93,6 +99,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
             else if (entities[key].body.position.x != 10*Constants.MAX_WIDTH && entities[key].body.position.y >= Constants.MAX_HEIGHT - Constants.CAKE_SIZE -entities[key].size){
                 Matter.Body.setPosition(entities[key].body, {x: Constants.MAX_WIDTH/2 - entities[key].size/2,
                                                              y: Constants.MAX_HEIGHT - Constants.CAKE_SIZE - entities[key].size});
+                console.log(key)
                 poseOfCake++;
                 if (poseOfCake == 4){
                     if ( soundStatus == true ){
@@ -111,8 +118,9 @@ const Physics = (entities, { touches, time, dispatch }) => {
                             if ( soundStatus == true ){
                                 mouseSound.play();
                               }
-                            Matter.Body.setPosition( entities[key].body, { x: 10*Constants.MAX_WIDTH, 
-                                                                            y: 10*Constants.MAX_HEIGHT})
+                              entities[key].pose = 6
+                            // Matter.Body.setPosition( entities[key].body, { x: 10*Constants.MAX_WIDTH, 
+                            //                                                 y: 10*Constants.MAX_HEIGHT})
                             dispatch({ type: "score"}); 
                         }
                         else {

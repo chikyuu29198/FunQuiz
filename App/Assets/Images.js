@@ -42,7 +42,8 @@ export default Images = {
     porcupine: require('./images/porcupine.png'),
     punchMouse_icon: require('./images/punchMouse_icon.png'),
     sound: require('./images/sound.png'),
-    unSound: require('./images/unSound.png')
+    unSound: require('./images/unSound.png'),
+    punched: require('./images/broke.png')
 
-    // mouse11: require('./images/broke.png'),
+    // mouse11: require('./images/broke.png'), 
 }

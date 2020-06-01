@@ -20,7 +20,12 @@ class Loading extends Component {
     // console.log(doneLevel + "test Asyn in Level.js")
     // store.dispatch({type: 'SET_DONE_LEVEL', done_level: doneLevel})
     let userData = await AsyncStorage.getItem('userData')
-    
+    // userData = ( userData == null) ? [] : JSON.parse(userData)
+    // console.log(userData.email)
+    store.dispatch({type: 'LOGIN_SUCCESS', user: userData})
+    // let a = store.getState().user.user
+    // // let test = JSON.parse(a)
+    // console.log( a)
     if (userData == null) {
       this.props.navigation.navigate('Login')
     }

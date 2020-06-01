@@ -31,6 +31,9 @@ class RunAwayHome extends Component {
       else if (list_custom_key[i] == CustomConfig.ASYN_BUTTON_COLOR ){
         store.dispatch({type: 'CONFIG_BTN_COLOR', btn_color: userCustom[list_custom_key[i]]})
       }
+      else if (list_custom_key[i] == CustomConfig.ASYN_SOUND ){
+        store.dispatch({type: 'CONFIG_SOUND', sound_uri: userCustom[list_custom_key[i]]})
+      }
     }
   }
   _onPress = async () => {

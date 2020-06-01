@@ -1,6 +1,7 @@
 let initalState = {
     background : null,
-    btn_color: null
+    btn_color: null,
+    sound: null
 }
 
 const userCustom = (state = initalState, action) => {
@@ -18,6 +19,11 @@ const userCustom = (state = initalState, action) => {
         background: null,
         btn_color: null
     }
+    if (action.type == 'CONFIG_SOUND') 
+    return {
+        ...state,
+        sound: action.sound_uri
+      };
     return state;
 };
 

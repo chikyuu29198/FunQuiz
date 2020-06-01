@@ -68,7 +68,7 @@ export default class PunchMouseInputKey extends Component {
 
   async getData (_key){
     //'11uGBq9i-C4nOiyxNyco1j9gPEq1HYPuDlFpquf6rvSw'
-    const data_geted = await axios.get('http://4782a1cc46ae.ngrok.io', {
+    const data_geted = await axios.get('https://edugame.azurewebsites.net', {
       params : {
         key: _key
       }

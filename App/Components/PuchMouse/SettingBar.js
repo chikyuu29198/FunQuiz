@@ -23,7 +23,7 @@ class SettingBar extends Component {
     constructor(props){
         super(props);
         this.state = {
-          isMute: false,
+          isMute: !store.getState().soundStatus,
         }
       }
       
@@ -32,7 +32,7 @@ class SettingBar extends Component {
       this.setState({
           isMute: !this.state.isMute
       })
-      if (this.state.isMute == true){
+      if (this.state.isMute){
         backgroundSound.play()
       }
       else {
@@ -57,6 +57,7 @@ class SettingBar extends Component {
     }
 
     UNSAFE_componentWillMount(){
+      if (this.state.isMute == false)
       backgroundSound.play();
       // backgroundSound.stop();
     }

@@ -9,14 +9,15 @@ import { Provider } from 'react-redux';
 import GameWorld from './Screens/PunchMouse/PunchMouseGameWorld'
 import PunchMouseHome from './Screens/PunchMouse/PunchMouseHome'
 import Home from './Screens/Home'
-// import Setting from './Screens/Setting'
+import SelectData from './Screens/RunAway/SelectData'
+import Test from './Screens/Test'
 class App extends Component {
   render(){
     return(
-      // <Home/>
-      <Provider store = {store}>
-        <AppNavigator />
-      </Provider>      
+      <SelectData/>
+      // <Provider store = {store}>
+      //   <AppNavigator />
+      // </Provider>      
     );
   }
 };

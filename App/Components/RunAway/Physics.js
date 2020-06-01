@@ -29,6 +29,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
 
     if ( _isCorrect == null && timeOut == false && bird.position.y == Constants.FLOOR_HEIGHT + Constants.BIRD_SIZE/2){
         if (bird.position.x <= mainCharacter.position.x ) {
+            store.dispatch({type: 'DISABLE_ANSWER'})
             timeOut = true;
         }
         else {
