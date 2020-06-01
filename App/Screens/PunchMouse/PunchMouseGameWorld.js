@@ -27,7 +27,6 @@ class PunchMouseGameWorld extends Component {
   constructor(props){
     super(props);
     this.GameEngine = null;
-    this.entities = this.setupWorld();
     this.updateRuningStatus = this.updateRuningStatus.bind(this);
     this.state = {
       running: true,
@@ -37,32 +36,27 @@ class PunchMouseGameWorld extends Component {
       listQuiz: this.props.navigation.state.params.data
       // pausing: store.getState().pausing
     }
+    this.entities = this.setupWorld();
   }
   
+  
   UNSAFE_componentWillMount = () => {
-    function getListQuiz(n){
-      return this.state.listQuiz.length;
-   }
-    let numberOfQuiz = getListQuiz.bind(this)
+    let numberOfQuiz = this.state.listQuiz.length;
     let _target =numberOfQuiz*10 + store.getState().level.currentLevel*5 + 40
     this.setState({
       target: _target
     })
   }
   setupWorld() {
-    function getListQuiz(n){
-      return this.state.listQuiz.length;
-   }
-    let numberOfQuiz = 5 //getListQuiz.bind(this)
+    let numberOfQuiz = this.state.listQuiz.length;
     let numberOfMouse = store.getState().level.currentLevel*5 + 40
-    // let numberOfQuiz = () => { return this.state.listQuiz.length }
     console.log(numberOfQuiz + "test numberOfQuiz")
     let engine = Matter.Engine.create({ enableSleeping: false });
     let world = engine.world;
     let mouse_list = []
     for (i = 0; i<numberOfMouse; i++){
       let x = Math.floor(Math.random() * (Constants.MAX_WIDTH - 0 + 1) ) + 0;
-      let y = - Math.floor(Math.random() * (Constants.MAX_HEIGHT*3 - 0 + 1) ) + 0;
+      let y = - Math.floor(Math.random() * (Constants.MAX_HEIGHT*2 - 0 + 1) ) + 0;
       let width = Math.floor(Math.random() * (70 - 50 + 1) ) + 50;
       var mouse = Matter.Bodies.rectangle( x, 
                                            y,
@@ -81,7 +75,7 @@ class PunchMouseGameWorld extends Component {
     let porcupine_list = []
     for (i = 0; i<numberOfQuiz; i++){
       let x = Math.floor(Math.random() * (Constants.MAX_WIDTH - 0 + 1) ) + 0;
-      let y = -(Math.floor(Math.random() * (Constants.MAX_HEIGHT*3 - 0 + 1) ) + Constants.MAX_HEIGHT);
+      let y = -(Math.floor(Math.random() * (Constants.MAX_HEIGHT*2 - 0 + 1) ) + Constants.MAX_HEIGHT/2);
       let width = 60;
       var porcupine = Matter.Bodies.rectangle( x, 
                                             y,
@@ -105,12 +99,12 @@ class PunchMouseGameWorld extends Component {
       let key = 'mouse' + i;
       let _size = Math.floor(Math.random() * (60 - 40 + 1) ) + 40
       let _color = Math.floor(Math.random() * (3 - 1 + 1) ) + 1
-      let _speed = Math.floor(Math.random() * (8 - 4 + 1) ) + 4
+      let _speed = Math.floor(Math.random() * (9 - 5 + 1) ) + 5
       game_world[key] = {body: mouse_list[i], isBroke: false, pose: _pose, size: _size, color: _color, speed: _speed, renderer: Mouse}
     }
     for (i = 0; i<porcupine_list.length; i++){
       let key = 'porcupine' + i;
-      game_world[key] = {body: porcupine_list[i], size: 60, speed: 7, renderer: Porcupine}
+      game_world[key] = {body: porcupine_list[i], size: 60, pose: 0, speed: 9, renderer: Porcupine}
     }
     return game_world
   }
