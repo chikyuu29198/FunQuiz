@@ -20,6 +20,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import store from '../../redux/store'
 import CustomConfig from '../../Components/RunAway/CustomConfig'
+import {app} from '../../firebaseConfig'
 
 var RNFS = require('react-native-fs');
 
@@ -32,7 +33,8 @@ export default class InputKey extends Component {
     super(props)
     this.state = {
       loading: null,
-      key: ""
+      key: "",
+      name: ""
 
     }
   }
@@ -42,17 +44,17 @@ export default class InputKey extends Component {
   //   AsyncStorage.setItem(key, value)
   // }
 
-  downloadImage = (linkDownload) => {
+  handleDownload = (key, linkDownload) => {
     // downloadImage = (key, linkDownload) => {
     // download(this.props.image.url, '_Subiz/image_' + this.props.image.name);
     //'https://i.pinimg.com/474x/c8/a9/9e/c8a99eb00f3269dc7673400b65f59e62--games-images-for-kids.jpg'
     var destination = linkDownload.replace(/\//g, "");
     console.log("replace: " + destination)
     // return this.download(key, linkDownload, `${RNFS.DocumentDirectoryPath}` + "/" +destination)
-    return this.download(linkDownload, `${RNFS.DocumentDirectoryPath}` + "/" +destination)
+    return this.download(key, linkDownload, `${RNFS.DocumentDirectoryPath}` + "/" +destination)
  
    };
-   download = async (target, destination) => {
+   download = async (key, target, destination) => {
     // download = async (key ,target, destination) => {
      try{
        let options = {
@@ -68,9 +70,10 @@ export default class InputKey extends Component {
        console.log("options");
        const request = await RNFS.downloadFile(options).promise
        console.log(request)
-      //  AsyncStorage.setItem('file://' + destination)
-      //  AsyncStorage.setItem(key, 'file://' + destination)
-       store.dispatch({type: 'CONFIG_BACKGROUND', bg_uri: 'file://' + destination})
+      if(key.includes("background"))
+        store.dispatch({type: 'CONFIG_BACKGROUND', bg_uri: 'file://' + destination})
+       else if (key.includes("sound"))
+       store.dispatch({type: 'CONFIG_SOUND', sound_uri: 'file://' + destination})
      }catch(e){
        console.log("error")
        console.log(e)
@@ -78,13 +81,30 @@ export default class InputKey extends Component {
      return 'file://' + destination
    };
 
-  async getData (_key){
+  async getData (_key, _name){
     //'11uGBq9i-C4nOiyxNyco1j9gPEq1HYPuDlFpquf6rvSw'
-    const data_geted = await axios.get('http://4782a1cc46ae.ngrok.io', {
+    const data_geted = await axios.get('https://edugame.azurewebsites.net', {
       params : {
         key: _key
       }
     })
+    let user = store.getState().user.user
+    user = JSON.parse(user)
+    if(data_geted!=null){
+      app.database().ref('listquiz').push({
+        author: user.email,
+        name: _name,
+        key: _key
+    }).then((data)=>{
+        //success callback
+        console.log('data ' , data)
+    }).catch((error)=>{
+        //error callback
+        console.log('error ' , error)
+    })
+  
+    }
+   
     console.log(data_geted)
     let nameOfKey = Object.keys(data_geted.data)
     var list_quiz = data_geted.data[nameOfKey[0]]
@@ -102,16 +122,21 @@ export default class InputKey extends Component {
       console.log(lowerKey)
       if (lowerKey.includes("background")){
         // let uriBg = await this.downloadImage(CustomConfig.ASYN_URI_BACKGROUND, user_custom[i].value)
-        let uriBg = await this.downloadImage(user_custom[i].value)
+        let uriBg = await this.handleDownload(lowerKey, user_custom[i].value)
         console.log(uriBg)
         userCustom[CustomConfig.ASYN_URI_BACKGROUND] = uriBg
        
       }
-      else {
+      else if (lowerKey.includes("button color")){
         // AsyncStorage.setItem(CustomConfig.ASYN_BUTTON_COLOR, user_custom[i].value)
         store.dispatch({type: 'CONFIG_BTN_COLOR', btn_color: user_custom[i].value})
         console.log("test butoon: " + user_custom[i].value)
         userCustom[CustomConfig.ASYN_BUTTON_COLOR] = user_custom[i].value
+      }
+      else if(lowerKey.includes("sound")){
+        let uriBg = await this.handleDownload(lowerKey, user_custom[i].value)
+        console.log(uriBg)
+        userCustom[CustomConfig.ASYN_SOUND] = uriBg
       }
     }
     AsyncStorage.setItem(CustomConfig.ASYN_ALL_CONFIG, JSON.stringify(userCustom))
@@ -123,7 +148,7 @@ export default class InputKey extends Component {
           loading: true
       })
       console.log(this.state.key)
-      await this.getData(this.state.key)
+      await this.getData(this.state.key, this.state.name)
       console.log( await AsyncStorage.getItem('quizData1'))
       if(store.getState().quizData.listQuiz.length != 0){
         this.setState({loading: false})
@@ -167,23 +192,59 @@ export default class InputKey extends Component {
                   <Image source = {require('../../Assets/images/RunAway_text.png')}
                   style={{
                      position: 'absolute',
+                     width: 220,
+                     height: 60
                   }}
                 />
                   </View>           
                
               </View>
               <View style = {styles.content}>
-              <View style = {styles.input}>
-              <TextInput 
-                placeholderTextColor="#FFF"
-                placeholder="Please input link to load data!" 
-                autoCapitalize="none"
-                onChangeText={key => this.setState({ key })}
-                value={this.state.key}
-                multiline={true}
-                numberOfLines={4}
-                style={styles.textInput}
-              />
+              <View>
+                <View style = {{flexDirection: 'row'}}>
+                <Text style = {{ fontSize: 17,
+                                color: '#2e0f05',
+                                fontWeight: "bold",
+                                paddingLeft: 10,
+                                paddingBottom: 10}}>Name:</Text>
+                <Text style = {{color: 'red',paddingBottom: 10, fontSize: 17}}>(*)</Text>
+                </View>
+                
+                <View style = {styles.input}>
+                <TextInput 
+                  placeholderTextColor="#FFF"
+                  placeholder="Please input name!" 
+                  autoCapitalize="none"
+                  onChangeText={name => this.setState({ name })}
+                  value={this.state.name}
+                  multiline={true}
+                  numberOfLines={2}
+                  style={styles.textInput}
+                />
+                </View>
+              </View>
+             
+              <View>
+              <View style = {{flexDirection: 'row'}}>
+                <Text style = {{ fontSize: 17,
+                                color: '#2e0f05',
+                                fontWeight: "bold",
+                                paddingLeft: 10,
+                                paddingBottom: 10}}>Key:</Text>
+                <Text style = {{color: 'red',paddingBottom: 10, fontSize: 17}}>(*)</Text>
+                </View>
+                <View style = {styles.input}>
+                <TextInput 
+                  placeholderTextColor="#FFF"
+                  placeholder="Please input link to load data!" 
+                  autoCapitalize="none"
+                  onChangeText={key => this.setState({ key })}
+                  value={this.state.key}
+                  multiline={true}
+                  numberOfLines={4}
+                  style={styles.textInput}
+                />
+                </View>
               </View>
               <View style = {styles.button}>
                 {
@@ -220,7 +281,7 @@ background: {
     marginLeft: width - 40
   },
   logo: {
-      flex: 5,
+      flex: 2.5,
       justifyContent: 'flex-end',
       marginBottom: 40
   },
@@ -260,8 +321,8 @@ background: {
     fontWeight: 'bold'
   },
   logoImg: {
-      width: 70,
-      height: 70,
+      width: 50,
+      height: 50,
   }
 
 })
