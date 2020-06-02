@@ -20,6 +20,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import store from '../../redux/store'
 import CustomConfig from '../../Components/PuchMouse/CustomConfig'
+import {app} from '../../firebaseConfig'
 
 var RNFS = require('react-native-fs');
 
@@ -32,7 +33,8 @@ export default class PunchMouseInputKey extends Component {
     super(props)
     this.state = {
       loading: null,
-      key: ""
+      key: "",
+      name: "",
 
     }
   }
@@ -66,13 +68,28 @@ export default class PunchMouseInputKey extends Component {
      return 'file://' + destination
    };
 
-  async getData (_key){
+  async getData (_key, _name){
     //'11uGBq9i-C4nOiyxNyco1j9gPEq1HYPuDlFpquf6rvSw'
     const data_geted = await axios.get('https://edugame.azurewebsites.net', {
       params : {
         key: _key
       }
     })
+    let user = store.getState().user.user
+    // user = JSON.parse(user)
+    if(data_geted!=null){
+      app.database().ref('PunchMouse').push({
+        author: user.email,
+        name: _name,
+        key: _key
+    }).then((data)=>{
+        //success callback
+        console.log('data ' , data)
+    }).catch((error)=>{
+        //error callback
+        console.log('error ' , error)
+    })
+
     console.log(data_geted)
     let nameOfKey = Object.keys(data_geted.data)
     var list_quiz = data_geted.data[nameOfKey[0]]
@@ -105,18 +122,25 @@ export default class PunchMouseInputKey extends Component {
     AsyncStorage.setItem(CustomConfig.ASYN_ALL_CONFIG, JSON.stringify(userCustom))
     let test = await  AsyncStorage.getItem(CustomConfig.ASYN_ALL_CONFIG)
     console.log("Test save: " + test)
-    }
+    }}
   async handleLoad(){
       this.setState({
           loading: true
       })
       console.log(this.state.key)
-      await this.getData(this.state.key)
+      await this.getData(this.state.key,  this.state.name)
       console.log( await AsyncStorage.getItem('quizData2'))
       if(store.getState().quizData.listQuiz.length != 0){
         this.setState({loading: false})
         this.props.navigation.navigate('PunchMouseLevel')
       }
+
+      // await this.getData(this.state.key, this.state.name)
+      // console.log( await AsyncStorage.getItem('quizData1'))
+      // if(store.getState().quizData.listQuiz.length != 0){
+      //   this.setState({loading: false})
+      //   this.props.navigation.navigate('Level')
+      // }
   }
   exitPress(){
     Alert.alert(
@@ -155,25 +179,59 @@ export default class PunchMouseInputKey extends Component {
                   <Image source = {require('../../Assets/images/PunchMouse_text.png')}
                   style={{
                      position: 'absolute',
-                     width: 320,
-                     height: 55
+                     width: 300,
+                     height: 45
                   }}
                 />
                   </View>           
                
               </View>
               <View style = {styles.content}>
-              <View style = {styles.input}>
-              <TextInput 
-                placeholderTextColor="#FFF"
-                placeholder="Please input link to load data!" 
-                autoCapitalize="none"
-                onChangeText={key => this.setState({ key })}
-                value={this.state.key}
-                multiline={true}
-                numberOfLines={4}
-                style={styles.textInput}
-              />
+              <View>
+                <View style = {{flexDirection: 'row'}}>
+                <Text style = {{ fontSize: 17,
+                                color: '#2e0f05',
+                                fontWeight: "bold",
+                                paddingLeft: 10,
+                                paddingBottom: 10}}>Name:</Text>
+                <Text style = {{color: 'red',paddingBottom: 10, fontSize: 17}}>(*)</Text>
+                </View>
+                
+                <View style = {styles.input}>
+                <TextInput 
+                  placeholderTextColor="#FFF"
+                  placeholder="Please input name!" 
+                  autoCapitalize="none"
+                  onChangeText={name => this.setState({ name })}
+                  value={this.state.name}
+                  multiline={true}
+                  numberOfLines={2}
+                  style={styles.textInput}
+                />
+                </View>
+              </View>
+             
+              <View>
+              <View style = {{flexDirection: 'row'}}>
+                <Text style = {{ fontSize: 17,
+                                color: '#2e0f05',
+                                fontWeight: "bold",
+                                paddingLeft: 10,
+                                paddingBottom: 10}}>Key:</Text>
+                <Text style = {{color: 'red',paddingBottom: 10, fontSize: 17}}>(*)</Text>
+                </View>
+                <View style = {styles.input}>
+                <TextInput 
+                  placeholderTextColor="#FFF"
+                  placeholder="Please input link to load data!" 
+                  autoCapitalize="none"
+                  onChangeText={key => this.setState({ key })}
+                  value={this.state.key}
+                  multiline={true}
+                  numberOfLines={4}
+                  style={styles.textInput}
+                />
+                </View>
               </View>
               <View style = {styles.button}>
                 {
@@ -210,9 +268,9 @@ background: {
     marginLeft: width - 40
   },
   logo: {
-      flex: 5,
+      flex: 3,
       justifyContent: 'flex-end',
-      marginBottom: 40
+      marginBottom: 30
   },
   content: {
       flex: 12,

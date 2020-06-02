@@ -18,7 +18,7 @@ import Spinner from 'react-native-spinkit';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import store from '../../redux/store'
-import CustomConfig from '../../Components/RunAway/CustomConfig'
+import CustomConfig from '../../Components/PuchMouse/CustomConfig'
 import {app} from '../../firebaseConfig'
 import Constants from '../../Components/PuchMouse/Constants';
 
@@ -26,7 +26,7 @@ var RNFS = require('react-native-fs');
 
 const { width, height } = Dimensions.get("window");
 const background = require("../../Assets/images/loadingbg.png");
-const logo = require("../../Assets/images/Bird.png");
+const logo = require("../../Assets/images/punchMouse_icon.png");
 
 class FlatListItem extends Component {
     constructor(props){
@@ -42,7 +42,7 @@ class FlatListItem extends Component {
         //body
         'Are you sure you want remove this quiz ?',
         [
-          {text: 'Yes', onPress: async()  => {await app.database().ref('RunAway').child(_key).remove().then((data)=>{
+          {text: 'Yes', onPress: async()  => {await app.database().ref('PunchMouse').child(_key).remove().then((data)=>{
             //success callback
             Alert.alert('Remove successful!')
         }).catch((error)=>{
@@ -104,7 +104,7 @@ class FlatListItem extends Component {
         console.log('test list quiz' + list_quiz + " " + total_level)
         store.dispatch({type: 'GET_DATA', listQuiz: list_quiz, totalLevel: total_level})
         const data = JSON.stringify(list_quiz)
-        await AsyncStorage.setItem('quizData1', data)
+        await AsyncStorage.setItem('quizData2', data)
         // handle custom config
         var userCustom = {}
         for (i = 0; i<user_custom.length; i++){
@@ -137,12 +137,12 @@ class FlatListItem extends Component {
           this.props.loadingUpdate()
         //   console.log(this.state.key)
           await this.getData(_key)
-          console.log( await AsyncStorage.getItem('quizData1'))
+          console.log( await AsyncStorage.getItem('quizData2'))
           if(store.getState().quizData.listQuiz.length != 0){
             this.setState({loading: false})
             console.log("Loaf thành công")
             this.props.loadingUpdate()
-            this.props.navigation.navigate('Level')
+            this.props.navigation.navigate('PunchMouseLevel')
           }
       }
     render(){
@@ -164,7 +164,7 @@ class FlatListItem extends Component {
         }}>
             <View style = {{flex: 2}}>
                 <Image
-                source = {Images.bird}
+                source = {Images.punchMouse_icon}
                 style = {{
                     width: 40,
                     height: 40,
@@ -204,7 +204,7 @@ class FlatListItem extends Component {
         }}>
             <View style = {{flex: 2}}>
                 <Image
-                source = {Images.bird}
+                source = {Images.punchMouse_icon}
                 style = {{
                     width: 40,
                     height: 40,
@@ -240,7 +240,7 @@ class FlatListItem extends Component {
 }
 
 
-export default class SelectData extends Component {
+export default class PunchMouseSelectData extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -261,8 +261,12 @@ export default class SelectData extends Component {
       
       console.log("test will mousse" + list)
       let yourData = []
-      let user = store.getState().user.user
-      //  user = JSON.parse(user)
+      let user = await store.getState().user.user
+      console.log(user + "typr: " + typeof user)
+      // if(user!=null)
+      //    user = JSON.parse(user)
+      // else
+      //   user = {}
       for (i = 0; i<list.length; i++){
         if(list[i].data.author == user.email)
         yourData.push(list[i])
@@ -272,7 +276,7 @@ export default class SelectData extends Component {
         yourQuiz: yourData,
         loading: false
     })
-    app.database().ref('RunAway').on('child_removed', (snapshot) => {
+    app.database().ref('PunchMouse').on('child_removed', (snapshot) => {
       list = list.filter((x) => x.key != snapshot.key)
       yourData = yourData.filter((x) => x.key != snapshot.key)
       this.setState({
@@ -284,7 +288,7 @@ export default class SelectData extends Component {
   }
    async getPublicQuiz () {
     var publicQuiz = [];
-    await app.database().ref('RunAway').once('value').then((snapshot) => {
+    await app.database().ref('PunchMouse').once('value').then((snapshot) => {
         // var publicQuiz = [];
         snapshot.forEach((child) => {
             publicQuiz.push({
@@ -361,7 +365,7 @@ export default class SelectData extends Component {
         <View style = {{flex:0.8, flexDirection: 'row', paddingBottom: 10}}>
           <View style = {{flex:1, justifyContent: 'center', right: -120}}>
           <View style = {styles.button}>
-                <TouchableOpacity activeOpacity={.5} onPress={() => this.props.navigation.navigate("InputKey")}>
+                <TouchableOpacity activeOpacity={.5} onPress={() => this.props.navigation.navigate("PunchMouseInputKey")}>
                     <Text style = { styles.buttonText}>Input new</Text>
                  </TouchableOpacity>
           </View>
@@ -371,7 +375,7 @@ export default class SelectData extends Component {
                 width = {45}
                 height = {45}
                 text = ""
-                onPress={() => this.props.navigation.navigate('RunAwayHome')}
+                onPress={() => this.props.navigation.navigate('PunchMouseHome')}
                 source = { Images.back}
 
               />      

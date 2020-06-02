@@ -9,12 +9,13 @@ import { Provider } from 'react-redux';
 import GameWorld from './Screens/PunchMouse/PunchMouseGameWorld'
 import PunchMouseHome from './Screens/PunchMouse/PunchMouseHome'
 import Home from './Screens/Home'
-import SelectData from './Screens/RunAway/SelectData'
+import PunchMouseSelectData from './Screens/PunchMouse/PunchMouseSelectData'
 import Test from './Screens/Test'
+import PunchMouseInputKey from './Screens/PunchMouse/PunchMouseInputKey'
 class App extends Component {
   render(){
     return(
-      // <SelectData/>
+      // <PunchMouseInputKey/>
       <Provider store = {store}>
         <AppNavigator />
       </Provider>      

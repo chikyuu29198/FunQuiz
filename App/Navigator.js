@@ -17,6 +17,8 @@ import PunchMouseInputKey from './Screens/PunchMouse/PunchMouseInputKey'
 import Setting from './Screens/RunAway/Setting'
 import PunchMouseSetting from './Screens/PunchMouse/PunchMouseSetting'
 import SelectData from './Screens/RunAway/SelectData'
+import PunchMouseSelectData from './Screens/PunchMouse/PunchMouseSelectData';
+
 const switchNavigator = createSwitchNavigator(
     {
     SignUp: SignUp,
@@ -33,7 +35,8 @@ const switchNavigator = createSwitchNavigator(
     PunchMouseInputKey: PunchMouseInputKey,
     Setting: Setting,
     PunchMouseSetting: PunchMouseSetting,
-    SelectData: SelectData
+    SelectData: SelectData,
+    PunchMouseSelectData: PunchMouseSelectData
     },
     {
         initialRouteName: "Loading",

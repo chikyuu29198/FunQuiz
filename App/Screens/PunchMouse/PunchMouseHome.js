@@ -65,7 +65,7 @@ class PunchMouseHome extends Component {
         doneLevel = (doneLevel == null) ? 0 : parseInt(doneLevel)
         await store.dispatch({type: 'SET_DONE_LEVEL', done_level: doneLevel})
         console.log("done level in PuchMouseHome " + store.getState().level.doneLevel)
-        this.props.navigation.navigate('PunchMouseInputKey')
+        this.props.navigation.navigate('PunchMouseSelectData')
     }
   }
   help(){

@@ -34,7 +34,7 @@ export default class PunchMouseSetting extends Component {
     }
   }
   newData(){
-    this.props.navigation.navigate('PunchMouseInputKey')
+    this.props.navigation.navigate('PunchMouseSelectData')
   }
   async resetLevel(){
     store.dispatch({type: 'RESET_LEVEL'})
