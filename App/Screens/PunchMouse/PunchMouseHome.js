@@ -48,8 +48,11 @@ class PunchMouseHome extends Component {
         console.log("have local data")
         console.log(data[data.length - 1].level)
         let doneLevel = await AsyncStorage.getItem('CURRENT_LEVEL2')
+        // console.log("tets donr"+doneLevel)
+        // console.log(typeof doneLevel + "value: " + doneLevel)
         doneLevel = (doneLevel == null) ? 0 : parseInt(doneLevel)
         await store.dispatch({type: ' SET_DONE_LEVEL', done_level: doneLevel})
+        await store.dispatch({type: 'SET_DONE_LEVEL', done_level: doneLevel})
         console.log("done level in PuchMouseHome " + store.getState().level.doneLevel)
         await store.dispatch({type: 'GET_DATA', listQuiz: data, totalLevel: data[data.length - 1].level})
         test = await store.getState().quizData.listQuiz

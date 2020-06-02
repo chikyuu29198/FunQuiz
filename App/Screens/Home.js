@@ -43,13 +43,8 @@ class Home extends Component {
         {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
       ],
       { cancelable: false }
-      //clicking out side of alert will not cancel
     );
 
-    // await AsyncStorage.removeItem("userData");
-    // let test = await AsyncStorage.getItem("userData")
-    // console.log( test)
-    // this.props.navigation.navigate('Login')
   }
   changeSound(){
    let _sound = store.getState().soundStatus

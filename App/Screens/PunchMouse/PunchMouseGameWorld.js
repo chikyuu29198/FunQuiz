@@ -21,6 +21,7 @@ import Quiz from '../../Components/PuchMouse/Quiz';
 import { Provider } from 'react-redux';
 import SettingBar from '../../Components/PuchMouse/SettingBar';
 import store from '../../redux/store';
+import AsyncStorage from '@react-native-community/async-storage';
 // import {ImageButton} from 'react-native-image-button-text';
 
 class PunchMouseGameWorld extends Component {
@@ -115,10 +116,16 @@ class PunchMouseGameWorld extends Component {
         running: false,
         gameOver: true
       });
-    else if (ev.type === "score")
+    else if (ev.type === "score"){
     this.setState({
       score: this.state.score + 1
     })
+      if(this.state.score == this.state.target){
+        store.dispatch({type: 'LEVEL_UP'})
+        let doneLevel = store.getState().level.doneLevel
+        AsyncStorage.setItem('CURRENT_LEVEL2', (doneLevel).toString())
+      }
+  }
     else if (ev.type === "pause"){ 
       // console.log(store.getState().pausing)   
       this.setState({
@@ -145,8 +152,14 @@ class PunchMouseGameWorld extends Component {
     this.setState({
       score: this.state.score + 10
     })
+    if(this.state.score == this.state.target){
+      store.dispatch({type: 'LEVEL_UP'})
+      let doneLevel = store.getState().level.doneLevel
+      AsyncStorage.setItem('CURRENT_LEVEL2', (doneLevel).toString())
+    }
   }
   reset = () => {
+    console.log('test rết function')
     store.dispatch({type: 'ENABLE_ANSWER'})
     store.dispatch({type: 'RESET_INDEX'});
     // store.dispatch({type: 'UNFLAGGED_WIN'})
@@ -159,9 +172,10 @@ class PunchMouseGameWorld extends Component {
   };
 
   next = () => {
+    console.log('test nex functon')
     store.dispatch({type: 'ENABLE_ANSWER'})
-    store.dispatch({type: 'RESET_INDEX'});
-    store.dispatch({type: 'UPDATE_LEVEL'})
+    // store.dispatch({type: 'RESET_INDEX'});
+    // store.dispatch({type: 'LEVEL_UP'})
     // console.log("test level next: " + store.getState().level.currentLevel)
     // store.dispatch({type: 'UNFLAGGED_WIN'})
     var data = store.getState().quizData.listQuiz
@@ -250,7 +264,7 @@ class PunchMouseGameWorld extends Component {
                 </View>
               
               <View style = { styles.functionButton}>
-                <TouchableOpacity activeOpacity={.5} onPress={() => this.props.navigation.navigate('Level')}>    
+                <TouchableOpacity activeOpacity={.5} onPress={() => this.props.navigation.navigate('PunchMouseLevel')}>    
                   <View style={styles.button}>
                     <Text style={styles.buttonText}>BACK</Text>
                   </View>
