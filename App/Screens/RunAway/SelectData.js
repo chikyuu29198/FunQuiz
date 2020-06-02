@@ -20,6 +20,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import store from '../../redux/store'
 import CustomConfig from '../../Components/RunAway/CustomConfig'
 import {app} from '../../firebaseConfig'
+import Constants from '../../Components/PuchMouse/Constants';
 
 var RNFS = require('react-native-fs');
 
@@ -34,6 +35,28 @@ class FlatListItem extends Component {
             loading: false
         }
       }
+    async handleDelete(_key){
+      Alert.alert(
+        //title
+        'Remove data',
+        //body
+        'Are you sure you want remove this quiz ?',
+        [
+          {text: 'Yes', onPress: async()  => {await app.database().ref('RunAway').child(_key).remove().then((data)=>{
+            //success callback
+            Alert.alert('Remove successful!')
+        }).catch((error)=>{
+          Alert.alert('Remove failed!')
+            console.log('error ' , error)
+        })
+      
+        }},
+          {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
+        ],
+        { cancelable: false }
+        //clicking out side of alert will not cancel
+      );
+    }
     handleDownload = (key, linkDownload) => {
         var destination = linkDownload.replace(/\//g, "");
         console.log("replace: " + destination)
@@ -71,24 +94,7 @@ class FlatListItem extends Component {
           params : {
             key: _key,
           }
-        })
-        // let user = store.getState().user.user
-        // user = JSON.parse(user)
-        // if(data_geted!=null){
-        //   app.database().ref('listquiz').push({
-        //     author: user.email,
-        //     name: _name,
-        //     key: _key
-        // }).then((data)=>{
-        //     //success callback
-        //     console.log('data ' , data)
-        // }).catch((error)=>{
-        //     //error callback
-        //     console.log('error ' , error)
-        // })
-      
-        // }
-       
+        })       
         console.log(data_geted)
         let nameOfKey = Object.keys(data_geted.data)
         var list_quiz = data_geted.data[nameOfKey[0]]
@@ -128,55 +134,107 @@ class FlatListItem extends Component {
         console.log("Test save: " + test)
         }
       async handleLoad(_key){
-          this.setState({
-              loading: true
-          })
+          this.props.loadingUpdate()
         //   console.log(this.state.key)
           await this.getData(_key)
           console.log( await AsyncStorage.getItem('quizData1'))
           if(store.getState().quizData.listQuiz.length != 0){
             this.setState({loading: false})
             console.log("Loaf thành công")
-            // this.props.navigation.navigate('Level')
+            this.props.loadingUpdate()
+            this.props.navigation.navigate('Level')
           }
       }
     render(){
         return(
+        this.props.typeRender == 'public' ?
         <TouchableOpacity  onPress={() =>
             // console.log(this.props.item.key)
-            this.handleLoad(this.props.item.key)    
+            this.handleLoad(this.props.item.data.key)    
             } >
             <View style = {{
             flex: 1,
             backgroundColor: "#290136",
             borderRadius: 5,
             flexDirection: "row",
-            marginVertical: 5,
+            marginVertical: 1,
             marginHorizontal: 10,
             alignItems: 'center',
-            opacity: 1
+            opacity: 2
         }}>
             <View style = {{flex: 2}}>
                 <Image
                 source = {Images.bird}
                 style = {{
-                    width: 50,
-                    height: 50,
-                    marginVertical: 5,
+                    width: 40,
+                    height: 40,
+                    marginVertical: 3,
                     marginLeft: 10,
                 }}
                 />
             </View>
             
             <View style = {{flex: 5}}>
-                <Text style = {styles.flatListText}> {this.props.item.name} </Text>
+                <Text style = {styles.flatListText}> {this.props.item.data.name} </Text>
             </View>
             <View  style =  {styles.rightText}>
-                <Text style = {styles.compeletedText}> {this.props.item.author}</Text>
+                <Text style = {styles.compeletedText}> {this.props.item.data.author}</Text>
             </View>
         
         </View>
         </TouchableOpacity>
+        :
+        <View  style = {{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+          <View style = {{flex: 5}}>
+          <TouchableOpacity  onPress={() =>
+            // console.log(this.props.item.key)
+            this.handleLoad(this.props.item.data.key)    
+            } >
+            <View style = {{
+            flex: 1,
+            backgroundColor: "#290136",
+            borderBottomLeftRadius: 5,
+            borderTopLeftRadius: 5,
+            flexDirection: "row",
+            marginVertical: 1,
+            // marginHorizontal: 10,
+            marginLeft: 10,
+            alignItems: 'center',
+            opacity: 2
+        }}>
+            <View style = {{flex: 2}}>
+                <Image
+                source = {Images.bird}
+                style = {{
+                    width: 40,
+                    height: 40,
+                    marginVertical: 3,
+                    marginLeft: 10,
+                }}
+                />
+            </View>
+            
+            <View style = {{flex: 10}}>
+                <Text style = {styles.flatListText}> {this.props.item.data.name} </Text>
+            </View>
+            </View>
+           </TouchableOpacity>
+          </View>
+            <View  style =  {styles.deleteButton}>
+               <TouchableOpacity onPress={() =>
+                   this.handleDelete(this.props.item.key)    
+            } >
+               <Image source = {Images.trash}
+                style = {{
+                    width: 30,
+                    height: 30,
+                    marginVertical: 3,
+                    marginRight: 5,
+                    paddingRight: 5
+                }}></Image>
+               </TouchableOpacity>                
+            </View>
+            </View>
         )
     }
 }
@@ -186,63 +244,75 @@ export default class SelectData extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      loading: null,
-      listData: []
+      loading: true,
+      listData: [],
+      yourQuiz: [],
 
     }
+  }
+  loadingUpdate = () => {
+    this.setState({
+      loading: true
+    })
   }
   async UNSAFE_componentWillMount(){
 
       let list = await this.getPublicQuiz()
-      this.setState({
-          listData: list
-      })
+      
       console.log("test will mousse" + list)
+      let yourData = []
+      let user = store.getState().user.user
+       user = JSON.parse(user)
+      for (i = 0; i<list.length; i++){
+        if(list[i].data.author == user.email)
+        yourData.push(list[i])
+      }
+      this.setState({
+        listData: list,
+        yourQuiz: yourData,
+        loading: false
+    })
+    app.database().ref('RunAway').on('child_removed', (snapshot) => {
+      list = list.filter((x) => x.key != snapshot.key)
+      yourData = yourData.filter((x) => x.key != snapshot.key)
+      this.setState({
+        listData: list,
+        yourQuiz: yourData,
+        loading: false
+      })
+    })
   }
    async getPublicQuiz () {
     var publicQuiz = [];
-    await app.database().ref('listquiz').once('value').then((snapshot) => {
+    await app.database().ref('RunAway').once('value').then((snapshot) => {
         // var publicQuiz = [];
         snapshot.forEach((child) => {
-            publicQuiz.push(child.val());
-        })
-        
-        
+            publicQuiz.push({
+              data: child.val(),
+              key: child.key
+            })
+        })        
     })
-    console.log("Test get "+publicQuiz)
     return publicQuiz;
   }
-  
-  exitPress(){
-    Alert.alert(
-      //title
-      'Cancle loading',
-      //body
-      'Are you sure you want to cancle ?',
-      [
-        {text: 'Yes', onPress: () => {this.props.navigation.navigate('Home')}},
-        {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
-      ],
-      { cancelable: false }
-      //clicking out side of alert will not cancel
-    );
-  }
+
   render() {
     return (
       <View >
+        { this.state.loading == false ?
         <ImageBackground
         source = {Images.loadingbg}
         style = {{width: '100%', height: '100%'}}
         >
-        <View style = {{flex: 0.7, justifyContent: 'center', alignItems: 'center'}}>
-        <Image source = {require('../../Assets/images/select_level.png')}
-         style={{
-          position: 'absolute',
-      }} 
-
-       />
+        <View style = {{flex: 0.6, alignItems: 'center', justifyContent: 'center', paddingTop: 10}}>
+            <Image source = {require('../../Assets/images/select_quiz.png')}
+            style={{
+            position: 'absolute',
+            height: 40, width: 200
+              }} 
+                />
         </View>
-        <View style = {{flex: 7, flexDirection: 'column'}}>
+        <View style = {{flex: 7, flexDirection: 'column', marginTop: 10}}>
             <View style = {styles.publicbg}>
                 <Text style = {styles.categoryText}>Public quiz</Text>
                 <FlatList
@@ -251,6 +321,8 @@ export default class SelectData extends Component {
                 return (
                     <FlatListItem 
                         navigation = {this.props.navigation}
+                        typeRender = {'public'}
+                        loadingUpdate = {this.loadingUpdate}
                         item = {item}
                         index = {index}
                         keyExtractor = {item.key}
@@ -262,12 +334,15 @@ export default class SelectData extends Component {
             </View>
             <View style = {styles.yourbg}>
                 <Text style = {styles.categoryText}>Your quiz</Text>
+               { this.state.yourQuiz.length != 0 ?
                 <FlatList
-            data = {this.state.listData}
+            data = {this.state.yourQuiz}
             renderItem = {({item, index}) => {
                 return (
                     <FlatListItem 
                         navigation = {this.props.navigation}
+                        typeRender = {'yourQuiz'}
+                        loadingUpdate = {this.loadingUpdate}
                         item = {item}
                         index = {index}
                         keyExtractor = {item.key}
@@ -276,26 +351,64 @@ export default class SelectData extends Component {
                  }}
               >
                 </FlatList> 
+                :
+                <Text style = {styles.categoryText}>You do not have any quiz before!</Text>
+  }
             </View>
-        
 
         </View>
         
-        <View style = {{flex:0.8, flexDirection: 'row', justifyContent: 'center'}}>
-        <View style = {styles.button}>
-                {
-                this.state.loading ?
-                <TouchableOpacity >
-                    <Spinner type="Circle" size={30} color="white" style={{alignSelf: "center"}}/>
-                </TouchableOpacity>
-                :
-                <TouchableOpacity activeOpacity={.5} onPress={() => this.handleLoad()}>
+        <View style = {{flex:0.8, flexDirection: 'row', paddingBottom: 10}}>
+          <View style = {{flex:1, justifyContent: 'center', right: -120}}>
+          <View style = {styles.button}>
+                <TouchableOpacity activeOpacity={.5} onPress={() => this.props.navigation.navigate("InputKey")}>
                     <Text style = { styles.buttonText}>Input new</Text>
-                </TouchableOpacity>
-                }
+                 </TouchableOpacity>
+          </View>
+          </View>      
+          <View style = {{flex: 1,justifyContent: 'center', marginLeft: Constants.MAX_HEIGHT/2 - 70}}>
+          <ImageButton
+                width = {45}
+                height = {45}
+                text = ""
+                onPress={() => this.props.navigation.navigate('RunAwayHome')}
+                source = { Images.back}
+
+              />      
               </View>
        </View>
         </ImageBackground>
+        :
+        null
+    
+    }
+    {
+      this.state.loading == true ?
+      <ImageBackground
+      source = {Images.loadingbg}
+      style = {{width: '100%', height: '100%'}}
+  >
+  <View style = {styles.loading}> 
+  <View style = {{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
+  <Image 
+    style={{
+      position: 'absolute',
+      width: 70,
+      height: 70,
+  }} 
+    resizeMode="stretch"
+    source={Images.bird}
+  />
+  </View>
+  <View style = {{flex: 1, justifyContent: 'flex-start'}}>
+  <Spinner type="Circle" size={45} color="white" style={{alignSelf: "center"}}/>
+  </View>
+  </View>
+  </ImageBackground>
+  :
+  null
+    }
+
       </View>
     );
   }
@@ -315,25 +428,32 @@ const styles = StyleSheet.create({
     color: 'green',
     fontSize: 12,
     fontStyle: 'italic'
-    // textAlign: 'center',
-    // alignItems: 'center',
-    // alignContent: 'center',
-    // justifyContent: 'center'
+
    },
    lockText: {
     color: 'red',
     fontSize: 12,
     fontStyle: 'italic'
-    // textAlign: 'center',
-    // alignItems: 'center',
-    // alignContent: 'center',
-    // justifyContent: 'center'
+
    },
    rightText: {
        flex: 3, 
        alignItems: 'flex-end', 
        marginRight: 10
     },
+    deleteButton: {
+      flex: 1,
+      backgroundColor: "#290136",
+      borderBottomRightRadius: 5,
+      borderTopRightRadius: 5,
+      // flexDirection: "row",
+      marginVertical: 1,
+      // marginLeft: 5,
+      marginRight: 10,
+      alignItems: 'center',
+      opacity: 2,
+      justifyContent: 'center'
+   },
     categoryText: {
         fontSize: 17,
         color: '#2e0f05',
@@ -342,23 +462,26 @@ const styles = StyleSheet.create({
         paddingVertical: 3
     },
     publicbg: {
-        backgroundColor: 'gray',
+        backgroundColor: '#6ca3d4',
         flex: 4,
         marginHorizontal: 10,
-        marginBottom: 10
+        marginBottom: 10,
+        borderRadius: 10,
+        opacity: 0.8
     },
     yourbg: {
-        backgroundColor: 'blue',
+        backgroundColor: '#ad95a0',
         flex: 2,
         marginHorizontal: 10,
-        marginBottom: 10
+        marginBottom: 10,
+        borderRadius: 10,
+        opacity: 0.8
     },
     button: {
         backgroundColor: "#FF3366",
         alignItems: "center",
         justifyContent: "center",
-        // marginTop: 20,
-        // marginHorizontal: 20,
+        alignContent: 'center',
         borderRadius: 15,
         height: 45,
         width: 120
@@ -368,4 +491,14 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold'
       },
+      loading: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+      },
+
+      exit: {
+        // flex: 1,
+        // marginLeft: width - 40
+    },
   });

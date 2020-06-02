@@ -43,7 +43,8 @@ export default Images = {
     punchMouse_icon: require('./images/punchMouse_icon.png'),
     sound: require('./images/sound.png'),
     unSound: require('./images/unSound.png'),
-    punched: require('./images/broke.png')
+    punched: require('./images/broke.png'),
+    trash: require('./images/trash.png')
 
     // mouse11: require('./images/broke.png'), 
 }

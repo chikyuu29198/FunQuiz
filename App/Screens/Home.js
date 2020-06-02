@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, ImageBackground, TouchableOpacity, Alert } from 'react-native';
 import store from '../redux/store'
 import Spinner from 'react-native-spinkit'
 import Loading from './Loading.js';
@@ -30,10 +30,26 @@ class Home extends Component {
     console.log("reset done level before navigate: " + store.getState().level.doneLevel)
   }
   async logout() {
-    await AsyncStorage.removeItem("userData");
-    let test = await AsyncStorage.getItem("userData")
-    console.log( test)
-    this.props.navigation.navigate('Login')
+    Alert.alert(
+      'Logout!',
+      'Are you sure you want logout ?',
+      [
+        {text: 'Yes', onPress: async()  => {
+          await AsyncStorage.removeItem('quizData1')
+          await AsyncStorage.removeItem("userData");
+          this.props.navigation.navigate('Login')
+
+      }},
+        {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
+      ],
+      { cancelable: false }
+      //clicking out side of alert will not cancel
+    );
+
+    // await AsyncStorage.removeItem("userData");
+    // let test = await AsyncStorage.getItem("userData")
+    // console.log( test)
+    // this.props.navigation.navigate('Login')
   }
   changeSound(){
    let _sound = store.getState().soundStatus

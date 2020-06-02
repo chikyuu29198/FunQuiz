@@ -54,9 +54,9 @@ class RunAwayHome extends Component {
         await store.dispatch({type: 'SET_DONE_LEVEL', done_level: doneLevel})
         console.log("done level in RunAwayHome " + store.getState().level.doneLevel)
         await store.dispatch({type: 'GET_DATA', listQuiz: data, totalLevel: data[data.length - 1].level})
-        test = await store.getState().quizData.listQuiz
+        let test = await store.getState().quizData.listQuiz
         console.log( " test done level after ditpach in RunAay homw " + store.getState().level.doneLevel)
-        if(test.length != 0){ this.props.navigation.navigate('Level')}
+        if(data.length != 0){ this.props.navigation.navigate('Level')}
       }
       else{
         console.log("NOT")
@@ -64,7 +64,7 @@ class RunAwayHome extends Component {
         doneLevel = (doneLevel == null) ? 0 : parseInt(doneLevel)
         console.log("done level in Home " + doneLevel)
         await store.dispatch({type: ' SET_DONE_LEVEL', done_level: doneLevel})
-        this.props.navigation.navigate('InputKey')
+        this.props.navigation.navigate('SelectData')
     }
   // }
     // else {

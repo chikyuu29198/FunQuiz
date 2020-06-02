@@ -14,10 +14,10 @@ import Test from './Screens/Test'
 class App extends Component {
   render(){
     return(
-      <SelectData/>
-      // <Provider store = {store}>
-      //   <AppNavigator />
-      // </Provider>      
+      // <SelectData/>
+      <Provider store = {store}>
+        <AppNavigator />
+      </Provider>      
     );
   }
 };

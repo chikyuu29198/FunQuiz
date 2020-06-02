@@ -91,7 +91,7 @@ export default class InputKey extends Component {
     let user = store.getState().user.user
     user = JSON.parse(user)
     if(data_geted!=null){
-      app.database().ref('listquiz').push({
+      app.database().ref('RunAway').push({
         author: user.email,
         name: _name,
         key: _key

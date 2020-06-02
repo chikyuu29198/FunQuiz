@@ -34,7 +34,7 @@ export default class Setting extends Component {
     }
   }
   newData(){
-    this.props.navigation.navigate('InputKey')
+    this.props.navigation.navigate('SelectData')
   }
   async resetLevel(){
     store.dispatch({type: 'RESET_LEVEL'})
