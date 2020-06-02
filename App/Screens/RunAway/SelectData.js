@@ -262,7 +262,7 @@ export default class SelectData extends Component {
       console.log("test will mousse" + list)
       let yourData = []
       let user = store.getState().user.user
-      //  user = JSON.parse(user)
+      if (typeof user == 'string')  user = JSON.parse(user)
       for (i = 0; i<list.length; i++){
         if(list[i].data.author == user.email)
         yourData.push(list[i])

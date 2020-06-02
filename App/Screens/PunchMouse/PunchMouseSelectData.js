@@ -262,6 +262,7 @@ export default class PunchMouseSelectData extends Component {
       console.log("test will mousse" + list)
       let yourData = []
       let user = await store.getState().user.user
+      if (typeof user == 'string')  user = JSON.parse(user)
       console.log(user + "typr: " + typeof user)
       // if(user!=null)
       //    user = JSON.parse(user)

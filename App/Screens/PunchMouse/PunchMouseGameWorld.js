@@ -193,10 +193,12 @@ class PunchMouseGameWorld extends Component {
     });
   }
   render(){
+    let imgSource
+    store.getState().userCustom.background ? imgSource = {uri: store.getState().userCustom.background} : imgSource = Images.woodFloor
     return(
       <Provider store = { store }>
        <ImageBackground
-          source = {Images.woodFloor}
+          source = {imgSource}
           style = {{width: '100%', height: '100%'}}
           >
       <View style = {styles.container}>

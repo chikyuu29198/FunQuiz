@@ -62,6 +62,7 @@ class Quiz extends Component {
     UNSAFE_componentWillMount(){
       this.props.reset();
       this.props.enableAnswer();
+      console.log("test ntn: "+store.getState().userCustom.btn_color)
     }
     anim = new Animated.Value(0);  
     componentDidMount(){  
@@ -89,9 +90,9 @@ class Quiz extends Component {
     render(){
         const index = this.props.index;
         const quiz = this.props.listQuiz[index]; 
-        // let btn_color
-        // this.props.userCustom.btn_color ? btn_color = this.props.userCustom.btn_color : 
-        let btn_color = '#64B5F6'
+        let btn_color
+        this.props.userCustom.btn_color ? btn_color = this.props.userCustom.btn_color : btn_color = '#64B5F6'
+      // let btn_color = '#64B5F6'
         const answerBoxRow = {
           flex: 1,
           borderColor: 'blue',
