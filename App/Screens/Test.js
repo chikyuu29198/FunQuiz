@@ -8,17 +8,18 @@ class Test extends Component {
     super(props)
     // this.setItem = app.FirebaseDatabase.getInstance().getReference();
   }
-  _onPress(){
-        
-    app.database().ref('listquiz').once('value').then((snapshot) => {
-        var userdata = [];
-        snapshot.forEach((child) => {
-            userdata.push(child.val());
-        })
-        console.log(userdata)
+  async _onPress(){      
+    
+    //content://
+
+    let backgroundSound = new Sound(require('../../Assets/sounds/custombgsound.mp3'),
+    (error, sound) => {
+    if (error) {
+      console.log("Can not load background sound")
+      return;
+    }
+    backgroundSound.setNumberOfLoops(-1)
     })
-  }
-  render() {
     return (
       <View >
         <TouchableOpacity onPress={() => this._onPress()}>

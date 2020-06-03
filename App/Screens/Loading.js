@@ -14,18 +14,8 @@ class Loading extends Component {
     super(props)
   }
   async componentDidMount(){
-    // let doneLevel = await AsyncStorage.getItem('CURRENT_LEVEL')
-    // doneLevel = (doneLevel == null) ? 0 : parseInt(doneLevel)
-    // store.dispatch({type: ' SET_DONE_LEVEL', done_level: doneLevel})
-    // console.log(doneLevel + "test Asyn in Level.js")
-    // store.dispatch({type: 'SET_DONE_LEVEL', done_level: doneLevel})
     let userData = await AsyncStorage.getItem('userData')
-    // userData = ( userData == null) ? [] : JSON.parse(userData)
-    // console.log(userData.email)
     store.dispatch({type: 'LOGIN_SUCCESS', user: userData})
-    // let a = store.getState().user.user
-    // // let test = JSON.parse(a)
-    // console.log( a)
     if (userData == null) {
       this.props.navigation.navigate('Login')
     }
@@ -66,7 +56,6 @@ class Loading extends Component {
 const styles = StyleSheet.create({
     imageBg: {
       flex: 1,
-      
     },
     loading: {
       flex: 1,

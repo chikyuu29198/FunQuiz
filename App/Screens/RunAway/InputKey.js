@@ -89,23 +89,25 @@ export default class InputKey extends Component {
       }
     })
     let user = store.getState().user.user
-    // user = JSON.parse(user)
+    if(typeof user == 'string')
+    user = JSON.parse(user)
+    console.log(typeof user + 'type')
+    var key
     if(data_geted!=null){
-      app.database().ref('RunAway').push({
+     try{
+       key = app.database().ref('RunAway').push({
         author: user.email,
         name: _name,
         key: _key
-    }).then((data)=>{
-        //success callback
-        console.log('data ' , data)
-    }).catch((error)=>{
+    }).key}catch(error){
         //error callback
         console.log('error ' , error)
-    })
-  
     }
-   
-    console.log(data_geted)
+    }
+    console.log('test key: '+ key)
+    await AsyncStorage.setItem('key1', key)
+    await store.dispatch({type: 'SET_KEY', key: key})
+    console.log(store.getState().gamePlaying.quizKey)
     let nameOfKey = Object.keys(data_geted.data)
     var list_quiz = data_geted.data[nameOfKey[0]]
     var user_custom = data_geted.data[nameOfKey[1]]
@@ -118,6 +120,7 @@ export default class InputKey extends Component {
     // handle custom config
     var userCustom = {}
     for (i = 0; i<user_custom.length; i++){
+      console.log(typeof user_custom[i].key)
       let lowerKey = user_custom[i].key.toLowerCase()
       console.log(lowerKey)
       if (lowerKey.includes("background")){

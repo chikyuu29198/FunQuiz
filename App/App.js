@@ -15,7 +15,7 @@ import PunchMouseInputKey from './Screens/PunchMouse/PunchMouseInputKey'
 class App extends Component {
   render(){
     return(
-      // <PunchMouseInputKey/>
+      // <Test/>
       <Provider store = {store}>
         <AppNavigator />
       </Provider>      
