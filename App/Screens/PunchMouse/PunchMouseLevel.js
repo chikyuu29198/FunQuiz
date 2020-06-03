@@ -14,6 +14,12 @@ class FlatListItem extends Component {
         //     quizLevel: []
         // }
       }
+      async UNSAFE_componentWillMount(){
+        let _currentLevel = await AsyncStorage.getItem('CURRENT_LEVEL2')
+        // console.log(_currentLevel)
+        store.dispatch({type: 'SET_DONE_LEVEL', done_level: parseInt(_currentLevel)})
+        // console.log('after get: '+ )
+    }
 
     _onPress(level){
        let test = AsyncStorage.getItem('CURRENT_LEVEL2')

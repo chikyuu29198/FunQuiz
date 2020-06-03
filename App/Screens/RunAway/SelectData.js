@@ -42,7 +42,8 @@ class FlatListItem extends Component {
         //body
         'Are you sure you want remove this quiz ?',
         [
-          {text: 'Yes', onPress: async()  => {await app.database().ref('RunAway').child(_key).remove().then((data)=>{
+          {text: 'Yes', onPress: async()  => {
+            await app.database().ref('RunAway').child(_key).remove().then((data)=>{
             //success callback
             Alert.alert('Remove successful!')
         }).catch((error)=>{
@@ -148,10 +149,14 @@ class FlatListItem extends Component {
         // console.log('dont have in server')
         AsyncStorage.setItem('CURRENT_LEVEL1', '0')
         // console.log(user.email)
+        try{
         app.database().ref('RunAway').child(_severKey).child('ranking').push({
           user: user.email,
           level: 0
         })
+      } catch (err){
+        console.log(err)
+      }
       }
         // handle custom config
         var userCustom = {}
@@ -182,16 +187,32 @@ class FlatListItem extends Component {
         console.log("Test save: " + test)
         }
       async handleLoad(_key, _severKey){
+
           this.props.loadingUpdate()
         //   console.log(this.state.key)
-          await this.getData(_key, _severKey)
-          console.log( await AsyncStorage.getItem('quizData1'))
-          if(store.getState().quizData.listQuiz.length != 0){
-            this.setState({loading: false})
-            console.log("Loaf thành công")
-            this.props.loadingUpdate()
-            this.props.navigation.navigate('Level')
-          }
+          // await this.getData(_key, _severKey)
+          // console.log( await AsyncStorage.getItem('quizData1'))
+          // if(store.getState().quizData.listQuiz.length != 0){
+          //   this.setState({loading: false})
+          //   console.log("Loaf thành công")
+          //   this.props.loadingUpdate()
+          //   this.props.navigation.navigate('Level')
+          // }
+
+          this.props.loadingUpdate()
+          await store.dispatch({type: 'RESET_DATA'})
+          this.getData(_key, _severKey)
+          setTimeout(function(){
+            if(store.getState().quizData.listQuiz.length != 0){
+              console.log("Loaf thành công")
+              this.props.loadingUpdate()
+              this.props.navigation.navigate('Level')
+            }
+            else{
+              this.props.loadingUpdate()
+              Alert.alert('Loading failed! Please check and try again!')
+            }
+           }.bind(this), 15000);
       }
     render(){
         return(
@@ -566,5 +587,5 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center'
-      },
+      }
   });

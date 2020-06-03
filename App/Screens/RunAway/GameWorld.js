@@ -51,12 +51,14 @@ class GameWorld extends Component {
     })
     console.log(userKey)
     if(userKey != null){
-      await app.database().ref('RunAway').child(key).child('ranking').child(userKey).update({
+      try{
+      app.database().ref('RunAway').child(key).child('ranking').child(userKey).update({
         level: doneLevel
       })
     }
-
-  }
+   catch (err){
+    console.log(err)
+  }}}
 
   setupWorld = () => {
     let engine = Matter.Engine.create({ enableSleeping: false });

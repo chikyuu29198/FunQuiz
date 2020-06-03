@@ -89,7 +89,7 @@ class FlatListItem extends Component {
          return 'file://' + destination
        };
     
-      async getData (_key){
+      async getData (_key,_severKey){
         const data_geted = await axios.get('https://edugame.azurewebsites.net', {
           params : {
             key: _key,
@@ -105,6 +105,46 @@ class FlatListItem extends Component {
         store.dispatch({type: 'GET_DATA', listQuiz: list_quiz, totalLevel: total_level})
         const data = JSON.stringify(list_quiz)
         await AsyncStorage.setItem('quizData2', data)
+        //get userInfor
+        var user = store.getState().user.user
+        if (typeof user == 'string'){
+          user = JSON.parse(user)
+        }
+        //Check data level of user in sever
+        console.log('START TEST .......................')
+        console.log(_severKey)
+        var doneLevel = null
+        await app.database().ref('PunchMouse').child(_severKey).child('ranking').once('value').then(snapshot => {
+            snapshot.forEach((child) => {
+              console.log("test bug" +user.email)
+              if(child.val().user == user.email){
+                doneLevel = child.val().level
+              }
+            // console.log('done level in server: ' + doneLevel)
+          });
+          })
+          console.log( 'test:' +doneLevel + typeof doneLevel)
+          if(doneLevel != null){
+            // console.log(doneLevel)
+            await AsyncStorage.setItem('CURRENT_LEVEL2', doneLevel.toString())
+            let tests = await AsyncStorage.getItem('CURRENT_LEVEL2')
+            // console.log('same in sever: ' + tests)
+          }
+          
+          else {
+            // console.log('dont have in server')
+            AsyncStorage.setItem('CURRENT_LEVEL2', '0')
+            // console.log(user.email)
+            try{
+            app.database().ref('PunchMouse').child(_severKey).child('ranking').push({
+              user: user.email,
+              level: 0
+            })
+          } catch (err){
+            console.log(err)
+          }
+          }
+
         // handle custom config
         var userCustom = {}
         for (i = 0; i<user_custom.length; i++){
@@ -149,24 +189,39 @@ class FlatListItem extends Component {
             data: userList})
           }
 
-      async handleLoad(_key){
-          this.props.loadingUpdate()
-        //   console.log(this.state.key)
-          await this.getData(_key)
-          console.log( await AsyncStorage.getItem('quizData2'))
+      async handleLoad(_key, _severKey){
+        this.props.loadingUpdate()
+        await store.dispatch({type: 'RESET_DATA'})
+        console.log(_severKey)
+        this.getData(_key, _severKey)
+        setTimeout(function(){
           if(store.getState().quizData.listQuiz.length != 0){
-            this.setState({loading: false})
             console.log("Loaf thành công")
             this.props.loadingUpdate()
             this.props.navigation.navigate('PunchMouseLevel')
           }
+          else{
+            this.props.loadingUpdate()
+            Alert.alert('Loading failed! Please check and try again!')
+          }
+         }.bind(this), 15000);
+        //   this.props.loadingUpdate()
+        // //   console.log(this.state.key)
+        //   await this.getData(_key)
+        //   console.log( await AsyncStorage.getItem('quizData2'))
+        //   if(store.getState().quizData.listQuiz.length != 0){
+        //     this.setState({loading: false})
+        //     console.log("Loaf thành công")
+        //     this.props.loadingUpdate()
+        //     this.props.navigation.navigate('PunchMouseLevel')
+        //   }
       }
     render(){
         return(
         this.props.typeRender == 'public' ?
         <TouchableOpacity  onPress={() =>
             // console.log(this.props.item.key)
-            this.handleLoad(this.props.item.data.key)    
+            this.handleLoad(this.props.item.data.key, this.props.item.key)    
             } >
             <View style = {{
             flex: 1,
@@ -204,7 +259,7 @@ class FlatListItem extends Component {
           <View style = {{flex: 5}}>
           <TouchableOpacity  onPress={() =>
             // console.log(this.props.item.key)
-            this.handleLoad(this.props.item.data.key)    
+            this.handleLoad(this.props.item.data.key, this.props.item.key)    
             } >
             <View style = {{
             flex: 1,
