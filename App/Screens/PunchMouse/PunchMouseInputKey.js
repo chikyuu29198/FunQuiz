@@ -158,16 +158,36 @@ export default class PunchMouseInputKey extends Component {
     console.log("Test save: " + test)
     }}
   async handleLoad(){
+    if (this.state.key.trim() !== "" && this.state.name.trim() !== ""){
       this.setState({
           loading: true
       })
-      console.log(this.state.key)
-      await this.getData(this.state.key, this.state.name)
-      console.log( await AsyncStorage.getItem('quizData2'))
-      if(store.getState().quizData.listQuiz.length != 0){
-        this.setState({loading: false})
-        this.props.navigation.navigate('PunchMouseLevel')
-      }
+      await store.dispatch({type: 'RESET_DATA'})
+      this.getData(this.state.key, this.state.name)
+      // console.log( await AsyncStorage.getItem('quizData1'))
+      setTimeout(function(){
+        if(store.getState().quizData.listQuiz.length != 0){
+          this.setState({loading: false})
+          this.props.navigation.navigate('PunchMouseLevel')
+        }
+        else{
+          this.setState({
+            loading: false
+          })
+          Alert.alert('Loading failed! Please check and try again!')
+        }
+       }.bind(this), 15000);
+    }
+    else{
+      Alert.alert(
+        "Warning!",
+        "You have to input name and key of quiz list. Please try again!",
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ],
+        { cancelable: true }
+      );
+    }
   }
   exitPress(){
     Alert.alert(

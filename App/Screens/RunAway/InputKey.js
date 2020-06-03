@@ -166,6 +166,7 @@ export default class InputKey extends Component {
     console.log("Test save: " + test)
     }}
   async handleLoad(){
+    if (this.state.key.trim() !== "" && this.state.name.trim() !== ""){
       this.setState({
           loading: true
       })
@@ -184,7 +185,17 @@ export default class InputKey extends Component {
           Alert.alert('Loading failed! Please check and try again!')
         }
        }.bind(this), 15000);
-      
+    }
+    else{
+      Alert.alert(
+        "Warning!",
+        "You have to input name and key of quiz list. Please try again!",
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ],
+        { cancelable: true }
+      );
+    }
   }
   exitPress(){
     Alert.alert(
