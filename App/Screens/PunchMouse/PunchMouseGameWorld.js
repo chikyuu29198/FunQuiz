@@ -66,9 +66,13 @@ class PunchMouseGameWorld extends Component {
     })
     console.log(userKey)
     if(userKey != null){
-      await app.database().ref('PunchMouse').child(key).child('ranking').child(userKey).update({
+      try{
+        app.database().ref('PunchMouse').child(key).child('ranking').child(userKey).update({
         level: doneLevel
       })
+     }catch (err){
+       console.log(err)
+     }
     }
 
   }

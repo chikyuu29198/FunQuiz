@@ -102,6 +102,7 @@ export default class PunchMouseInputKey extends Component {
       console.log(store.getState().gamePlaying.quizKey)
       console.log('test email: ' + user.email)
     var doneLevel = null
+    try{
       app.database().ref('PunchMouse').child(key).child('ranking').once('value').then(snapshot => {
           snapshot.forEach((child) => {
             if(child.val().user == user.email){
@@ -110,14 +111,21 @@ export default class PunchMouseInputKey extends Component {
           console.log(doneLevel)
         });
     })
+   } catch (err){
+     console.log(err)
+   }
     if(doneLevel != null)
       AsyncStorage.setItem('CURRENT_LEVEL2', doneLevel.toString())
     else{
+      try{
       AsyncStorage.setItem('CURRENT_LEVEL2', '0')
       app.database().ref('PunchMouse').child(key).child('ranking').push({
         user: user.email,
         level: 0
       })
+    } catch (err){
+      console.log(err)
+    }
     }
     let nameOfKey = Object.keys(data_geted.data)
     var list_quiz = data_geted.data[nameOfKey[0]]

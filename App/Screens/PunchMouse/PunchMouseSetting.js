@@ -77,12 +77,12 @@ export default class PunchMouseSetting extends Component {
               <TouchableOpacity  onPress={() => this.newData() }>
                 <ImageBackground
                     source = {require('../../Assets/images/button.png')}
-                    style = {{width: 200, height: 70}}
+                    style = {{width: 210, height: 75}}
                   >
                     <View style = {{justifyContent: 'center', alignItems: 'center', paddingVertical: 15}}>
                       <Image 
                         source = {require('../../Assets/images/newData_text.png')}
-                        style = {{width: 130, height: 40}}
+                        style = {{width: 180, height: 40}}
                       />
                     </View>
                   </ImageBackground>
@@ -91,7 +91,7 @@ export default class PunchMouseSetting extends Component {
               <TouchableOpacity  onPress={() =>this.resetLevel() }>
                 <ImageBackground
                     source = {require('../../Assets/images/button.png')}
-                    style = {{width: 200, height: 70}}
+                    style = {{width: 210, height: 75}}
                   >
                     <View style = {{justifyContent: 'center', alignItems: 'center', paddingVertical: 15}}>
                       <Image 
@@ -105,7 +105,7 @@ export default class PunchMouseSetting extends Component {
               <TouchableOpacity  onPress={() => this.resetDefaultSetting() }>
                 <ImageBackground
                     source = {require('../../Assets/images/button.png')}
-                    style = {{width: 200, height: 70}}
+                    style = {{width: 210, height: 75}}
                   >
                     <View style = {{justifyContent: 'center', alignItems: 'center', paddingVertical: 15}}>
                       <Image 
@@ -146,7 +146,7 @@ background: {
     flexDirection: "column",
     marginHorizontal: 30,
     marginTop: 10,
-    marginBottom: 100,
+    marginBottom: 80,
     backgroundColor: '#7ebcf2',
     borderRadius: 20,
     paddingBottom: 30

@@ -307,6 +307,7 @@ export default class PunchMouseSelectData extends Component {
         yourQuiz: yourData,
         loading: false
     })
+    try{
     app.database().ref('PunchMouse').on('child_removed', (snapshot) => {
       list = list.filter((x) => x.key != snapshot.key)
       yourData = yourData.filter((x) => x.key != snapshot.key)
@@ -316,6 +317,10 @@ export default class PunchMouseSelectData extends Component {
         loading: false
       })
     })
+    }catch (error) {
+      console.log(error);
+      
+    }
   }
    async getPublicQuiz () {
     var publicQuiz = [];

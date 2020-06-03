@@ -110,22 +110,33 @@ export default class InputKey extends Component {
       //   level: 0
       // })
     var doneLevel = null
+    try{
       app.database().ref('RunAway').child(key).child('ranking').once('value').then(snapshot => {
-          snapshot.forEach((child) => {
-            if(child.val().user == user.email){
-              doneLevel = child.val().level
-            }
-          console.log(doneLevel)
-        });
-    })
+        snapshot.forEach((child) => {
+          if(child.val().user == user.email){
+            doneLevel = child.val().level
+          }
+        console.log(doneLevel)
+      });
+  })
+    } catch(error){
+      //error callback
+      console.log('error ' , error)
+   }
     if(doneLevel != null)
       AsyncStorage.setItem('CURRENT_LEVEL1', doneLevel.toString())
     else{
       AsyncStorage.setItem('CURRENT_LEVEL1', '0')
-      app.database().ref('RunAway').child(key).child('ranking').push({
-        user: user.email,
-        level: 0
-      })
+      try{
+        app.database().ref('RunAway').child(key).child('ranking').push({
+          user: user.email,
+          level: 0
+        })
+      } catch(error){
+        //error callback
+        console.log('error ' , error)
+     }
+     
     }
     let nameOfKey = Object.keys(data_geted.data)
     var list_quiz = data_geted.data[nameOfKey[0]]
