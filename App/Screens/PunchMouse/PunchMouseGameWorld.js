@@ -22,6 +22,7 @@ import { Provider } from 'react-redux';
 import SettingBar from '../../Components/PuchMouse/SettingBar';
 import store from '../../redux/store';
 import AsyncStorage from '@react-native-community/async-storage';
+import {app} from '../../firebaseConfig';
 // import {ImageButton} from 'react-native-image-button-text';
 
 class PunchMouseGameWorld extends Component {
@@ -47,6 +48,10 @@ class PunchMouseGameWorld extends Component {
     this.setState({
       target: _target
     })
+  }
+  async componentWillUnmount(){
+    //Set level at server
+
   }
   setupWorld() {
     let numberOfQuiz = this.state.listQuiz.length;

@@ -57,6 +57,21 @@ class FlatListItem extends Component {
         //clicking out side of alert will not cancel
       );
     }
+    async handleView(_key){
+    var userList = [];
+      await app.database().ref('RunAway').child(_key).child('ranking').once('value').then((snapshot) => {
+          // var publicQuiz = [];
+          snapshot.forEach((child) => {
+            userList.push({
+                name: child.val().user,
+                level: child.val().level
+              })
+          })        
+      })
+     console.log(userList)
+     this.props.navigation.navigate('ViewAllUser', {
+      data: userList})
+    }
     handleDownload = (key, linkDownload) => {
         var destination = linkDownload.replace(/\//g, "");
         console.log("replace: " + destination)
@@ -89,7 +104,7 @@ class FlatListItem extends Component {
          return 'file://' + destination
        };
     
-      async getData (_key){
+      async getData (_key, _severKey){
         const data_geted = await axios.get('https://edugame.azurewebsites.net', {
           params : {
             key: _key,
@@ -105,6 +120,39 @@ class FlatListItem extends Component {
         store.dispatch({type: 'GET_DATA', listQuiz: list_quiz, totalLevel: total_level})
         const data = JSON.stringify(list_quiz)
         await AsyncStorage.setItem('quizData1', data)
+        //get userInfor
+        var user = store.getState().user.user
+        if (typeof user == 'string'){
+          user = JSON.parse(user)
+        }
+        //Check data level of user in sever
+        var doneLevel = null
+        await app.database().ref('RunAway').child(_severKey).child('ranking').once('value').then(snapshot => {
+            snapshot.forEach((child) => {
+              // console.log(user.email)
+              if(child.val().user == user.email){
+                doneLevel = child.val().level
+              }
+            // console.log('done level in server: ' + doneLevel)
+          });
+      })
+      console.log( 'test:' +doneLevel + typeof doneLevel)
+      if(doneLevel != null){
+        // console.log(doneLevel)
+        await AsyncStorage.setItem('CURRENT_LEVEL1', doneLevel.toString())
+        let tests = await AsyncStorage.getItem('CURRENT_LEVEL1')
+        // console.log('same in sever: ' + tests)
+      }
+       
+      else {
+        // console.log('dont have in server')
+        AsyncStorage.setItem('CURRENT_LEVEL1', '0')
+        // console.log(user.email)
+        app.database().ref('RunAway').child(_severKey).child('ranking').push({
+          user: user.email,
+          level: 0
+        })
+      }
         // handle custom config
         var userCustom = {}
         for (i = 0; i<user_custom.length; i++){
@@ -133,10 +181,10 @@ class FlatListItem extends Component {
         let test = await  AsyncStorage.getItem(CustomConfig.ASYN_ALL_CONFIG)
         console.log("Test save: " + test)
         }
-      async handleLoad(_key){
+      async handleLoad(_key, _severKey){
           this.props.loadingUpdate()
         //   console.log(this.state.key)
-          await this.getData(_key)
+          await this.getData(_key, _severKey)
           console.log( await AsyncStorage.getItem('quizData1'))
           if(store.getState().quizData.listQuiz.length != 0){
             this.setState({loading: false})
@@ -150,7 +198,7 @@ class FlatListItem extends Component {
         this.props.typeRender == 'public' ?
         <TouchableOpacity  onPress={() =>
             // console.log(this.props.item.key)
-            this.handleLoad(this.props.item.data.key)    
+            this.handleLoad(this.props.item.data.key, this.props.item.key)    
             } >
             <View style = {{
             flex: 1,
@@ -188,7 +236,7 @@ class FlatListItem extends Component {
           <View style = {{flex: 5}}>
           <TouchableOpacity  onPress={() =>
             // console.log(this.props.item.key)
-            this.handleLoad(this.props.item.data.key)    
+            this.handleLoad(this.props.item.data.key, this.props.item.key)    
             } >
             <View style = {{
             flex: 1,
@@ -225,6 +273,20 @@ class FlatListItem extends Component {
                    this.handleDelete(this.props.item.key)    
             } >
                <Image source = {Images.trash}
+                style = {{
+                    width: 30,
+                    height: 30,
+                    marginVertical: 3,
+                    marginRight: 5,
+                    paddingRight: 5
+                }}></Image>
+               </TouchableOpacity>                
+            </View>
+            <View  style =  {styles.socialButton}>
+               <TouchableOpacity onPress={() =>
+                   this.handleView(this.props.item.key)    
+            } >
+               <Image source = {Images.social}
                 style = {{
                     width: 30,
                     height: 30,
@@ -444,16 +506,25 @@ const styles = StyleSheet.create({
     deleteButton: {
       flex: 1,
       backgroundColor: "#290136",
-      borderBottomRightRadius: 5,
-      borderTopRightRadius: 5,
-      // flexDirection: "row",
       marginVertical: 1,
       // marginLeft: 5,
-      marginRight: 10,
       alignItems: 'center',
       opacity: 2,
       justifyContent: 'center'
    },
+   socialButton: {
+    flex: 1,
+    backgroundColor: "#290136",
+    borderBottomRightRadius: 5,
+    borderTopRightRadius: 5,
+    // flexDirection: "row",
+    marginVertical: 1,
+    // marginLeft: 5,
+    marginRight: 10,
+    alignItems: 'center',
+    opacity: 2,
+    justifyContent: 'center'
+ },
     categoryText: {
         fontSize: 17,
         color: '#2e0f05',
@@ -496,9 +567,4 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
       },
-
-      exit: {
-        // flex: 1,
-        // marginLeft: width - 40
-    },
   });

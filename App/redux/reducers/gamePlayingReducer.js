@@ -6,12 +6,12 @@ let initalState = {
 const gamePlayingReducer = (state = initalState, action) => {
     if (action.type == 'RUNAWAY') 
     return {
-        gameName: 1,
+        gameName: 'RUNAWAY',
         quizKey: state.quizKey
       };
       if (action.type == 'PUNCH_MOUSE') 
       return {
-          gameName: 2,
+          gameName: 'PUNCH_MOUSE',
           quizKey: state.quizKey
         };
     if (action.type == 'SET_KEY') 

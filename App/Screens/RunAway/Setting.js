@@ -33,7 +33,7 @@ export default class Setting extends Component {
       key: ""
     }
   }
-  newData(){
+  async newData(){
     this.props.navigation.navigate('SelectData')
   }
   async resetLevel(){
@@ -46,6 +46,29 @@ export default class Setting extends Component {
     catch(exception) {
         Alert.alert("Reset level failed")
     }
+    // try {
+    //   let key = await store.getState().gamePlaying.quizKey
+    //   let user = await store.getState().user.user
+    //   if(typeof user == 'string')
+    //     user = JSON.parse(user)
+    //   console.log(user.email)
+    //   console.log(key)
+    //   let deleteKey = null
+    //   await app.database().ref('RunAway').child(key).child('ranking').once('value').then((snapshot) => {
+    //     // var publicQuiz = [];
+    //     snapshot.forEach((child) => {
+    //       if(child.val().user == user.email){
+    //         deleteKey = child.key
+    //       }
+    //     })        
+    // })
+    // if( deleteKey != null){
+    //   await app.database().ref('RunAway').child(key).child('ranking').
+    // }
+    // }
+    // catch(err) {
+
+    // }
   }
   async resetDefaultSetting(){
     store.dispatch({type: 'RESET_CUSTOM'})

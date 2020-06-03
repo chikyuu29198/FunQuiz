@@ -17,11 +17,18 @@ class Home extends Component {
     }
   }
 
-  runAway() {
+  async runAway() {
+    let key = await AsyncStorage.getItem('key1')
+    console.log('key ' + key)
+    store.dispatch({type: 'SET_KEY', key: key})
     store.dispatch({type: 'RUNAWAY'})
     this.props.navigation.navigate('RunAwayHome')
   }
-  punchMouse(){
+  async punchMouse(){
+    let key = await AsyncStorage.getItem('key2')
+    console.log('key ' + key)
+    store.dispatch({type: 'SET_KEY', key: key})
+    console.log("game: " +store.getState().gamePlaying)
     store.dispatch({type: 'PUNCH_MOUSE'})
     this.props.navigation.navigate('PunchMouseHome')
   }

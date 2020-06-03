@@ -18,6 +18,7 @@ import Setting from './Screens/RunAway/Setting'
 import PunchMouseSetting from './Screens/PunchMouse/PunchMouseSetting'
 import SelectData from './Screens/RunAway/SelectData'
 import PunchMouseSelectData from './Screens/PunchMouse/PunchMouseSelectData';
+import ViewAllUser from './Screens/ViewAllUser'
 
 const switchNavigator = createSwitchNavigator(
     {
@@ -36,7 +37,8 @@ const switchNavigator = createSwitchNavigator(
     Setting: Setting,
     PunchMouseSetting: PunchMouseSetting,
     SelectData: SelectData,
-    PunchMouseSelectData: PunchMouseSelectData
+    PunchMouseSelectData: PunchMouseSelectData,
+    ViewAllUser: ViewAllUser
     },
     {
         initialRouteName: "Loading",

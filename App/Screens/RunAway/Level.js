@@ -14,11 +14,16 @@ class FlatListItem extends Component {
         //     quizLevel: []
         // }
       }
-
+    async UNSAFE_componentWillMount(){
+        let _currentLevel = await AsyncStorage.getItem('CURRENT_LEVEL1')
+        // console.log(_currentLevel)
+        store.dispatch({type: 'SET_DONE_LEVEL', done_level: parseInt(_currentLevel)})
+        // console.log('after get: '+ )
+    }
     _onPress(level){
     //    let test = AsyncStorage.getItem('CURRENT_LEVEL1')
     //    console.log(test + "test Asyn in runaway Level.js")
-       console.log("done level getSate in Level: " + store.getState().level.doneLevel)
+    //    console.log("done level getSate in Level: " + store.getState().level.doneLevel)
        var data = store.getState().quizData.listQuiz
        var quizLevel = data.filter((x)=>x.level == level);
        store.dispatch({type: 'SET_CURRENT_LEVEL', current_level: level})

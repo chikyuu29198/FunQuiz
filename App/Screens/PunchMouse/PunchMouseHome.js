@@ -34,10 +34,9 @@ class PunchMouseHome extends Component {
     }
   }
   _onPress = async () => {
-    console.log("game: " +store.getState().gamePlaying)
     let data =  await AsyncStorage.getItem('quizData2')
     let userCustom = await AsyncStorage.getItem(CustomConfig.ASYN_ALL_CONFIG)
-    console.log(data)
+    // console.log(data)
     data = (data == null) ? [] : JSON.parse(data)
     console.log("test list custom in PunchHome" + data + ",lengh: " + data.length)
     userCustom = ( userCustom == null) ? [] : JSON.parse(userCustom)

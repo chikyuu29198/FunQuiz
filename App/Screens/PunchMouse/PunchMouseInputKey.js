@@ -39,13 +39,14 @@ export default class PunchMouseInputKey extends Component {
     }
   }
 
-  downloadImage = (linkDownload) => {
+  handleDownload = (key, linkDownload) => {
     var destination = linkDownload.replace(/\//g, "");
     console.log("replace: " + destination)
-    return this.download(linkDownload, `${RNFS.DocumentDirectoryPath}` + "/" +destination)
+    return this.download(key, linkDownload, `${RNFS.DocumentDirectoryPath}` + "/" +destination)
  
    };
-   download = async (target, destination) => {
+   download = async (key, target, destination) => {
+    // download = async (key ,target, destination) => {
      try{
        let options = {
          fromUrl: target,
@@ -60,7 +61,10 @@ export default class PunchMouseInputKey extends Component {
        console.log("options");
        const request = await RNFS.downloadFile(options).promise
        console.log(request)
-       store.dispatch({type: 'CONFIG_BACKGROUND', bg_uri: 'file://' + destination})
+      if(key.includes("background"))
+        store.dispatch({type: 'CONFIG_BACKGROUND', bg_uri: 'file://' + destination})
+       else if (key.includes("sound"))
+       store.dispatch({type: 'CONFIG_SOUND', sound_uri: 'file://' + destination})
      }catch(e){
        console.log("error")
        console.log(e)
@@ -76,21 +80,45 @@ export default class PunchMouseInputKey extends Component {
       }
     })
     let user = store.getState().user.user
-    // user = JSON.parse(user)
+    if(typeof user == 'string')
+    user = JSON.parse(user)
+    console.log(typeof user + 'type')
+    var key = null
     if(data_geted!=null){
-      app.database().ref('PunchMouse').push({
+     try{
+       key = app.database().ref('PunchMouse').push({
         author: user.email,
         name: _name,
         key: _key
-    }).then((data)=>{
-        //success callback
-        console.log('data ' , data)
-    }).catch((error)=>{
+    }).key}catch(error){
         //error callback
         console.log('error ' , error)
+    }
+    }
+    if (key!= null){
+      console.log('test key: '+ key)
+      await AsyncStorage.setItem('key2', key)
+      await store.dispatch({type: 'SET_KEY', key: key})
+      console.log(store.getState().gamePlaying.quizKey)
+      console.log('test email: ' + user.email)
+    var doneLevel = null
+      app.database().ref('PunchMouse').child(key).child('ranking').once('value').then(snapshot => {
+          snapshot.forEach((child) => {
+            if(child.val().user == user.email){
+              doneLevel = child.val().level
+            }
+          console.log(doneLevel)
+        });
     })
-
-    console.log(data_geted)
+    if(doneLevel != null)
+      AsyncStorage.setItem('CURRENT_LEVEL2', doneLevel.toString())
+    else{
+      AsyncStorage.setItem('CURRENT_LEVEL2', '0')
+      app.database().ref('PunchMouse').child(key).child('ranking').push({
+        user: user.email,
+        level: 0
+      })
+    }
     let nameOfKey = Object.keys(data_geted.data)
     var list_quiz = data_geted.data[nameOfKey[0]]
     var user_custom = data_geted.data[nameOfKey[1]]
@@ -103,20 +131,26 @@ export default class PunchMouseInputKey extends Component {
     // handle custom config
     var userCustom = {}
     for (i = 0; i<user_custom.length; i++){
+      console.log(typeof user_custom[i].key)
       let lowerKey = user_custom[i].key.toLowerCase()
       console.log(lowerKey)
       if (lowerKey.includes("background")){
         // let uriBg = await this.downloadImage(CustomConfig.ASYN_URI_BACKGROUND, user_custom[i].value)
-        let uriBg = await this.downloadImage(user_custom[i].value)
+        let uriBg = await this.handleDownload(lowerKey, user_custom[i].value)
         console.log(uriBg)
         userCustom[CustomConfig.ASYN_URI_BACKGROUND] = uriBg
        
       }
-      else {
+      else if (lowerKey.includes("button color")){
         // AsyncStorage.setItem(CustomConfig.ASYN_BUTTON_COLOR, user_custom[i].value)
         store.dispatch({type: 'CONFIG_BTN_COLOR', btn_color: user_custom[i].value})
         console.log("test butoon: " + user_custom[i].value)
         userCustom[CustomConfig.ASYN_BUTTON_COLOR] = user_custom[i].value
+      }
+      else if(lowerKey.includes("sound")){
+        let uriBg = await this.handleDownload(lowerKey, user_custom[i].value)
+        console.log(uriBg)
+        userCustom[CustomConfig.ASYN_SOUND] = uriBg
       }
     }
     AsyncStorage.setItem(CustomConfig.ASYN_ALL_CONFIG, JSON.stringify(userCustom))
@@ -128,19 +162,12 @@ export default class PunchMouseInputKey extends Component {
           loading: true
       })
       console.log(this.state.key)
-      await this.getData(this.state.key,  this.state.name)
+      await this.getData(this.state.key, this.state.name)
       console.log( await AsyncStorage.getItem('quizData2'))
       if(store.getState().quizData.listQuiz.length != 0){
         this.setState({loading: false})
         this.props.navigation.navigate('PunchMouseLevel')
       }
-
-      // await this.getData(this.state.key, this.state.name)
-      // console.log( await AsyncStorage.getItem('quizData1'))
-      // if(store.getState().quizData.listQuiz.length != 0){
-      //   this.setState({loading: false})
-      //   this.props.navigation.navigate('Level')
-      // }
   }
   exitPress(){
     Alert.alert(

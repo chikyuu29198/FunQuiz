@@ -37,6 +37,7 @@ class RunAwayHome extends Component {
     }
   }
   _onPress = async () => {
+    console.log('key: ' + store.getState().gamePlaying.quizKey)
     console.log("game: " +store.getState().gamePlaying)
     let data =  await AsyncStorage.getItem('quizData1')
     let userCustom = await AsyncStorage.getItem(CustomConfig.ASYN_ALL_CONFIG)

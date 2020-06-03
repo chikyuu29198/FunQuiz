@@ -1,35 +1,42 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import {
+  AppRegistry,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Dimensions,
+  TextInput,
+  Button,
+  TouchableOpacity,
+  ImageBackground,
+  Keyboard,
+  TouchableWithoutFeedback,
+  Alert,
+ 
+} from 'react-native';
 import {app} from '../firebaseConfig'
-import store from '../redux/store';
 
-class Test extends Component {
-  constructor(props){
-    super(props)
-    // this.setItem = app.FirebaseDatabase.getInstance().getReference();
-  }
-  async _onPress(){      
-    
-    //content://
 
-    let backgroundSound = new Sound(require('../../Assets/sounds/custombgsound.mp3'),
-    (error, sound) => {
-    if (error) {
-      console.log("Can not load background sound")
-      return;
-    }
-    backgroundSound.setNumberOfLoops(-1)
+export default class SignupScreen extends Component {
+  clicked(){
+    console.log('a')
+    app.database().ref('RunAway').child('-M8siYs38_2xreSqPMvC').child('ranking').push({
+      user: "chi",
+      level: 9
     })
-    return (
+  }
+  render() {
+    return (     
       <View >
-        <TouchableOpacity onPress={() => this._onPress()}>
-            <View style = {{width: 60, height: 60, backgroundColor: 'green'}}><Text>Test</Text></View>
-            
-        
-        </TouchableOpacity>
+       <TouchableOpacity onPress = {this.clicked()}> 
+         <Text>nhấn</Text>
+       </TouchableOpacity>
       </View>
-      
     );
   }
 }
-export default Test; 
+
+const styles = StyleSheet.create({
+  
+});

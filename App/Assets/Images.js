@@ -44,7 +44,8 @@ export default Images = {
     sound: require('./images/sound.png'),
     unSound: require('./images/unSound.png'),
     punched: require('./images/broke.png'),
-    trash: require('./images/trash.png')
+    trash: require('./images/trash.png'),
+    social: require('./images/social.png')
 
     // mouse11: require('./images/broke.png'), 
 }

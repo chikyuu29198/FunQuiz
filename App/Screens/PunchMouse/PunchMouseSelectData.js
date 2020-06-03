@@ -133,6 +133,22 @@ class FlatListItem extends Component {
         let test = await  AsyncStorage.getItem(CustomConfig.ASYN_ALL_CONFIG)
         console.log("Test save: " + test)
         }
+        async handleView(_key){
+          var userList = [];
+            await app.database().ref('PunchMouse').child(_key).child('ranking').once('value').then((snapshot) => {
+                // var publicQuiz = [];
+                snapshot.forEach((child) => {
+                  userList.push({
+                      name: child.val().user,
+                      level: child.val().level
+                    })
+                })        
+            })
+           console.log(userList)
+           this.props.navigation.navigate('ViewAllUser', {
+            data: userList})
+          }
+
       async handleLoad(_key){
           this.props.loadingUpdate()
         //   console.log(this.state.key)
@@ -225,6 +241,20 @@ class FlatListItem extends Component {
                    this.handleDelete(this.props.item.key)    
             } >
                <Image source = {Images.trash}
+                style = {{
+                    width: 30,
+                    height: 30,
+                    marginVertical: 3,
+                    marginRight: 5,
+                    paddingRight: 5
+                }}></Image>
+               </TouchableOpacity>                
+            </View>
+            <View  style =  {styles.socialButton}>
+               <TouchableOpacity onPress={() =>
+                   this.handleView(this.props.item.key)    
+            } >
+               <Image source = {Images.social}
                 style = {{
                     width: 30,
                     height: 30,
@@ -402,7 +432,7 @@ export default class PunchMouseSelectData extends Component {
       height: 70,
   }} 
     resizeMode="stretch"
-    source={Images.bird}
+    source={Images.punchMouse_icon}
   />
   </View>
   <View style = {{flex: 1, justifyContent: 'flex-start'}}>
@@ -446,19 +476,6 @@ const styles = StyleSheet.create({
        alignItems: 'flex-end', 
        marginRight: 10
     },
-    deleteButton: {
-      flex: 1,
-      backgroundColor: "#290136",
-      borderBottomRightRadius: 5,
-      borderTopRightRadius: 5,
-      // flexDirection: "row",
-      marginVertical: 1,
-      // marginLeft: 5,
-      marginRight: 10,
-      alignItems: 'center',
-      opacity: 2,
-      justifyContent: 'center'
-   },
     categoryText: {
         fontSize: 17,
         color: '#2e0f05',
@@ -501,6 +518,28 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
       },
+      deleteButton: {
+        flex: 1,
+        backgroundColor: "#290136",
+        marginVertical: 1,
+        // marginLeft: 5,
+        alignItems: 'center',
+        opacity: 2,
+        justifyContent: 'center'
+     },
+     socialButton: {
+      flex: 1,
+      backgroundColor: "#290136",
+      borderBottomRightRadius: 5,
+      borderTopRightRadius: 5,
+      // flexDirection: "row",
+      marginVertical: 1,
+      // marginLeft: 5,
+      marginRight: 10,
+      alignItems: 'center',
+      opacity: 2,
+      justifyContent: 'center'
+   },
 
       exit: {
         // flex: 1,

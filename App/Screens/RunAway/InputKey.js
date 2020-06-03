@@ -21,6 +21,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import store from '../../redux/store'
 import CustomConfig from '../../Components/RunAway/CustomConfig'
 import {app} from '../../firebaseConfig'
+import { use } from 'matter-js';
 
 var RNFS = require('react-native-fs');
 
@@ -38,19 +39,10 @@ export default class InputKey extends Component {
 
     }
   }
-  
-  // setCustomize = async (key, value) => {
-  //   setCustomize = async ( value) => {
-  //   AsyncStorage.setItem(key, value)
-  // }
 
   handleDownload = (key, linkDownload) => {
-    // downloadImage = (key, linkDownload) => {
-    // download(this.props.image.url, '_Subiz/image_' + this.props.image.name);
-    //'https://i.pinimg.com/474x/c8/a9/9e/c8a99eb00f3269dc7673400b65f59e62--games-images-for-kids.jpg'
     var destination = linkDownload.replace(/\//g, "");
     console.log("replace: " + destination)
-    // return this.download(key, linkDownload, `${RNFS.DocumentDirectoryPath}` + "/" +destination)
     return this.download(key, linkDownload, `${RNFS.DocumentDirectoryPath}` + "/" +destination)
  
    };
@@ -92,7 +84,7 @@ export default class InputKey extends Component {
     if(typeof user == 'string')
     user = JSON.parse(user)
     console.log(typeof user + 'type')
-    var key
+    var key = null
     if(data_geted!=null){
      try{
        key = app.database().ref('RunAway').push({
@@ -104,10 +96,37 @@ export default class InputKey extends Component {
         console.log('error ' , error)
     }
     }
-    console.log('test key: '+ key)
-    await AsyncStorage.setItem('key1', key)
-    await store.dispatch({type: 'SET_KEY', key: key})
-    console.log(store.getState().gamePlaying.quizKey)
+    if (key!= null){
+      console.log('test key: '+ key)
+      await AsyncStorage.setItem('key1', key)
+      await store.dispatch({type: 'SET_KEY', key: key})
+      console.log(store.getState().gamePlaying.quizKey)
+      // let key = user.email.slice(0, )
+      // let setValue = {[user.email] : 0}
+      // // setValue[eval(user.email) ] = 0
+      // console.log(setValue)
+      // app.database().ref('RunAway').child(key).child('ranking').push({
+      //   user: user.email,
+      //   level: 0
+      // })
+    var doneLevel = null
+      app.database().ref('RunAway').child(key).child('ranking').once('value').then(snapshot => {
+          snapshot.forEach((child) => {
+            if(child.val().user == user.email){
+              doneLevel = child.val().level
+            }
+          console.log(doneLevel)
+        });
+    })
+    if(doneLevel != null)
+      AsyncStorage.setItem('CURRENT_LEVEL1', doneLevel.toString())
+    else{
+      AsyncStorage.setItem('CURRENT_LEVEL1', '0')
+      app.database().ref('RunAway').child(key).child('ranking').push({
+        user: user.email,
+        level: 0
+      })
+    }
     let nameOfKey = Object.keys(data_geted.data)
     var list_quiz = data_geted.data[nameOfKey[0]]
     var user_custom = data_geted.data[nameOfKey[1]]
@@ -145,7 +164,7 @@ export default class InputKey extends Component {
     AsyncStorage.setItem(CustomConfig.ASYN_ALL_CONFIG, JSON.stringify(userCustom))
     let test = await  AsyncStorage.getItem(CustomConfig.ASYN_ALL_CONFIG)
     console.log("Test save: " + test)
-    }
+    }}
   async handleLoad(){
       this.setState({
           loading: true
