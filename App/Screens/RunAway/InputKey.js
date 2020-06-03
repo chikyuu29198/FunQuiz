@@ -169,13 +169,22 @@ export default class InputKey extends Component {
       this.setState({
           loading: true
       })
-      console.log(this.state.key)
-      await this.getData(this.state.key, this.state.name)
-      console.log( await AsyncStorage.getItem('quizData1'))
-      if(store.getState().quizData.listQuiz.length != 0){
-        this.setState({loading: false})
-        this.props.navigation.navigate('Level')
-      }
+      await store.dispatch({type: 'RESET_DATA'})
+      this.getData(this.state.key, this.state.name)
+      // console.log( await AsyncStorage.getItem('quizData1'))
+      setTimeout(function(){
+        if(store.getState().quizData.listQuiz.length != 0){
+          this.setState({loading: false})
+          this.props.navigation.navigate('Level')
+        }
+        else{
+          this.setState({
+            loading: false
+          })
+          Alert.alert('Loading failed! Please check and try again!')
+        }
+       }.bind(this), 15000);
+      
   }
   exitPress(){
     Alert.alert(

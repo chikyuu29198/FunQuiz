@@ -9,7 +9,7 @@ import store from '../../redux/store';
 import Sound from 'react-native-sound';
 Sound.setCategory('Ambient')
 
-let backgroundSound = new Sound(require('../../Assets/sounds/custombgsound.wav'),
+let backgroundSound = new Sound(require('../../Assets/sounds/custombgsound.wav'), null,
     (error, sound) => {
     if (error) {
       console.log("Can not load background sound")
@@ -69,32 +69,10 @@ class SettingBar extends Component {
     }
 
     UNSAFE_componentWillMount(){
-    //   if(store.getState().userCustom.sound != null){
-    //     backgroundSound = new Sound(store.getState().userCustom.sound,
-    //         (error, sound) => {
-    //         if (error) {
-    //           console.log("Can not load background sound")
-    //           return;
-    //         }
-    //         })
-    //   }
-    //   else {
-    //     backgroundSound = new Sound(require('../../Assets/sounds/backgroundSound.mp3'),
-    //       (error, sound) => {
-    //       if (error) {
-    //         console.log("Can not load background sound")
-    //         return;
-    //       }
-    // })
-    //   }
-    //   backgroundSound.setNumberOfLoops(-1)
+   
     console.log("test sound in state: " + store.getState().userCustom.sound)
     let soundPath = store.getState().userCustom.sound;
-    soundPath = soundPath.slice(7)
-    console.log(soundPath)
-    let add = 'content://'
-    let soundPathCustom = add.concat(soundPath)
-    let backgroundSound1 = new Sound(soundPathCustom,
+    backgroundSound = new Sound(soundPath,null,
         (error, sound) => {
         console.log(sound)
         if (error) {
@@ -103,7 +81,7 @@ class SettingBar extends Component {
         }
         else{
           console.log(backgroundSound1)
-          backgroundSound1.play()
+          // backgroundSound1.play()
         }
         })
       if(this.state.isMute == false)

@@ -34,7 +34,29 @@ class GameWorld extends Component {
       listQuiz: this.props.navigation.state.params.data
     }
   }
-  
+  async componentWillUnmount(){
+    //Set level at server
+    let key = store.getState().gamePlaying.quizKey
+    let userKey = null
+    let doneLevel = store.getState().level.doneLevel
+    let user = await store.getState().user.user
+      if (typeof user == 'string')  user = JSON.parse(user)
+    console.log(key + ' ' + userKey + ' ' + ' ' + doneLevel)
+    await app.database().ref('RunAway').child(key).child('ranking').once('value').then(snapshot => {
+      snapshot.forEach((child) => {
+        if(child.val().user == user.email){
+          userKey = child.key
+        }
+    });
+    })
+    console.log(userKey)
+    if(userKey != null){
+      await app.database().ref('RunAway').child(key).child('ranking').child(userKey).update({
+        level: doneLevel
+      })
+    }
+
+  }
 
   setupWorld = () => {
     let engine = Matter.Engine.create({ enableSleeping: false });
