@@ -214,7 +214,7 @@ class FlatListItem extends Component {
               this.props.loadingUpdate()
               Alert.alert('Loading failed! Please check and try again!')
             }
-           }.bind(this), 15000);
+           }.bind(this), 20000);
       }
     render(){
         return(

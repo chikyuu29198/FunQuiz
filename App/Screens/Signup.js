@@ -44,6 +44,8 @@ export default class SignupScreen extends Component {
                 .then(() => {
                   console.log("successful")
                   Alert.alert("Sign up successful!")
+                  this.props.navigation.navigate('Login')
+                  console.log('hhhh')
                 })
                 .catch(function(error){
                   console.log(error.message)

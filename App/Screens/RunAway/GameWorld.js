@@ -36,6 +36,8 @@ class GameWorld extends Component {
   }
   async componentWillUnmount(){
     //Set level at server
+    store.dispatch({type: 'ENABLE_ANSWER'})
+    store.dispatch({type: 'RESET'})
     let key = store.getState().gamePlaying.quizKey
     let userKey = null
     let doneLevel = store.getState().level.doneLevel

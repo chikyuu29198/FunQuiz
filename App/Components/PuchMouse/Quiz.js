@@ -83,7 +83,7 @@ class Quiz extends Component {
         });  
         Animated.timing(this.anim,{  
              toValue: 100,  
-             duration: 5000,  
+             duration: 10000,  
         }).start();  
     }  
 

@@ -27,20 +27,20 @@ class SettingBar extends Component {
       }
     changeSoundIcon(){
       //TODO: can load file
-      console.log(backgroundSound)
-         console.log("test custom sound: " + store.getState().userCustom.sound)
-        if (store.getState().userCustom.sound != null){
-          backgroundSound = new Sound(store.getState().userCustom.sound,
-            (error, sound) => {
-            if (error) {
-              console.log("Can not load background sound")
-              return;
-            }
-            backgroundSound.setNumberOfLoops(-1)
-            })
-        }
-        // backgroundSound1.play()
-        console.log(backgroundSound)
+      // console.log(backgroundSound)
+      //    console.log("test custom sound: " + store.getState().userCustom.sound)
+      //   if (store.getState().userCustom.sound != null){
+      //     backgroundSound = new Sound(store.getState().userCustom.sound,
+      //       (error, sound) => {
+      //       if (error) {
+      //         console.log("Can not load background sound")
+      //         return;
+      //       }
+      //       backgroundSound.setNumberOfLoops(-1)
+      //       })
+      //   }
+      //   // backgroundSound1.play()
+      //   console.log(backgroundSound)
       this.setState({
           isMute: !this.state.isMute
       })
@@ -70,20 +70,20 @@ class SettingBar extends Component {
 
     UNSAFE_componentWillMount(){
    
-    console.log("test sound in state: " + store.getState().userCustom.sound)
-    let soundPath = store.getState().userCustom.sound;
-    backgroundSound = new Sound(soundPath,null,
-        (error, sound) => {
-        console.log(sound)
-        if (error) {
-          console.log("Can not load background sound")
-          // return;
-        }
-        else{
-          console.log(backgroundSound1)
-          // backgroundSound1.play()
-        }
-        })
+    // console.log("test sound in state: " + store.getState().userCustom.sound)
+    // let soundPath = store.getState().userCustom.sound;
+    // backgroundSound = new Sound(soundPath,null,
+    //     (error, sound) => {
+    //     console.log(sound)
+    //     if (error) {
+    //       console.log("Can not load background sound")
+    //       // return;
+    //     }
+    //     else{
+    //       console.log(backgroundSound1)
+    //       // backgroundSound1.play()
+    //     }
+    //     })
       if(this.state.isMute == false)
       backgroundSound.play();
       // backgroundSound.stop();

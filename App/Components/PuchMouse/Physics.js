@@ -29,6 +29,9 @@ const Physics = (entities, { touches, time, dispatch }) => {
     let world = engine.world;
     tick += 1;
     let soundStatus = store.getState().soundStatus;
+    let xPosition = Math.floor(Math.random() * (Constants.MAX_WIDTH - 0 + 1) ) + 0;
+    let yPositon = - Math.floor(Math.random() * (Constants.MAX_HEIGHT - 0 + 1) ) + 0;
+
     if (porcupineTouch!=null){
         if(entities[porcupineTouch].pose == 1){
             Matter.Body.setPosition( entities[porcupineTouch].body, { x: 10*Constants.MAX_WIDTH, 
@@ -44,11 +47,14 @@ const Physics = (entities, { touches, time, dispatch }) => {
     Object.keys(entities).forEach(key => {
         if (key.indexOf("mouse") === 0 || key.indexOf("porcupine") === 0) {
             if(entities[key].pose == 6){
-                 Matter.Body.setPosition( entities[key].body, { x: 10*Constants.MAX_WIDTH, 
-                                                                 y: 10*Constants.MAX_HEIGHT})
+                console.log('set new position')
+                console.log(key)
+                 Matter.Body.setPosition( entities[key].body, { x: xPosition, y: yPositon})
+                 console.log(entities[key].body.position.y + 'và' + entities[key].body.position.y)
+                 entities[key].pose = 1
             }
-            if (entities[key].body.position.x != 10*Constants.MAX_WIDTH && entities[key].body.position.y < Constants.MAX_HEIGHT - Constants.CAKE_SIZE - entities[key].size){
-                let _x = Math.floor(Math.random() * (5 - 2 + 1) ) + 2
+            if (entities[key].body.position.y < Constants.MAX_HEIGHT - Constants.CAKE_SIZE - entities[key].size){
+                let _x = Math.floor(Math.random() * (3 - 2 + 1) ) + 2
                 let direction = Math.floor(Math.random() * (2 - 1 + 1) ) + 1
                 if (direction == 1){           
                     Matter.Body.rotate(entities[key].body, Math.PI)
@@ -61,10 +67,10 @@ const Physics = (entities, { touches, time, dispatch }) => {
                 }
                 if(entities[key].body.position.y > Constants.MAX_HEIGHT/5*3){
                     if (entities[key].body.position.x > Constants.MAX_WIDTH/2){
-                        Matter.Body.translate( entities[key].body, {x: - 10, y: + entities[key].speed});  
+                        Matter.Body.translate( entities[key].body, {x: - 6, y: + entities[key].speed});  
                     }
                     else {
-                        Matter.Body.translate( entities[key].body, {x: + 10, y: + entities[key].speed});
+                        Matter.Body.translate( entities[key].body, {x: + 6, y: + entities[key].speed});
                     }
                 }
                 let bounds = entities[key].body.bounds;
@@ -100,7 +106,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
                     }}
                 }
             }
-            else if (entities[key].body.position.x != 10*Constants.MAX_WIDTH && entities[key].body.position.y >= Constants.MAX_HEIGHT - Constants.CAKE_SIZE -entities[key].size){
+            else if (entities[key].body.position.y >= Constants.MAX_HEIGHT - Constants.CAKE_SIZE -entities[key].size){
                 if( entities[key].body.position.x >= Constants.MAX_WIDTH/2 - Constants.CAKE_SIZE - entities[key].size &&  entities[key].body.position.x <= Constants.MAX_WIDTH/2 + Constants.CAKE_SIZE + entities[key].size){
                 Matter.Body.setPosition(entities[key].body, {x: Constants.MAX_WIDTH/2 - entities[key].size/2,
                                                              y: Constants.MAX_HEIGHT - Constants.CAKE_SIZE - entities[key].size});
@@ -108,10 +114,10 @@ const Physics = (entities, { touches, time, dispatch }) => {
             }
                 else {
                     if(entities[key].body.position.x > Constants.MAX_HEIGHT/2 - Constants.CAKE_SIZE - entities[key].size){
-                        Matter.Body.translate( entities[key].body, {x: - 10, y: 0});
+                        Matter.Body.translate( entities[key].body, {x: - 6, y: 0});
                     }
                     else {
-                        Matter.Body.translate( entities[key].body, {x: + 10, y: 0});
+                        Matter.Body.translate( entities[key].body, {x: + 6, y: 0});
                     }
                 }
                 if (poseOfCake == 4){
@@ -139,7 +145,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
                                
                                 dispatch({ type: "score"}); 
                             }
-                        else {
+                            else {
                             porcupineTouch = key
                             if ( soundStatus == true ){
                                 mouseSound.play();

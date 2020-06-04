@@ -68,17 +68,17 @@ class SettingBar extends Component {
     return (
       <View style={styles.settingBar}>
         <ImageButton  
-          width={20} 
-          height={20} 
+          width={30} 
+          height={30} 
           text= "" 
           onPress={this.changeSoundIcon.bind(this)}
           source={ this.state.isMute ?
                     Images.mute : 
                     Images.speaker}/>
         <ImageButton
-          width = {20}
-          height = {20}
-          paddingRight = {0}
+          width = {30}
+          height = {30}
+          paddingLeft = {20}
           text = ""
           onPress={this.exitPress.bind(this)}
           source = { Images.exit}
@@ -91,14 +91,14 @@ class SettingBar extends Component {
 const styles = StyleSheet.create({
     settingBar: {
       position: "absolute",
-      top: 5,
+      top: 8,
       width: 50,
       height: 20,
       left: Constants.MAX_WIDTH -60,
       alignContent: 'center',
       justifyContent: 'center',
-      backgroundColor: 'black',
-      opacity: 0.5,
+      // backgroundColor: 'black',
+      // opacity: 0.5,
       flexDirection: 'row'
 
       

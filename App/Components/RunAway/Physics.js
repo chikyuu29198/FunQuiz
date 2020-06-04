@@ -33,7 +33,7 @@ const Physics = (entities, { touches, time, dispatch }) => {
             timeOut = true;
         }
         else {
-            Matter.Body.translate(bird, {x: -3, y: 0})            
+            Matter.Body.translate(bird, {x: -1, y: 0})            
         }
     }
     if (timeOut == true && _isCorrect == null){

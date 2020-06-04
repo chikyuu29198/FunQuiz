@@ -195,7 +195,7 @@ export default class InputKey extends Component {
           })
           Alert.alert('Loading failed! Please check and try again!')
         }
-       }.bind(this), 15000);
+       }.bind(this), 20000);
     }
     else{
       Alert.alert(

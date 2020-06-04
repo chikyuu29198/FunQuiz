@@ -32,9 +32,11 @@ class PunchMouseGameWorld extends Component {
     this.updateRuningStatus = this.updateRuningStatus.bind(this);
     this.state = {
       running: true,
-      score: 0,
+      quizGeted: 0,
+      mousePunched: 0,
       gameOver: false,
       target: 0,
+      targetQuiz: 0,
       listQuiz: this.props.navigation.state.params.data
       // pausing: store.getState().pausing
     }
@@ -46,7 +48,8 @@ class PunchMouseGameWorld extends Component {
     let numberOfQuiz = this.state.listQuiz.length;
     let _target =numberOfQuiz*10 + store.getState().level.currentLevel*5 + 40
     this.setState({
-      target: _target
+      target: _target,
+      targetQuiz: numberOfQuiz
     })
   }
   async componentWillUnmount(){
@@ -78,14 +81,14 @@ class PunchMouseGameWorld extends Component {
   }
   setupWorld() {
     let numberOfQuiz = this.state.listQuiz.length;
-    let numberOfMouse = store.getState().level.currentLevel*5 + 40
+    // let numberOfMouse = store.getState().level.currentLevel*5 + 40
     console.log(numberOfQuiz + "test numberOfQuiz")
     let engine = Matter.Engine.create({ enableSleeping: false });
     let world = engine.world;
     let mouse_list = []
-    for (i = 0; i<numberOfMouse; i++){
-      let x = Math.floor(Math.random() * (Constants.MAX_WIDTH - 0 + 1) ) + 0;
-      let y = - Math.floor(Math.random() * (Constants.MAX_HEIGHT*2 - 0 + 1) ) + 0;
+    for (i = 0; i< 20; i++){
+      let x = Math.floor(Math.random() * (Constants.MAX_WIDTH*1.5 + Constants.MAX_WIDTH*1.5  + 1) ) -Constants.MAX_WIDTH*1.5; 
+      let y = - Math.floor(Math.random() * (Constants.MAX_HEIGHT - 0 + 1) ) + 0;
       let width = Math.floor(Math.random() * (70 - 50 + 1) ) + 50;
       var mouse = Matter.Bodies.rectangle( x, 
                                            y,
@@ -104,7 +107,7 @@ class PunchMouseGameWorld extends Component {
     let porcupine_list = []
     for (i = 0; i<numberOfQuiz; i++){
       let x = Math.floor(Math.random() * (Constants.MAX_WIDTH - 0 + 1) ) + 0;
-      let y = -(Math.floor(Math.random() * (Constants.MAX_HEIGHT*2 - 0 + 1) ) + Constants.MAX_HEIGHT/2);
+      let y = -(Math.floor(Math.random() * (Constants.MAX_HEIGHT*1.5 - 0 + 1) ) + Constants.MAX_HEIGHT/2);
       let width = 60;
       var porcupine = Matter.Bodies.rectangle( x, 
                                             y,
@@ -121,19 +124,19 @@ class PunchMouseGameWorld extends Component {
     // console.log(mouse_list)
     Matter.World.add(world, entity_list);
     let game_world = {physics: { engine: engine, world: world},
-    cake: { body: cake, pose: 1, size: [Constants.BIRD_SIZE, Constants.BIRD_SIZE], renderer: Cake},
+    cake: { body: cake, pose: 1, size: [Constants.CAKE_SIZE, Constants.CAKE_SIZE], renderer: Cake},
   }
     for (i = 0; i<mouse_list.length; i++){
       let _pose = Math.floor(Math.random() * (3 - 1 + 1) ) + 1
       let key = 'mouse' + i;
       let _size = Math.floor(Math.random() * (60 - 40 + 1) ) + 40
       let _color = Math.floor(Math.random() * (3 - 1 + 1) ) + 1
-      let _speed = Math.floor(Math.random() * (9 - 5 + 1) ) + 5
+      let _speed = Math.floor(Math.random() * (8 - 5 + 1) ) + 5
       game_world[key] = {body: mouse_list[i], isBroke: false, pose: _pose, size: _size, color: _color, speed: _speed, renderer: Mouse}
     }
     for (i = 0; i<porcupine_list.length; i++){
       let key = 'porcupine' + i;
-      game_world[key] = {body: porcupine_list[i], size: 60, pose: 0, speed: 9, renderer: Porcupine}
+      game_world[key] = {body: porcupine_list[i], size: 60, pose: 0, speed: 5, renderer: Porcupine}
     }
     return game_world
   }
@@ -146,9 +149,9 @@ class PunchMouseGameWorld extends Component {
       });
     else if (ev.type === "score"){
     this.setState({
-      score: this.state.score + 1
+      mousePunched: this.state.mousePunched + 1
     })
-      if(this.state.score == this.state.target){
+      if(this.state.quizGeted == this.state.targetQuiz && this.state.mousePunched == this.state.target){
        // store.dispatch({type: 'UPDATE_LEVEL'})
         let doneLevel = store.getState().level.doneLevel
         let current = store.getState().level.currentLevel
@@ -181,9 +184,9 @@ class PunchMouseGameWorld extends Component {
   plusScore = () =>{
     console.log(this.state.score + " Score test")
     this.setState({
-      score: this.state.score + 10
+      quizGeted: this.state.quizGeted + 1
     })
-    if(this.state.score == this.state.target){
+    if(this.state.quizGeted == this.state.targetQuiz && this.state.mousePunched == this.state.target){
       // store.dispatch({type: 'LEVEL_UP'})
       let doneLevel = store.getState().level.doneLevel
       let current = store.getState().level.currentLevel
@@ -202,7 +205,8 @@ class PunchMouseGameWorld extends Component {
     this.GameEngine.swap(this.setupWorld());
     this.setState({
         running: true,
-        score: 0,
+        quizGeted: 0,
+        mousePunched: 0,
         gameOver: false,
     });
   };
@@ -222,9 +226,11 @@ class PunchMouseGameWorld extends Component {
     this.GameEngine.swap(this.setupWorld());
     this.setState({
         running: true,
-        score: 0,
+        quizGeted: 0,
+        mousePunched: 0,
         gameOver: false,
         target: quizLevel.length*10 + current_level*5 + 40,
+        targetQuiz: quizLevel.length,
         listQuiz: quizLevel
     });
   }
@@ -249,9 +255,50 @@ class PunchMouseGameWorld extends Component {
             status = {this.status}
             >
             <StatusBar hidden={true} />
-          </GameEngine>   
-          < Text style = { styles.score }> {this.state.score} </Text>
+          </GameEngine> 
+          <View style = {styles.topFloor}>
           < SettingBar navigation = {this.props.navigation} />
+          <View style = {styles.targetFrame}>
+            <View style = {styles.target}>
+              <Image
+                  style={{
+                      position: 'absolute',
+                      top:2,
+                      left: 5,
+                      width: 35,
+                      height: 35,
+                  }} 
+                  // resizeMode="stretch"
+                  source={Images.mouse11}
+              />
+              <View style = {{flexDirection: 'row', top: 2}}>
+                <Text style = {{marginLeft: 45, fontSize: 20, color: '#4f0210', fontWeight: 'bold'}}> {this.state.mousePunched} </Text>
+                <Text style = {styles.textTarget}>/</Text>
+                <Text style = {styles.textTarget}> {this.state.target} </Text>
+              </View>
+              
+            </View>
+            <View>
+               <Image
+                  style={{
+                      position: 'absolute',
+                      top: -2,
+                      left: 8,
+                      width: 43,
+                      height: 43,
+                  }} 
+                  // resizeMode="stretch"
+                  source={Images.porcupine}
+              />
+               <View style = {{flexDirection: 'row', top: 2}}> 
+                <Text style = {{marginLeft: 45, fontSize: 20, color: '#4f0210', fontWeight: 'bold'}}> {this.state.quizGeted} </Text>
+                <Text style = {styles.textTarget}>/</Text>
+                <Text style = {styles.textTarget}> {this.state.targetQuiz} </Text>
+              </View>
+            </View>
+          </View>
+          </View>
+         
         </View>
       {
         this.state.gameOver == false && this.state.running == false ?   
@@ -266,8 +313,8 @@ class PunchMouseGameWorld extends Component {
               <View style = {styles.contentComponent}>
                 <View style = {{alignItems: 'center'}}> 
                   <Text style={styles.gameOverText}>Game Over</Text>
-                  <Text style = {styles.contentText} > {'Score:    ' + this.state.score} </Text>
-                  <Text style = {styles.contentText} > {'Level:    ' + store.getState().level.currentLevel} </Text>
+                  <Text style = {styles.contentText} > {'Mouse punched:    ' + this.state.mousePunched + '/' + this.state.target} </Text>
+                  <Text style = {styles.contentText} > {'Quiz correct:    ' + this.state.quizGeted + '/' + this.state.targetQuiz} </Text>
             
                 </View>
               
@@ -290,13 +337,14 @@ class PunchMouseGameWorld extends Component {
           null
       }
       {
-        this.state.target == this.state.score ?
+        this.state.target <= this.state.mousePunched && this.state.quizGeted <= this.state.targetQuiz?
           <TouchableOpacity style={styles.fullScreenButton}>
             <View style={styles.fullScreen}>
               <View style = {styles.contentComponent}>
                 <View style = {{alignItems: 'center'}}> 
                   <Text style={styles.gameOverText}> { store.getState().level.currentLevel < store.getState().quizData.totalLevel ? 'Level Up' : 'Completed!' }</Text>
-                  <Text style = {styles.contentText} > {'Score:    ' + this.state.score} </Text>
+                  <Text style = {styles.contentText} > {'Mouse punched:    ' + this.state.mousePunched + '/' + this.state.target} </Text>
+                  <Text style = {styles.contentText} > {'Quiz correct:    ' + this.state.quizGeted + '/' + this.state.targetQuiz} </Text>
                   <Text style = {styles.contentText} > {'Level:    ' + store.getState().level.currentLevel} </Text>
             
                 </View>
@@ -373,26 +421,14 @@ const styles = StyleSheet.create({
     right: 0,
     flex: 1
   },
-  score: {
-    position: "absolute",
-    top: 5,
-    left: Constants.MAX_WIDTH/2 - 15,
-    fontSize: 40,
-    color: '#DC7C9D',
+  textTarget: {
+    // position: "absolute",
+    // top: 5,
+    // left: Constants.MAX_WIDTH/2 - 15,
+    fontSize: 20,
+    color: '#4f0210',
     fontFamily: 'lucida grande',
-    fontWeight: "bold",
-    textShadowColor: '#444444',
-    textShadowRadius: 10,
-    textShadowOffset: { width: 2, height: 2}
-  },
-  settingBar: {
-    position: "absolute",
-    top: 5,
-    width: 50,
-    height: 20,
-    left: Constants.MAX_WIDTH - 50,
-    backgroundColor: 'black',
-    opacity: 0.8
+    fontWeight:'bold'
   },
   functionButton: {
     flexDirection: 'row',
@@ -435,6 +471,27 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontWeight: "bold"
+  },
+  topFloor: {
+    top: 0,
+    position: "absolute",
+    width: Constants.MAX_WIDTH,
+    height: 50,
+    backgroundColor: '#5a87bf',
+    justifyContent: "center",
+  },
+  targetFrame: {
+    flexDirection: 'row',
+    position: "absolute",
+    top: 8,
+    left: 5,
+  },
+  target: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginBottom: 10
+    // marginHorizontal: '10'
   }
   
 });
