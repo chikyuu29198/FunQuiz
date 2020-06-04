@@ -149,9 +149,12 @@ class PunchMouseGameWorld extends Component {
       score: this.state.score + 1
     })
       if(this.state.score == this.state.target){
-        store.dispatch({type: 'LEVEL_UP'})
+       // store.dispatch({type: 'UPDATE_LEVEL'})
         let doneLevel = store.getState().level.doneLevel
-        AsyncStorage.setItem('CURRENT_LEVEL2', (doneLevel).toString())
+        let current = store.getState().level.currentLevel
+        if(doneLevel <= current)
+          store.dispatch({type: 'LEVEL_UP'})
+          AsyncStorage.setItem('CURRENT_LEVEL2', (current).toString())
       }
   }
     else if (ev.type === "pause"){ 
@@ -181,9 +184,14 @@ class PunchMouseGameWorld extends Component {
       score: this.state.score + 10
     })
     if(this.state.score == this.state.target){
-      store.dispatch({type: 'LEVEL_UP'})
+      // store.dispatch({type: 'LEVEL_UP'})
       let doneLevel = store.getState().level.doneLevel
-      AsyncStorage.setItem('CURRENT_LEVEL2', (doneLevel).toString())
+      let current = store.getState().level.currentLevel
+        if(doneLevel <= current){
+          store.dispatch({type: 'LEVEL_UP'})
+          AsyncStorage.setItem('CURRENT_LEVEL2', (current).toString())
+        }
+          
     }
   }
   reset = () => {
@@ -202,8 +210,8 @@ class PunchMouseGameWorld extends Component {
   next = () => {
     console.log('test nex functon')
     store.dispatch({type: 'ENABLE_ANSWER'})
-    // store.dispatch({type: 'RESET_INDEX'});
-    // store.dispatch({type: 'LEVEL_UP'})
+    store.dispatch({type: 'RESET_INDEX'});
+    store.dispatch({type: 'UPDATE_LEVEL'})
     // console.log("test level next: " + store.getState().level.currentLevel)
     // store.dispatch({type: 'UNFLAGGED_WIN'})
     var data = store.getState().quizData.listQuiz
@@ -216,7 +224,7 @@ class PunchMouseGameWorld extends Component {
         running: true,
         score: 0,
         gameOver: false,
-        target: quizLevel.length + current_level*5 + 40,
+        target: quizLevel.length*10 + current_level*5 + 40,
         listQuiz: quizLevel
     });
   }

@@ -167,6 +167,8 @@ class FlatListItem extends Component {
             let uriBg = await this.handleDownload(lowerKey, user_custom[i].value)
             console.log(uriBg)
             userCustom[CustomConfig.ASYN_SOUND] = uriBg
+            await AsyncStorage.setItem('key2', _severKey)
+            await store.dispatch({type: 'SET_KEY', key: _severKey})
           }
         }
         AsyncStorage.setItem(CustomConfig.ASYN_ALL_CONFIG, JSON.stringify(userCustom))

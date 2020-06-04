@@ -185,6 +185,8 @@ class FlatListItem extends Component {
         AsyncStorage.setItem(CustomConfig.ASYN_ALL_CONFIG, JSON.stringify(userCustom))
         let test = await  AsyncStorage.getItem(CustomConfig.ASYN_ALL_CONFIG)
         console.log("Test save: " + test)
+        await AsyncStorage.setItem('key1', _severKey)
+        await store.dispatch({type: 'SET_KEY', key: _severKey})
         }
       async handleLoad(_key, _severKey){
 
