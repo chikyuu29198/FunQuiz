@@ -12,10 +12,7 @@ FunQuiz là ứng dụng luyện tập các câu hỏi trắc nghiệm thông qu
 - Cài đặt âm thanh, hình nền, màu sắc...
 - Đăng xuất
 ## **Một số màn hình của ứng dụng:**
-<img src="https://i.imgur.com/XlmURcD.png" > 
-<img src="https://i.imgur.com/5HhWL30.png" >
-<img src="https://i.imgur.com/XlmURcD.png" > 
-<img src="https://i.imgur.com/5HhWL30.png" >
+<img src="https://i.imgur.com/XlmURcD.png" > <img src="https://i.imgur.com/5HhWL30.png" > <img src="https://i.imgur.com/y2XgFfQ.png" > <img src="https://i.imgur.com/RkFqz4j.png" > <img src="https://i.imgur.com/XTvP0kh.png" >
 
 ### *File cài đặt trên Android:* https://drive.google.com/file/d/1JZB9-8K_u8edBpAsSUNusxQ3LpVEQbbA/view?usp=sharing
 #### Cài đặt và chạy chương trình
