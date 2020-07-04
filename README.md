@@ -12,7 +12,7 @@ FunQuiz là ứng dụng luyện tập các câu hỏi trắc nghiệm thông qu
 - Xóa bộ câu hỏi
 - Cài đặt âm thanh, hình nền, màu sắc...
 - Đăng xuất
-### *File cài đặt trên Android:* ######https://drive.google.com/file/d/1JZB9-8K_u8edBpAsSUNusxQ3LpVEQbbA/view?usp=sharing
+### *File cài đặt trên Android:* https://drive.google.com/file/d/1JZB9-8K_u8edBpAsSUNusxQ3LpVEQbbA/view?usp=sharing
 - Cài đặt và chạy chương trình
 - Cài đặt môi trường dự án React Native
-- Clone source code và thực thi câu lệnh "react-native run-android" trong folder dự án để chạy chương trình
+- Clone source code và thực thi câu lệnh "npm install" và "react-native run-android" trong folder dự án để chạy chương trình
