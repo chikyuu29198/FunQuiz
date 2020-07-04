@@ -2,7 +2,7 @@
 ## **Giới thiệu**
 FunQuiz là ứng dụng luyện tập các câu hỏi trắc nghiệm thông qua trò chơi, ứng dụng cho phép người chơi tùy biên bộ câu hỏi và một số tham số cấu hình trong trò chơi.
 ## **Một số màn hình của ứng dụng:**
-<img src="https://imgur.com/XlmURcD">
+<img src="https://imgur.com/XlmURcD" >
 ## **Các chức năng hiện có:**
 - Đăng ký tài khoản
 - Đăng nhập với tài khoản Google (tự động đăng nhập lại nếu chưa logout khỏi phiên làm việc trước đó)
