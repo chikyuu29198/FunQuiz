@@ -14,7 +14,7 @@ FunQuiz là ứng dụng luyện tập các câu hỏi trắc nghiệm thông qu
 ## **Một số màn hình của ứng dụng:**
 <img src="https://i.imgur.com/XlmURcD.png" > <img src="https://i.imgur.com/5HhWL30.png" > <img src="https://i.imgur.com/y2XgFfQ.png" > <img src="https://i.imgur.com/RkFqz4j.png" > <img src="https://i.imgur.com/XTvP0kh.png" >
 
-### *File cài đặt trên Android:* https://drive.google.com/file/d/1JZB9-8K_u8edBpAsSUNusxQ3LpVEQbbA/view?usp=sharing
+### *File cài đặt trên Android:* https://drive.google.com/file/d/1Ahz_fhoA9l3uOf4Gvnmz5WcPiC-48vLd/view?usp=sharing
 #### Cài đặt và chạy chương trình
 - Cài đặt môi trường dự án React Native
 - Clone source code và thực thi câu lệnh "npm install" và "react-native run-android" trong folder dự án để chạy chương trình
