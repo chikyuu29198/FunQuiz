@@ -1,4 +1,4 @@
-# KL
+# FunQuiz
 ## **Giới thiệu**
 FunQuiz là ứng dụng luyện tập các câu hỏi trắc nghiệm thông qua trò chơi, ứng dụng cho phép người chơi tùy biên bộ câu hỏi và một số tham số cấu hình trong trò chơi.
 ## **Các chức năng hiện có:**
